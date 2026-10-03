@@ -132,7 +132,7 @@
       <div class="fungsionaris-container sc-fade-up" style="--stagger: 2">
         <!-- Filter Tabs -->
         <div class="fungsionaris-filter" role="tablist" aria-label="Saring Fungsionaris Berdasarkan Struktur">
-          <button class="filter-btn active" type="button" role="tab" aria-selected="true" data-filter="all">Semua Pimpinan</button>
+          <button class="filter-btn active" type="button" role="tab" aria-selected="true" data-filter="all">Semua Struktur</button>
           <button class="filter-btn" type="button" role="tab" aria-selected="false" data-filter="dpo">DPO</button>
           <button class="filter-btn" type="button" role="tab" aria-selected="false" data-filter="bph">BPH</button>
           <button class="filter-btn" type="button" role="tab" aria-selected="false" data-filter="hr">HR</button>
@@ -144,147 +144,194 @@
           <button class="filter-btn" type="button" role="tab" aria-selected="false" data-filter="harmoni">HARMONI</button>
         </div>
 
-        <!-- Members Grid (Compact Centered Preview: Pimpinan & Kadep) -->
-        <div class="fungsionaris-grid" id="fungsionarisGrid">
-          <!-- DPO (3) -->
-          <article class="member-card glow-card" data-department="dpo">
-            <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Anggota DPO" loading="lazy"></div>
-            <div class="member-info">
-              <span class="member-role role-lead">Anggota DPO</span>
-              <h3 class="member-name">Fajar Pratama</h3>
-              <span class="member-dept-tag">DPO</span>
-            </div>
-          </article>
-          <article class="member-card glow-card" data-department="dpo">
-            <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Anggota DPO" loading="lazy"></div>
-            <div class="member-info">
-              <span class="member-role role-lead">Anggota DPO</span>
-              <h3 class="member-name">Salsabila Ramadhani</h3>
-              <span class="member-dept-tag">DPO</span>
-            </div>
-          </article>
-          <article class="member-card glow-card" data-department="dpo">
-            <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Anggota DPO" loading="lazy"></div>
-            <div class="member-info">
-              <span class="member-role role-lead">Anggota DPO</span>
-              <h3 class="member-name">Bagus Wibowo</h3>
-              <span class="member-dept-tag">DPO</span>
-            </div>
-          </article>
+        <!-- ORGANIZATIONAL TREE (Bagan Pohon Keluarga Kabinet) -->
+        <div class="org-tree" id="fungsionarisGrid" role="tree" aria-label="Bagan Struktur Kabinet">
 
-          <!-- BPH (6) -->
-          <article class="member-card glow-card" data-department="bph">
-            <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Ketua Umum" loading="lazy"></div>
-            <div class="member-info">
-              <span class="member-role role-lead">Ketua Umum</span>
-              <h3 class="member-name">Muhammad Rahman</h3>
-              <span class="member-dept-tag">BPH</span>
+          <!-- ============ TIER 1: DPO ============ -->
+          <div class="tree-tier tree-tier-dpo" data-group="dpo" role="treeitem">
+            <div class="tree-tier-label">
+              <span class="tree-tier-badge">DPO</span>
+              <span class="tree-tier-name">Dewan Pertimbangan Organisasi</span>
             </div>
-          </article>
-          <article class="member-card glow-card" data-department="bph">
-            <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Wakil Ketua Umum" loading="lazy"></div>
-            <div class="member-info">
-              <span class="member-role role-lead">Wakil Ketua Umum</span>
-              <h3 class="member-name">Ahmad Fauzi</h3>
-              <span class="member-dept-tag">BPH</span>
+            <div class="tree-row">
+              <article class="member-card glow-card tree-node" data-department="dpo">
+                <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Anggota DPO" loading="lazy"></div>
+                <div class="member-info">
+                  <span class="member-role role-lead">Anggota DPO</span>
+                  <h3 class="member-name">Budi Karbit Santoso</h3>
+                  <span class="member-dept-tag">DPO</span>
+                </div>
+              </article>
+              <article class="member-card glow-card tree-node" data-department="dpo">
+                <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Anggota DPO" loading="lazy"></div>
+                <div class="member-info">
+                  <span class="member-role role-lead">Anggota DPO</span>
+                  <h3 class="member-name">Siti Kompor Meleduk</h3>
+                  <span class="member-dept-tag">DPO</span>
+                </div>
+              </article>
+              <article class="member-card glow-card tree-node" data-department="dpo">
+                <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Anggota DPO" loading="lazy"></div>
+                <div class="member-info">
+                  <span class="member-role role-lead">Anggota DPO</span>
+                  <h3 class="member-name">Joko Kece Badai</h3>
+                  <span class="member-dept-tag">DPO</span>
+                </div>
+              </article>
             </div>
-          </article>
-          <article class="member-card glow-card" data-department="bph">
-            <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Sekretaris Umum 1" loading="lazy"></div>
-            <div class="member-info">
-              <span class="member-role role-lead">Sekretaris Umum 1</span>
-              <h3 class="member-name">Siti Nurhaliza</h3>
-              <span class="member-dept-tag">BPH</span>
-            </div>
-          </article>
-          <article class="member-card glow-card" data-department="bph">
-            <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Sekretaris Umum 2" loading="lazy"></div>
-            <div class="member-info">
-              <span class="member-role role-lead">Sekretaris Umum 2</span>
-              <h3 class="member-name">Dewi Anggraini</h3>
-              <span class="member-dept-tag">BPH</span>
-            </div>
-          </article>
-          <article class="member-card glow-card" data-department="bph">
-            <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Bendahara Umum 1" loading="lazy"></div>
-            <div class="member-info">
-              <span class="member-role role-lead">Bendahara Umum 1</span>
-              <h3 class="member-name">Dina Safitri</h3>
-              <span class="member-dept-tag">BPH</span>
-            </div>
-          </article>
-          <article class="member-card glow-card" data-department="bph">
-            <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Bendahara Umum 2" loading="lazy"></div>
-            <div class="member-info">
-              <span class="member-role role-lead">Bendahara Umum 2</span>
-              <h3 class="member-name">Rani Oktaviani</h3>
-              <span class="member-dept-tag">BPH</span>
-            </div>
-          </article>
+          </div>
 
-          <!-- 7 KEPALA DEPARTEMEN -->
-          <article class="member-card glow-card" data-department="hr">
-            <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Kepala Departemen HR" loading="lazy"></div>
-            <div class="member-info">
-              <span class="member-role role-lead">Kepala Departemen</span>
-              <h3 class="member-name">Rizky Ramadhani</h3>
-              <span class="member-dept-tag">HR</span>
-            </div>
-          </article>
+          <!-- Connector: DPO -> BPH -->
+          <div class="tree-connector" aria-hidden="true">
+            <span class="tree-line-v"></span>
+          </div>
 
-          <article class="member-card glow-card" data-department="padi">
-            <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Kepala Departemen PADI" loading="lazy"></div>
-            <div class="member-info">
-              <span class="member-role role-lead">Kepala Departemen</span>
-              <h3 class="member-name">Ahmadiansyah</h3>
-              <span class="member-dept-tag">PADI</span>
+          <!-- ============ TIER 2: BPH ============ -->
+          <div class="tree-tier tree-tier-bph" data-group="bph" role="treeitem">
+            <div class="tree-tier-label">
+              <span class="tree-tier-badge">BPH</span>
+              <span class="tree-tier-name">Badan Pengurus Harian</span>
             </div>
-          </article>
+            <div class="tree-row tree-row-pinnacle">
+              <article class="member-card glow-card tree-node" data-department="bph">
+                <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Ketua Umum" loading="lazy"></div>
+                <div class="member-info">
+                  <span class="member-role role-lead">Ketua Umum</span>
+                  <h3 class="member-name">Agus Ganteng Permanen</h3>
+                  <span class="member-dept-tag">BPH</span>
+                </div>
+              </article>
+              <article class="member-card glow-card tree-node" data-department="bph">
+                <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Wakil Ketua Umum" loading="lazy"></div>
+                <div class="member-info">
+                  <span class="member-role role-lead">Wakil Ketua Umum</span>
+                  <h3 class="member-name">Rina Sakit Hati</h3>
+                  <span class="member-dept-tag">BPH</span>
+                </div>
+              </article>
+            </div>
+            <div class="tree-branch" aria-hidden="true"><span class="tree-line-v"></span></div>
+            <div class="tree-row">
+              <article class="member-card glow-card tree-node" data-department="bph">
+                <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Sekretaris Umum 1" loading="lazy"></div>
+                <div class="member-info">
+                  <span class="member-role role-lead">Sekretaris Umum 1</span>
+                  <h3 class="member-name">Ani Buku Tamu</h3>
+                  <span class="member-dept-tag">BPH</span>
+                </div>
+              </article>
+              <article class="member-card glow-card tree-node" data-department="bph">
+                <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Sekretaris Umum 2" loading="lazy"></div>
+                <div class="member-info">
+                  <span class="member-role role-lead">Sekretaris Umum 2</span>
+                  <h3 class="member-name">Dedi Staples Kertas</h3>
+                  <span class="member-dept-tag">BPH</span>
+                </div>
+              </article>
+              <article class="member-card glow-card tree-node" data-department="bph">
+                <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Bendahara Umum 1" loading="lazy"></div>
+                <div class="member-info">
+                  <span class="member-role role-lead">Bendahara Umum 1</span>
+                  <h3 class="member-name">Ucup Duit Ilang</h3>
+                  <span class="member-dept-tag">BPH</span>
+                </div>
+              </article>
+              <article class="member-card glow-card tree-node" data-department="bph">
+                <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Bendahara Umum 2" loading="lazy"></div>
+                <div class="member-info">
+                  <span class="member-role role-lead">Bendahara Umum 2</span>
+                  <h3 class="member-name">Mbak Kas Bon</h3>
+                  <span class="member-dept-tag">BPH</span>
+                </div>
+              </article>
+            </div>
+          </div>
 
-          <article class="member-card glow-card" data-department="orse">
-            <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Kepala Departemen ORSE" loading="lazy"></div>
-            <div class="member-info">
-              <span class="member-role role-lead">Kepala Departemen</span>
-              <h3 class="member-name">Royyan Ibnu Rozi</h3>
-              <span class="member-dept-tag">ORSE</span>
-            </div>
-          </article>
+          <!-- Connector: BPH -> Kadep Rail -->
+          <div class="tree-connector tree-connector-rail" aria-hidden="true">
+            <span class="tree-line-v"></span>
+          </div>
 
-          <article class="member-card glow-card" data-department="kominfo">
-            <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Kepala Departemen KOMINFO" loading="lazy"></div>
-            <div class="member-info">
-              <span class="member-role role-lead">Kepala Departemen</span>
-              <h3 class="member-name">Mochammad Dhafin D.S.</h3>
-              <span class="member-dept-tag">KOMINFO</span>
+          <!-- ============ TIER 3: 7 KEPALA DEPARTEMEN ============ -->
+          <div class="tree-tier tree-tier-dept" data-group="departments" role="treeitem">
+            <div class="tree-tier-label">
+              <span class="tree-tier-badge tree-tier-badge-alt">KADEP</span>
+              <span class="tree-tier-name">7 Kepala Departemen</span>
             </div>
-          </article>
+            <div class="tree-row tree-row-kadep">
+              <article class="member-card glow-card tree-node" data-department="hr">
+                <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Kepala Departemen HR" loading="lazy"></div>
+                <div class="member-info">
+                  <span class="member-role role-lead">Kepala Departemen</span>
+                  <h3 class="member-name">Pak Hrdwi Rekrutmen</h3>
+                  <span class="member-dept-tag">HR</span>
+                </div>
+              </article>
+              <article class="member-card glow-card tree-node" data-department="padi">
+                <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Kepala Departemen PADI" loading="lazy"></div>
+                <div class="member-info">
+                  <span class="member-role role-lead">Kepala Departemen</span>
+                  <h3 class="member-name">Profesor Ngoding Tidur</h3>
+                  <span class="member-dept-tag">PADI</span>
+                </div>
+              </article>
+              <article class="member-card glow-card tree-node" data-department="orse">
+                <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Kepala Departemen ORSE" loading="lazy"></div>
+                <div class="member-info">
+                  <span class="member-role role-lead">Kepala Departemen</span>
+                  <h3 class="member-name">Kapten Futsal Kampung</h3>
+                  <span class="member-dept-tag">ORSE</span>
+                </div>
+              </article>
+              <article class="member-card glow-card tree-node" data-department="kominfo">
+                <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Kepala Departemen KOMINFO" loading="lazy"></div>
+                <div class="member-info">
+                  <span class="member-role role-lead">Kepala Departemen</span>
+                  <h3 class="member-name">Sultan Konten Viral</h3>
+                  <span class="member-dept-tag">KOMINFO</span>
+                </div>
+              </article>
+              <article class="member-card glow-card tree-node" data-department="psdm">
+                <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Kepala Departemen PSDM" loading="lazy"></div>
+                <div class="member-info">
+                  <span class="member-role role-lead">Kepala Departemen</span>
+                  <h3 class="member-name">Bapak Kaderisasi Sejati</h3>
+                  <span class="member-dept-tag">PSDM</span>
+                </div>
+              </article>
+              <article class="member-card glow-card tree-node" data-department="sosma">
+                <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Kepala Departemen SOSMA" loading="lazy"></div>
+                <div class="member-info">
+                  <span class="member-role role-lead">Kepala Departemen</span>
+                  <h3 class="member-name">Ketua RT Digital</h3>
+                  <span class="member-dept-tag">SOSMA</span>
+                </div>
+              </article>
+              <article class="member-card glow-card tree-node" data-department="harmoni">
+                <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Kepala Departemen HARMONI" loading="lazy"></div>
+                <div class="member-info">
+                  <span class="member-role role-lead">Kepala Departemen</span>
+                  <h3 class="member-name">DJ Acara Kampung</h3>
+                  <span class="member-dept-tag">HARMONI</span>
+                </div>
+              </article>
+            </div>
+          </div>
 
-          <article class="member-card glow-card" data-department="psdm">
-            <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Kepala Departemen PSDM" loading="lazy"></div>
-            <div class="member-info">
-              <span class="member-role role-lead">Kepala Departemen</span>
-              <h3 class="member-name">Ahmad Aulia Rahman</h3>
-              <span class="member-dept-tag">PSDM</span>
+          <!-- ============ DYNAMIC DEPARTMENT EXPANSION PANEL ============ -->
+          <div class="tree-dept-panel" id="treeDeptPanel" hidden>
+            <div class="tree-connector" aria-hidden="true"><span class="tree-line-v"></span></div>
+            <div class="tree-tier tree-tier-expanded">
+              <div class="tree-tier-label">
+                <span class="tree-tier-badge tree-tier-badge-alt" id="treePanelBadge">HR</span>
+                <span class="tree-tier-name" id="treePanelName">Departemen</span>
+              </div>
+              <div class="tree-row" id="treePanelLeadRow"></div>
+              <div class="tree-branch" aria-hidden="true"><span class="tree-line-v"></span></div>
+              <div class="tree-row" id="treePanelStaffRow"></div>
             </div>
-          </article>
+          </div>
 
-          <article class="member-card glow-card" data-department="sosma">
-            <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Kepala Departemen SOSMA" loading="lazy"></div>
-            <div class="member-info">
-              <span class="member-role role-lead">Kepala Departemen</span>
-              <h3 class="member-name">Dimas Kurniawan</h3>
-              <span class="member-dept-tag">SOSMA</span>
-            </div>
-          </article>
-
-          <article class="member-card glow-card" data-department="harmoni">
-            <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto Kepala Departemen HARMONI" loading="lazy"></div>
-            <div class="member-info">
-              <span class="member-role role-lead">Kepala Departemen</span>
-              <h3 class="member-name">Aditya Pratama</h3>
-              <span class="member-dept-tag">HARMONI</span>
-            </div>
-          </article>
         </div>
 
         <div class="fungsionaris-actions">

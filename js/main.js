@@ -119,10 +119,130 @@ if (magneticBtns.length && window.matchMedia('(pointer: fine)').matches) {
   });
 }
 
-// 5. Fungsionaris Department Filter Logic (Hierarchical Department Groups)
+// 5. Fungsionaris Filter Logic (Organizational Tree + Legacy Fallback)
 const filterButtons = document.querySelectorAll('.fungsionaris-filter .filter-btn');
-const deptGroups = document.querySelectorAll('.fungsionaris-groups .dept-group');
+const orgTree = document.getElementById('fungsionarisGrid');
+const treeTiers = document.querySelectorAll('.org-tree > .tree-tier[data-group]');
+const treeConnectors = document.querySelectorAll('.org-tree > .tree-connector');
 const legacyCards = document.querySelectorAll('.fungsionaris-grid .member-card');
+
+// Department roster data (1 Kadep + 4 Staff each) for the dynamic expansion panel
+const DEPT_ROSTER = {
+  hr: {
+    name: 'Departemen Hubungan Relasi',
+    lead: { role: 'Kepala Departemen', name: 'Pak Hrdwi Rekrutmen', tag: 'HR' },
+    staff: [
+      { name: 'Sisca Obrolan Ringan' },
+      { name: 'Rio Kopi Pagi' },
+      { name: 'Nadia Curhat Malam' },
+      { name: 'Bagas Absen Terus' }
+    ]
+  },
+  padi: {
+    name: 'Pengembangan Akademik dan Teknologi',
+    lead: { role: 'Kepala Departemen', name: 'Profesor Ngoding Tidur', tag: 'PADI' },
+    staff: [
+      { name: 'Ilham Error 404' },
+      { name: 'Nadya Submit Tugas' },
+      { name: 'Raka Deadline Besok' },
+      { name: 'Maya Ngebug Dulu' }
+    ]
+  },
+  orse: {
+    name: 'Departemen Olahraga dan Seni',
+    lead: { role: 'Kepala Departemen', name: 'Kapten Futsal Kampung', tag: 'ORSE' },
+    staff: [
+      { name: 'Rian Skipping Dulu' },
+      { name: 'Farhan Nonton Bola' },
+      { name: 'Nadia Rebahan Sportif' },
+      { name: 'Aldo Lupa Racket' }
+    ]
+  },
+  kominfo: {
+    name: 'Komunikasi dan Informasi',
+    lead: { role: 'Kepala Departemen', name: 'Sultan Konten Viral', tag: 'KOMINFO' },
+    staff: [
+      { name: 'Hida Edit Sampai Subuh' },
+      { name: 'Husain Scroll Terus' },
+      { name: 'Aisyah Filter Cantik' },
+      { name: 'Raka Live TikTok' }
+    ]
+  },
+  psdm: {
+    name: 'Pengembangan Sumber Daya Mahasiswa',
+    lead: { role: 'Kepala Departemen', name: 'Bapak Kaderisasi Sejati', tag: 'PSDM' },
+    staff: [
+      { name: 'Annisa Semangat 45' },
+      { name: 'Kevin Maba Abadi' },
+      { name: 'Nabila Rapat Terus' },
+      { name: 'Maya Jarkom Mantap' }
+    ]
+  },
+  sosma: {
+    name: 'Sosial dan Masyarakat',
+    lead: { role: 'Kepala Departemen', name: 'Ketua RT Digital', tag: 'SOSMA' },
+    staff: [
+      { name: 'Zahra Bakti Sosial' },
+      { name: 'Bintang Gotong Royong' },
+      { name: 'Rizky Dermawan' },
+      { name: 'Nisa Kasih Sayang' }
+    ]
+  },
+  harmoni: {
+    name: 'Hari Momen Inspiratif',
+    lead: { role: 'Kepala Departemen', name: 'DJ Acara Kampung', tag: 'HARMONI' },
+    staff: [
+      { name: 'Maya Nostalgia' },
+      { name: 'Gilang Sound Sistem' },
+      { name: 'Kevin Makan Bareng' },
+      { name: 'Rina Karaoke Nostalgia' }
+    ]
+  }
+};
+
+const treePanel = document.getElementById('treeDeptPanel');
+const treePanelBadge = document.getElementById('treePanelBadge');
+const treePanelName = document.getElementById('treePanelName');
+const treePanelLeadRow = document.getElementById('treePanelLeadRow');
+const treePanelStaffRow = document.getElementById('treePanelStaffRow');
+
+const buildMemberCard = ({ role, name, tag, isLead }) => `
+  <article class="member-card glow-card tree-node" data-department="${(tag || '').toLowerCase()}">
+    <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto ${role} ${tag}" loading="lazy"></div>
+    <div class="member-info">
+      <span class="member-role${isLead ? ' role-lead' : ''}">${role}</span>
+      <h3 class="member-name">${name}</h3>
+      <span class="member-dept-tag">${tag}</span>
+    </div>
+  </article>`;
+
+const renderDeptPanel = key => {
+  const dept = DEPT_ROSTER[key];
+  if (!dept || !treePanel) return;
+  treePanelBadge.textContent = key.toUpperCase();
+  treePanelName.textContent = dept.name;
+  treePanelLeadRow.innerHTML = buildMemberCard({
+    role: dept.lead.role,
+    name: dept.lead.name,
+    tag: dept.lead.tag,
+    isLead: true
+  });
+  treePanelStaffRow.innerHTML = dept.staff
+    .map(s => buildMemberCard({ role: 'Staff', name: s.name, tag: dept.lead.tag, isLead: false }))
+    .join('');
+  treePanel.hidden = false;
+};
+
+const hideDeptPanel = () => {
+  if (treePanel) {
+    treePanel.hidden = true;
+    treePanelLeadRow.innerHTML = '';
+    treePanelStaffRow.innerHTML = '';
+  }
+};
+
+// Map filter key -> which tiers stay visible
+const isDeptKey = key => Object.prototype.hasOwnProperty.call(DEPT_ROSTER, key);
 
 if (filterButtons.length) {
   filterButtons.forEach(btn => {
@@ -136,19 +256,42 @@ if (filterButtons.length) {
 
       const filter = btn.getAttribute('data-filter');
 
-      // Filter groups
-      if (deptGroups.length) {
-        deptGroups.forEach(group => {
-          const groupName = group.getAttribute('data-group');
-          if (filter === 'all' || groupName === filter) {
-            group.classList.remove('is-hidden');
-          } else {
-            group.classList.add('is-hidden');
+      // ---- Tree mode ----
+      if (orgTree && treeTiers.length) {
+        treeTiers.forEach(tier => {
+          const group = tier.getAttribute('data-group');
+          let visible = false;
+
+          if (filter === 'all') {
+            visible = ['dpo', 'bph', 'departments'].includes(group);
+          } else if (filter === 'dpo') {
+            visible = group === 'dpo';
+          } else if (filter === 'bph') {
+            visible = group === 'bph';
+          } else if (isDeptKey(filter)) {
+            // Show only the Kadep rail as a visual anchor
+            visible = group === 'departments';
           }
+
+          tier.hidden = !visible;
         });
+
+        // Connectors: show only when relevant
+        treeConnectors.forEach(conn => {
+          conn.hidden = filter !== 'all';
+        });
+
+        // Hide the Kadep rail when a single department is expanded
+        if (isDeptKey(filter)) {
+          const deptTier = Array.from(treeTiers).find(t => t.getAttribute('data-group') === 'departments');
+          if (deptTier) deptTier.hidden = true;
+          renderDeptPanel(filter);
+        } else {
+          hideDeptPanel();
+        }
       }
 
-      // Legacy fallback if flat cards exist
+      // ---- Legacy flat-card fallback ----
       if (legacyCards.length) {
         legacyCards.forEach(card => {
           const dept = card.getAttribute('data-department');

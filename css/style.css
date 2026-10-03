@@ -1009,7 +1009,184 @@ html[data-theme="dark"] .dept-group-label {
   letter-spacing: -0.02em;
 }
 
-/* Compact Fungsionaris Grid (Home Page Centered Layout) */
+/* ==========================================================================
+   ORGANIZATIONAL TREE (BAGAN POHON KELUARGA KABINET)
+   ========================================================================== */
+.org-tree {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+  padding: 1rem 0;
+}
+
+.tree-tier {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4rem;
+  width: 100%;
+}
+
+.tree-tier[hidden] {
+  display: none !important;
+}
+
+.tree-tier-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 1.3rem;
+  background: var(--clay-white);
+  border-radius: 999px;
+  box-shadow: var(--clay-shadow-pill);
+}
+
+.tree-tier-badge {
+  padding: 0.28rem 0.75rem;
+  background: var(--accent-gold);
+  color: #ffffff;
+  font: 800 0.72rem var(--display);
+  letter-spacing: 0.08em;
+  border-radius: 10px;
+  box-shadow: 
+    4px 6px 12px rgba(217, 119, 6, 0.3),
+    inset -2px -2px 4px rgba(120, 53, 15, 0.4),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.5);
+}
+
+.tree-tier-badge-alt {
+  background: var(--clay-blue);
+  box-shadow: var(--clay-shadow-btn-primary);
+}
+
+.tree-tier-name {
+  color: var(--ink);
+  font: 800 0.95rem var(--display);
+  letter-spacing: -0.01em;
+}
+
+.tree-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.tree-row-pinnacle {
+  gap: 2.5rem;
+}
+
+.tree-node {
+  width: 220px;
+  max-width: 240px;
+  flex: 0 1 220px;
+}
+
+.tree-row-pinnacle .tree-node {
+  width: 250px;
+  max-width: 270px;
+  flex: 0 1 250px;
+}
+
+/* Connector: garis vertikal antar-tier */
+.tree-connector {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0.4rem 0;
+}
+
+.tree-line-v {
+  display: block;
+  width: 3px;
+  height: 3.2rem;
+  background: linear-gradient(180deg, var(--clay-blue-border), var(--clay-blue));
+  border-radius: 999px;
+  box-shadow: 
+    0 0 0 1px rgba(255, 255, 255, 0.6),
+    1px 2px 4px rgba(56, 189, 248, 0.25);
+}
+
+.tree-branch {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0.3rem 0;
+}
+
+.tree-branch .tree-line-v {
+  height: 2.4rem;
+}
+
+/* Rail connector: garis horizontal bercabang dari BPH ke 7 Kadep */
+.tree-connector-rail {
+  position: relative;
+  justify-content: center;
+}
+
+.tree-connector-rail .tree-line-v {
+  height: 3.2rem;
+}
+
+.tree-connector-rail::after {
+  content: "";
+  position: absolute;
+  top: 0.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(88%, 1100px);
+  height: 3px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    var(--clay-blue-border) 12%, 
+    var(--clay-blue) 50%, 
+    var(--clay-blue-border) 88%, 
+    transparent 100%);
+  border-radius: 999px;
+  opacity: 0.75;
+}
+
+/* Tree node hover lift (kartu = bukan tombol, tetap cursor default) */
+.tree-node:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: var(--clay-shadow-card-hover);
+}
+
+/* Dynamic Department Expansion Panel */
+.tree-dept-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  animation: treeExpand 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tree-dept-panel[hidden] {
+  display: none !important;
+}
+
+@keyframes treeExpand {
+  from { opacity: 0; transform: translateY(-14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tree-tier-expanded {
+  padding: 2rem;
+  border-radius: 36px;
+  background: var(--clay-white-soft);
+  box-shadow: var(--clay-shadow-card);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+}
+
+html[data-theme="dark"] .tree-tier-expanded {
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Compact Fungsionaris Grid (legacy fallback) */
 .fungsionaris-grid {
   display: flex;
   flex-wrap: wrap;
@@ -1889,11 +2066,26 @@ html[data-theme="dark"] .footer-bottom {
   }
 
   .fungsionaris-grid .member-card,
+  .tree-node,
   .dept-lead-row .member-card,
   .dept-staff-row .member-card {
     width: 100%;
     max-width: 100%;
     flex: 1 1 100%;
+  }
+
+  .tree-row,
+  .tree-row-pinnacle {
+    gap: 1rem;
+  }
+
+  .tree-connector-rail::after {
+    width: 92%;
+  }
+
+  .tree-tier-expanded {
+    padding: 1.3rem;
+    border-radius: 28px;
   }
 
   .program-grid, .kabar-grid {
