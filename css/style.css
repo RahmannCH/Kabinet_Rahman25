@@ -2,56 +2,59 @@
   color-scheme: light;
 
   /* ==========================================================================
-     REFINED CLAYMORPHISM DESIGN SYSTEM TOKENS
-     Concept: Tactile 3D Soft-Clay Aesthetics + Clean Institutional Integrity
+     REFINED CLAYMORPHISM DESIGN SYSTEM - COMPLETE SPECIFICATION
+     Architecture: Tactile 3D Soft-Clay Aesthetics + Enterprise Structure
+     Reference: Hype4 Academy Mathematical Claymorphism Physics
      ========================================================================== */
   
-  /* Canvas & Base Backgrounds */
+  /* Canvas & Base Viewport */
   --clay-canvas: #eef4fc;
-  --clay-canvas-alt: #e3edf9;
+  --clay-canvas-alt: #e1edf9;
   --paper: var(--clay-canvas);
   --paper-soft: #f4f8fe;
   
-  /* Clay Surface Colors */
+  /* Clay Surface Tints */
   --clay-white: #ffffff;
   --clay-white-soft: #fcfdff;
   --surface: #ffffff;
   --surface-raised: #ffffff;
 
-  /* Typography / Inks (Calibrated for strict WCAG AAA / AA contrast) */
-  --ink: #0f172a;               /* Deep Navy Slate (15.8:1 on white) */
-  --muted: #475569;             /* Balanced Cool Slate (5.8:1 on white) */
+  /* Strict WCAG AAA & AA Accessible Inks */
+  --ink: #0f172a;               /* Deep Slate (Contrast 15.8:1 on #ffffff) */
+  --muted: #475569;             /* Balanced Cool Slate (Contrast 5.8:1) */
   --line: rgba(186, 215, 245, 0.45);
   --line-light: rgba(226, 238, 252, 0.7);
 
-  /* Clay Pastel Accent Palette */
-  --clay-blue: #38bdf8;         /* Sky 400 - Main vibrant interactive clay */
-  --clay-blue-dark: #0284c7;    /* Sky 600 - High contrast text & active shade */
-  --clay-blue-light: #e0f2fe;   /* Sky 100 - Pill backgrounds & soft chips */
-  --clay-blue-border: #bae6fd;  /* Sky 200 - Delicate rims */
+  /* Clay Pastel Color System */
+  --clay-blue: #38bdf8;         /* Sky 400 - Main Interactive Clay */
+  --clay-blue-dark: #0284c7;    /* Sky 600 - High-Contrast Text on Pastel */
+  --clay-blue-light: #e0f2fe;   /* Sky 100 - Pill Backgrounds & Chips */
+  --clay-blue-border: #bae6fd;  /* Sky 200 - Soft Clay Rims */
+  
   --blue-pastel: #38bdf8;
   --blue-pastel-medium: #0284c7;
   --blue-pastel-light: #f0f9ff;
   --blue-pastel-pill: #e0f2fe;
   --blue-pastel-border: #bae6fd;
 
-  --accent-gold: #d97706;       /* Warm Amber - Leadership insignia */
+  --accent-gold: #d97706;       /* Warm Amber 600 - Leadership Insignia */
   --gold-pill: #fef3c7;
   --gold-border: #fde68a;
 
   --draft: #fef3c7;
   --draft-ink: #78350f;
 
-  /* Nav & Backdrop */
+  /* Nav & Modals */
   --nav-bg: rgba(238, 244, 252, 0.88);
   --focus: #38bdf8;
 
   /* ==========================================================================
-     MATHEMATICAL CLAYMORPHISM MULTI-LAYER SHADOWS
-     Formula: Outer Drop Shadow + Inset Dark Contour + Inset Top-Left Highlight
+     MATHEMATICAL CLAYMORPHISM MULTI-LAYER SHADOW PRIMITIVES
+     [Outer Elevation] + [Negative Dark Inset] + [Positive Specular Highlight Inset]
      ========================================================================== */
   
   /* 1. Standard Clay Card (Convex 3D Volume) */
+  --clay-card-radius: 28px;
   --clay-shadow-card:
     14px 18px 36px rgba(160, 195, 235, 0.4),
     -8px -8px 20px rgba(255, 255, 255, 0.9),
@@ -65,6 +68,7 @@
     inset 8px 8px 16px rgba(255, 255, 255, 1);
 
   /* 2. Primary Action Button (Tactile Squishy Plump Clay) */
+  --clay-btn-radius: 999px;
   --clay-shadow-btn-primary:
     8px 12px 24px rgba(56, 189, 248, 0.38),
     -4px -4px 10px rgba(255, 255, 255, 0.85),
@@ -133,7 +137,7 @@
 
 /* ==========================================================================
    DARK THEME CLAYMORPHISM TOKENS
-   Deep Obsidian Clay with Vibrant Ethereal Highlights
+   Deep Obsidian Clay with Glowing Neon Highlights
    ========================================================================== */
 html[data-theme="dark"] {
   color-scheme: dark;
@@ -151,7 +155,7 @@ html[data-theme="dark"] {
   --ink: #f8fafc;
   --muted: #94a3b8;
   --line: rgba(30, 48, 77, 0.6);
-  --line-light: rgba(22, 36, 58, 0.7);
+  --line-light: rgba(226, 238, 252, 0.1);
 
   --clay-blue: #38bdf8;
   --clay-blue-dark: #7dd3fc;
@@ -1670,31 +1674,6 @@ html[data-theme="dark"] .footer-bottom {
 
 .modal-member-grid-lead {
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-}
-
-/* ==========================================================================
-   ENTRANCE ANIMATIONS & SCROLL REVEAL
-   ========================================================================== */
-.sc-fade-up {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-  transition-delay: calc(var(--stagger, 0) * 0.1s);
-}
-
-.sc-fade-up.sc-in {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.sc-fade-in {
-  opacity: 0;
-  transition: opacity 0.8s ease;
-  transition-delay: calc(var(--stagger, 0) * 0.1s);
-}
-
-.sc-fade-in.sc-in {
-  opacity: 1;
 }
 
 /* ==========================================================================
