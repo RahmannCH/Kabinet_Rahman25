@@ -1,4 +1,8 @@
-// Theme Management
+// ==========================================================================
+// KABINET RAHMAN 25 - CORE SCRIPT (CLAYMORPHISM INTERACTION ENGINE)
+// ==========================================================================
+
+// 1. Theme Management (Light & Dark Clay State Controller)
 const themeButton = document.querySelector('.theme-toggle');
 const themeMeta = document.querySelector('meta[name="theme-color"]');
 
@@ -7,11 +11,15 @@ if (themeButton) {
     document.documentElement.dataset.theme = theme;
     themeButton.setAttribute('aria-pressed', String(theme === 'dark'));
     themeButton.setAttribute('aria-label', theme === 'dark' ? 'Aktifkan tema terang' : 'Aktifkan tema gelap');
-    themeButton.querySelector('.theme-symbol').textContent = theme === 'dark' ? '☀' : '◐';
-    themeMeta?.setAttribute('content', theme === 'dark' ? '#090d16' : '#ffffff');
+    const symbol = themeButton.querySelector('.theme-symbol');
+    if (symbol) {
+      symbol.textContent = theme === 'dark' ? '☀' : '◐';
+    }
+    themeMeta?.setAttribute('content', theme === 'dark' ? '#090e17' : '#eef4fc');
   };
 
   applyTheme(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
+
   themeButton.addEventListener('click', () => {
     const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
     applyTheme(nextTheme);
@@ -21,11 +29,11 @@ if (themeButton) {
   });
 }
 
-// Navbar Morphing on Scroll
+// 2. Navbar Dynamic Elevation on Scroll
 const siteHeader = document.getElementById('siteHeader');
 if (siteHeader) {
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 30) {
+    if (window.scrollY > 24) {
       siteHeader.classList.add('is-scrolled');
     } else {
       siteHeader.classList.remove('is-scrolled');
@@ -33,7 +41,7 @@ if (siteHeader) {
   }, { passive: true });
 }
 
-// Mobile Navigation Controller
+// 3. Mobile Navigation Controller (Clay Island Menu)
 const menuButton = document.querySelector('.menu-toggle');
 const navigation = document.querySelector('#site-nav');
 
@@ -95,21 +103,7 @@ if (menuButton && navigation) {
   }
 }
 
-// Glow-Tracking Card Mouse Movement (Subtle Pastel Glow)
-const glowCards = document.querySelectorAll('.glow-card');
-if (glowCards.length) {
-  glowCards.forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      card.style.setProperty('--mouse-x', `${x}px`);
-      card.style.setProperty('--mouse-y', `${y}px`);
-    });
-  });
-}
-
-// Magnetic Button Interaction (Gentle Desktop Hover Physics)
+// 4. Clay Button Spring Bounce Physics on Pointer
 const magneticBtns = document.querySelectorAll('.magnetic-btn');
 if (magneticBtns.length && window.matchMedia('(pointer: fine)').matches) {
   magneticBtns.forEach(btn => {
@@ -117,15 +111,15 @@ if (magneticBtns.length && window.matchMedia('(pointer: fine)').matches) {
       const rect = btn.getBoundingClientRect();
       const x = e.clientX - rect.left - rect.width / 2;
       const y = e.clientY - rect.top - rect.height / 2;
-      btn.style.transform = `translate(${x * 0.12}px, ${y * 0.12}px)`;
+      btn.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
     });
     btn.addEventListener('mouseleave', () => {
-      btn.style.transform = 'translate(0px, 0px)';
+      btn.style.transform = '';
     });
   });
 }
 
-// Fungsionaris Department Filter Logic (Front Page Preview)
+// 5. Fungsionaris Department Filter Logic (Hierarchical Department Groups)
 const filterButtons = document.querySelectorAll('.fungsionaris-filter .filter-btn');
 const deptGroups = document.querySelectorAll('.fungsionaris-groups .dept-group');
 const legacyCards = document.querySelectorAll('.fungsionaris-grid .member-card');
@@ -142,7 +136,7 @@ if (filterButtons.length) {
 
       const filter = btn.getAttribute('data-filter');
 
-      // Filter groups if present
+      // Filter groups
       if (deptGroups.length) {
         deptGroups.forEach(group => {
           const groupName = group.getAttribute('data-group');
@@ -154,7 +148,7 @@ if (filterButtons.length) {
         });
       }
 
-      // Legacy fallback
+      // Legacy fallback if flat cards exist
       if (legacyCards.length) {
         legacyCards.forEach(card => {
           const dept = card.getAttribute('data-department');
@@ -169,7 +163,7 @@ if (filterButtons.length) {
   });
 }
 
-// Aspirasi Form Feedback Handler
+// 6. Aspirasi Form Feedback Simulation
 const form = document.getElementById('publicAspirasiForm');
 const alertBox = document.getElementById('formSuccessAlert');
 
@@ -197,7 +191,7 @@ if (form) {
   });
 }
 
-// Fluid Scroll Reveal Engine
+// 7. Fluid Scroll Reveal Engine
 if ('IntersectionObserver' in window) {
   const revealElements = document.querySelectorAll('.sc-fade-up, .sc-fade-in');
   
@@ -219,7 +213,7 @@ if ('IntersectionObserver' in window) {
 }
 
 // ==========================================================================
-// FULL-SCREEN CABINET EXPLORER (MODAL) LOGIC
+// 8. FULL-SCREEN CABINET EXPLORER MODAL CONTROLLER
 // ==========================================================================
 const openModalBtn = document.getElementById('openFullCabinetBtn');
 const closeModalBtn = document.getElementById('closeFullCabinetBtn');
@@ -261,14 +255,14 @@ if (openModalBtn && closeModalBtn && cabinetModal) {
   openModalBtn.addEventListener('click', openCabinetModal);
   closeModalBtn.addEventListener('click', closeCabinetModal);
 
-  // Close on Escape
+  // Close on Escape key
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && !cabinetModal.hidden) {
       closeCabinetModal();
     }
   });
 
-  // Focus trap inside modal
+  // Accessible Focus Trap inside modal
   cabinetModal.addEventListener('keydown', e => {
     if (e.key === 'Tab') {
       const focusableElements = cabinetModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
@@ -289,7 +283,7 @@ if (openModalBtn && closeModalBtn && cabinetModal) {
     }
   });
 
-  // History back-button support
+  // Browser Back button integration
   window.addEventListener('popstate', () => {
     if (window.location.hash !== '#struktur-lengkap' && !cabinetModal.hidden) {
       closeCabinetModal();
