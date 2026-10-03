@@ -1009,6 +1009,21 @@ html[data-theme="dark"] .dept-group-label {
   letter-spacing: -0.02em;
 }
 
+/* Compact Fungsionaris Grid (Home Page Centered Layout) */
+.fungsionaris-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.6rem;
+  width: 100%;
+}
+
+.fungsionaris-grid .member-card {
+  width: 240px;
+  max-width: 260px;
+  flex: 0 1 240px;
+}
+
 .dept-group-grid {
   display: flex;
   flex-direction: column;
@@ -1873,12 +1888,12 @@ html[data-theme="dark"] .footer-bottom {
     padding: 0.65rem 1rem;
   }
 
-  .dept-group-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .card-lead, .card-lead-bph {
+  .fungsionaris-grid .member-card,
+  .dept-lead-row .member-card,
+  .dept-staff-row .member-card {
+    width: 100%;
     max-width: 100%;
+    flex: 1 1 100%;
   }
 
   .program-grid, .kabar-grid {
