@@ -1010,9 +1010,37 @@ html[data-theme="dark"] .dept-group-label {
 }
 
 .dept-group-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 1.6rem;
+  width: 100%;
+}
+
+.dept-lead-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.6rem;
+  width: 100%;
+}
+
+.dept-staff-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.6rem;
+  width: 100%;
+}
+
+.dept-lead-row .member-card {
+  width: 250px;
+  max-width: 280px;
+}
+
+.dept-staff-row .member-card {
+  width: 220px;
+  max-width: 240px;
 }
 
 /* ==========================================================================
@@ -1667,13 +1695,19 @@ html[data-theme="dark"] .footer-bottom {
 }
 
 .modal-member-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 1.6rem;
+  width: 100%;
 }
 
 .modal-member-grid-lead {
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6rem;
+  width: 100%;
 }
 
 /* ==========================================================================
