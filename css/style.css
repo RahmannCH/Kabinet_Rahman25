@@ -1,5 +1,14 @@
-:root {
+﻿:root {
   color-scheme: light;
+
+  /* Z-Index scale (systemic layers only) */
+  --z-base: 1;
+  --z-decor: 2;
+  --z-nav: 100;
+  --z-skip: 200;
+  --z-modal: 1000;
+  --z-lightbox: 1200;
+
 
   /* ==========================================================================
      REFINED CLAYMORPHISM DESIGN SYSTEM - COMPLETE SPECIFICATION
@@ -304,7 +313,7 @@ h1, h2, h3, h4, p {
 /* Accessibility Skip Link (Clay Capsule) */
 .skip-link {
   position: fixed;
-  z-index: 1000;
+  z-index: var(--z-skip);
   top: 1rem;
   left: 1rem;
   padding: 0.85rem 1.4rem;
@@ -348,7 +357,7 @@ html[data-theme="dark"] .preview-banner {
 .nav-container {
   position: sticky;
   top: 1rem;
-  z-index: 100;
+  z-index: var(--z-nav);
   padding: 0 max(4%, calc((100% - 1200px) / 2));
 }
 
@@ -531,7 +540,7 @@ html[data-theme="dark"] .site-header.is-scrolled {
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
-  z-index: -1;
+  z-index: var(--z-decor);
   opacity: 0.85;
 }
 
@@ -584,7 +593,7 @@ html[data-theme="dark"] .hero-glow-2 {
 
 .hero-copy {
   position: relative;
-  z-index: 2;
+  z-index: var(--z-decor);
 }
 
 /* Clay Eyebrow Pill */
@@ -1183,7 +1192,7 @@ html[data-theme="dark"] .tree-tier-expanded {
 .article-modal {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: var(--z-modal);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1812,7 +1821,7 @@ html[data-theme="dark"] .footer-bottom {
 .cabinet-modal {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: var(--z-modal);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1863,7 +1872,7 @@ html[data-theme="dark"] .footer-bottom {
   background: var(--clay-white);
   box-shadow: var(--clay-shadow-card);
   border-bottom: 1px solid var(--line);
-  z-index: 10;
+  z-index: var(--z-decor);
 }
 
 .modal-header-brand {
@@ -1928,7 +1937,7 @@ html[data-theme="dark"] .footer-bottom {
   padding: 0.85rem max(4%, calc((100% - 1200px) / 2));
   background: var(--clay-canvas-alt);
   box-shadow: inset 0 -2px 6px rgba(186, 215, 245, 0.35);
-  z-index: 5;
+  z-index: var(--z-decor);
 }
 
 html[data-theme="dark"] .modal-nav-bar {
@@ -2667,7 +2676,7 @@ html[data-theme="dark"] .gallery-item {
 .lightbox {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: var(--z-lightbox);
   display: flex;
   align-items: center;
   justify-content: center;

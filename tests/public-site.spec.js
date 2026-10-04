@@ -125,22 +125,44 @@ test('proker departemen renders 21 cards and filters per departemen', async ({ p
   await expect(page.locator('#prokerDeptGrid .proker-dept-card:visible')).toHaveCount(21);
 });
 
-test('Escape closes only the topmost overlay and keeps scroll locked', async ({ page }) => {
+test('Escape closes the open overlay and never leaves scroll stuck', async ({ page }) => {
   await page.goto('/');
+  await page.setViewportSize({ width: 1440, height: 1000 });
 
-  // Open cabinet modal
+  // --- Cabinet modal: open → Escape → closed, scroll released ---
   await page.locator('#openFullCabinetBtn').click();
   await expect(page.locator('#fullCabinetModal')).toBeVisible();
+  expect(await page.evaluate(() => document.body.style.overflow)).toBe('hidden');
 
-  // Open gallery lightbox on top of it (close modal first to reach the gallery)
-  await page.locator('#closeFullCabinetBtn').click();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#fullCabinetModal')).toBeHidden();
+  expect(await page.evaluate(() => document.body.style.overflow)).toBe('');
+
+  // --- Lightbox: open → Escape → closed, scroll released ---
+  await page.locator('#galeri').scrollIntoViewIfNeeded();
   await page.locator('.gallery-item').first().click();
   await expect(page.locator('#lightbox')).toBeVisible();
   expect(await page.evaluate(() => document.body.style.overflow)).toBe('hidden');
 
-  // Escape closes the lightbox only
   await page.keyboard.press('Escape');
   await expect(page.locator('#lightbox')).toBeHidden();
+  expect(await page.evaluate(() => document.body.style.overflow)).toBe('');
+
+  // --- Repeated open/close cycles must not leak the scroll lock ---
+  for (let i = 0; i < 3; i++) {
+    await page.locator('.gallery-item').nth(i).click();
+    await expect(page.locator('#lightbox')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#lightbox')).toBeHidden();
+  }
+  expect(await page.evaluate(() => document.body.style.overflow)).toBe('');
+
+  // --- Overlay stack priority: with only the article modal open, Escape closes it too ---
+  await page.locator('[data-article]').first().click();
+  await expect(page.locator('#articleModal')).toBeVisible();
+  expect(await page.evaluate(() => document.body.style.overflow)).toBe('hidden');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#articleModal')).toBeHidden();
   expect(await page.evaluate(() => document.body.style.overflow)).toBe('');
 });
 

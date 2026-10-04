@@ -30,10 +30,19 @@ createServer((request, response) => {
   if (!filePath.startsWith(`${root}${path.sep}`) || !existsSync(filePath) || !statSync(filePath).isFile()) {
     const notFoundPath = path.join(root, '404.html');
     response.writeHead(404, { 'content-type': 'text/html; charset=utf-8' });
-    createReadStream(notFoundPath).pipe(response);
+    if (existsSync(notFoundPath)) {
+      createReadStream(notFoundPath).pipe(response);
+    } else {
+      response.end('<h1>404 Not Found</h1>');
+    }
     return;
   }
 
   response.writeHead(200, { 'content-type': mimeTypes[path.extname(filePath).toLowerCase()] ?? 'application/octet-stream' });
-  createReadStream(filePath).pipe(response);
+  createReadStream(filePath)
+    .on('error', () => {
+      if (!response.headersSent) response.writeHead(500);
+      response.end();
+    })
+    .pipe(response);
 }).listen(port, '127.0.0.1');

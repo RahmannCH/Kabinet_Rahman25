@@ -198,7 +198,6 @@ const filterButtons = document.querySelectorAll('.fungsionaris-filter .filter-bt
 const orgTree = document.getElementById('fungsionarisGrid');
 const treeTiers = document.querySelectorAll('.org-tree > .tree-tier[data-group]');
 const treeConnectors = document.querySelectorAll('.org-tree > .tree-connector');
-const legacyCards = document.querySelectorAll('.fungsionaris-grid .member-card');
 
 // Department roster data (1 Kadep + 4 Staff each) for the dynamic expansion panel
 const DEPT_ROSTER = {
@@ -425,18 +424,6 @@ if (filterButtons.length) {
         } else {
           hideDeptPanel();
         }
-      }
-
-      // ---- Legacy flat-card fallback ----
-      if (legacyCards.length) {
-        legacyCards.forEach(card => {
-          const dept = card.getAttribute('data-department');
-          if (filter === 'all' || dept === filter) {
-            card.classList.remove('is-hidden');
-          } else {
-            card.classList.add('is-hidden');
-          }
-        });
       }
     });
   });
