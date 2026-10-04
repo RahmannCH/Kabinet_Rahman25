@@ -3,36 +3,64 @@
 // ==========================================================================
 
 // 0. Scroll-Lock Manager (counter-based, supports multiple overlapping overlays)
+//
+// Hardened against "stuck lock": every overlay close path resets cleanly, and a
+// safety net re-syncs the counter if the DOM ever disagrees with our depth
+// (e.g. an exception mid-close, or a bfcache restore).
 const ScrollLock = (() => {
   let depth = 0;
+  const apply = () => {
+    document.body.style.overflow = depth > 0 ? 'hidden' : '';
+  };
   const lock = () => {
     depth++;
-    document.body.style.overflow = 'hidden';
+    apply();
   };
   const unlock = () => {
     depth = Math.max(0, depth - 1);
-    if (depth === 0) document.body.style.overflow = '';
+    apply();
   };
   const forceReset = () => {
     depth = 0;
-    document.body.style.overflow = '';
+    apply();
   };
-  return { lock, unlock, forceReset, get depth() { return depth; } };
+  // Safety net: if nothing is actually open but we still hold a lock, release it.
+  const reconcile = () => {
+    const anyOpen = document.querySelector(
+      '.cabinet-modal:not([hidden]), .article-modal:not([hidden]), .lightbox:not([hidden])'
+    );
+    if (!anyOpen && depth !== 0) forceReset();
+  };
+  // Never leave the page frozen across a bfcache restore / tab return.
+  window.addEventListener('pagehide', forceReset);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') reconcile();
+  });
+  return { lock, unlock, forceReset, reconcile, get depth() { return depth; } };
 })();
 
-// 0b. Overlay Manager (Escape priority: lightbox > article > cabinet)
+// 0c. Focus helpers — only real, visible, focusable elements (skips hidden dept sections)
+const FOCUSABLE_SELECTOR =
+  'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+const getVisibleFocusables = (root) =>
+  Array.from(root.querySelectorAll(FOCUSABLE_SELECTOR)).filter(
+    el => el.offsetParent !== null && !el.closest('[hidden]')
+  );
+
+
+//
+// Each overlay registers { id, close }. `close()` MUST be idempotent and return
+// true only when it actually closed something, so Escape walks the stack safely.
 const OverlayManager = {
   stack: [],
-  register(id, open, close) {
-    // replace if already registered
+  register(id, close) {
     this.stack = this.stack.filter(o => o.id !== id);
-    this.stack.push({ id, open, close });
+    this.stack.push({ id, close });
   },
   closeTop() {
     for (let i = this.stack.length - 1; i >= 0; i--) {
-      const o = this.stack[i];
-      if (!o.close()) continue; // returns false if already closed
-      return true;
+      if (this.stack[i].close()) return true;
     }
     return false;
   },
@@ -416,18 +444,18 @@ const alertBox = document.getElementById('formSuccessAlert');
 
 const setFieldError = (field, message) => {
   if (!field) return;
-  let errorEl = field.parentElement.querySelector('.field-error');
-  if (!errorEl) {
-    errorEl = document.createElement('span');
-    errorEl.className = 'field-error';
-    errorEl.setAttribute('role', 'alert');
-    field.parentElement.appendChild(errorEl);
-  }
+  const errorEl = field.parentElement.querySelector('.field-error');
   if (message) {
-    errorEl.textContent = message;
+    if (!errorEl) {
+      const el = document.createElement('span');
+      el.className = 'field-error';
+      el.setAttribute('role', 'alert');
+      field.parentElement.appendChild(el);
+    }
+    field.parentElement.querySelector('.field-error').textContent = message;
     field.setAttribute('aria-invalid', 'true');
   } else {
-    errorEl.textContent = '';
+    if (errorEl) errorEl.remove();
     field.removeAttribute('aria-invalid');
   }
 };
@@ -558,12 +586,13 @@ if (openModalBtn && closeModalBtn && cabinetModal) {
   closeModalBtn.addEventListener('click', closeCabinetModal);
 
   // Register with the shared overlay manager (Escape priority handled centrally)
-  OverlayManager.register('cabinet', openCabinetModal, closeCabinetModal);
+  OverlayManager.register('cabinet', closeCabinetModal);
 
-  // Accessible Focus Trap inside modal
+  // Accessible Focus Trap inside modal (skips hidden department sections)
   cabinetModal.addEventListener('keydown', e => {
     if (e.key === 'Tab') {
-      const focusableElements = cabinetModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      const focusableElements = getVisibleFocusables(cabinetModal);
+      if (!focusableElements.length) return;
       const firstElement = focusableElements[0];
       const lastElement = focusableElements[focusableElements.length - 1];
 
@@ -742,11 +771,11 @@ if (articleModal && articleTriggers.length) {
     el.addEventListener('click', closeArticle);
   });
 
-  OverlayManager.register('article', () => openArticle(articleModal.dataset.currentKey), closeArticle);
+  OverlayManager.register('article', closeArticle);
 
   articleModal.addEventListener('keydown', e => {
     if (e.key !== 'Tab') return;
-    const focusables = articleModal.querySelectorAll('button, [href], [tabindex]:not([tabindex="-1"])');
+    const focusables = getVisibleFocusables(articleModal);
     if (!focusables.length) return;
     const first = focusables[0];
     const last = focusables[focusables.length - 1];
@@ -807,13 +836,11 @@ if (articleModal && articleTriggers.length) {
   const empty = document.getElementById('agendaEmpty');
   if (!timeline || !AGENDA_ITEMS.length) return;
 
-  // --- Dynamic status based on date ---
+  // --- Dynamic status based on date (timezone-safe: compare YYYY-MM-DD strings) ---
   const computeStatus = (dateStr) => {
-    const itemDate = new Date(dateStr + 'T00:00:00');
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    if (itemDate < today) return { cls: 'is-selesai', label: 'Selesai' };
-    if (itemDate.getTime() === today.getTime()) return { cls: 'is-running', label: 'Berjalan' };
+    const todayStr = new Date().toISOString().slice(0, 10);
+    if (dateStr < todayStr) return { cls: 'is-selesai', label: 'Selesai' };
+    if (dateStr === todayStr) return { cls: 'is-running', label: 'Berjalan' };
     return { cls: 'is-upcoming', label: 'Akan Datang' };
   };
 
@@ -908,7 +935,7 @@ if (articleModal && articleTriggers.length) {
     lightboxCap.textContent = trigger.dataset.caption || '';
     lightbox.hidden = false;
     ScrollLock.lock();
-    lightbox.querySelector('.lightbox-close').focus();
+    lightbox.querySelector('.lightbox-close')?.focus();
   };
 
   const close = () => {
@@ -928,7 +955,7 @@ if (articleModal && articleTriggers.length) {
   );
 
   // Escape priority: registered LAST so it is the topmost overlay
-  OverlayManager.register('lightbox', () => {}, close);
+  OverlayManager.register('lightbox', close);
 })();
 
 // 14. Global Escape Handler (closes only the topmost overlay)
