@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="id">
 <head>
   <meta charset="utf-8">
@@ -60,6 +60,7 @@
         <a href="#kabar" class="nav-link">Kabar</a>
         <a href="#galeri" class="nav-link">Galeri</a>
         <a href="#faq" class="nav-link">FAQ</a>
+        <a href="#statistik" class="nav-link">Statistik</a>
         <a class="nav-action" href="#aspirasi">Aspirasi <span aria-hidden="true">↗</span></a>
       </nav>
     </header>
@@ -94,7 +95,7 @@
         <img src="assets/Logo-Kabinet.jpg" alt="Ilustrasi Visual Kabinet" width="800" height="800" fetchpriority="high">
         <figcaption class="glass-caption">
           <img src="assets/logo-himakom.jpg" alt="" aria-hidden="true">
-          <span><small>Kabinet Berjalan</small><strong>Periode 2024-2025</strong></span>
+          <span><small>Kabinet Berjalan</small><strong>Periode 2025-2026</strong></span>
         </figcaption>
       </figure>
       <span class="hero-side-note" aria-hidden="true">FMIPA · UNIVERSITAS LAMBUNG MANGKURAT</span>
@@ -106,19 +107,19 @@
         <h2 id="stats-title" class="sr-only">Statistik Skala Organisasi</h2>
         <div class="stats-grid">
           <div class="stat-card">
-            <span class="stat-number" data-count="44">0</span>
+            <span class="stat-number" data-count="44">44</span>
             <span class="stat-label">Pengurus Aktif</span>
           </div>
           <div class="stat-card">
-            <span class="stat-number" data-count="7">0</span>
+            <span class="stat-number" data-count="7">7</span>
             <span class="stat-label">Departemen</span>
           </div>
           <div class="stat-card">
-            <span class="stat-number" data-count="20" data-suffix="+">0</span>
+            <span class="stat-number" data-count="21">21</span>
             <span class="stat-label">Program Kerja</span>
           </div>
           <div class="stat-card">
-            <span class="stat-number" data-count="500" data-suffix="+">0</span>
+            <span class="stat-number" data-count="500" data-suffix="+">500+</span>
             <span class="stat-label">Mahasiswa Diayomi</span>
           </div>
         </div>
@@ -365,8 +366,7 @@
 
         <div class="fungsionaris-actions">
           <button id="openFullCabinetBtn" class="button button-primary" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="fullCabinetModal">
-            Lihat Struktur Lengkap (44 Anggota) ↗
-          </button>
+            Lihat Struktur Lengkap (44 Anggota) ↗</button>
         </div>
       </div>
     </section>
@@ -411,10 +411,31 @@
       </div>
     </section>
 
+    <!-- Program Kerja Departemen (Data-driven, 21 proker) -->
+    <section class="proker-dept section" id="proker-dept" aria-labelledby="prokerDeptTitle">
+      <div class="proker-dept-header sc-fade-up" style="--stagger: 1">
+        <div class="section-kicker"><span>04</span> Program Kerja Departemen</div>
+        <h2 id="prokerDeptTitle">21 program<br><em>7 departemen.</em></h2>
+        <p>Rangkaian program kerja seluruh departemen Kabinet Rahman 25 — saring berdasarkan departemen.</p>
+      </div>
+      <div class="proker-dept-filter sc-fade-up" style="--stagger: 2" role="tablist" aria-label="Saring proker per departemen">
+        <button type="button" class="proker-filter-btn active" data-proker-filter="all" role="tab" aria-selected="true">Semua</button>
+        <button type="button" class="proker-filter-btn" data-proker-filter="hr" role="tab" aria-selected="false">HR</button>
+        <button type="button" class="proker-filter-btn" data-proker-filter="padi" role="tab" aria-selected="false">PADI</button>
+        <button type="button" class="proker-filter-btn" data-proker-filter="orse" role="tab" aria-selected="false">ORSE</button>
+        <button type="button" class="proker-filter-btn" data-proker-filter="kominfo" role="tab" aria-selected="false">KOMINFO</button>
+        <button type="button" class="proker-filter-btn" data-proker-filter="psdm" role="tab" aria-selected="false">PSDM</button>
+        <button type="button" class="proker-filter-btn" data-proker-filter="sosma" role="tab" aria-selected="false">SOSMA</button>
+        <button type="button" class="proker-filter-btn" data-proker-filter="harmoni" role="tab" aria-selected="false">HARMONI</button>
+      </div>
+      <div class="proker-dept-grid" id="prokerDeptGrid"></div>
+      <p class="proker-empty" id="prokerEmpty" hidden>Tidak ada program untuk departemen ini.</p>
+    </section>
+
     <!-- Agenda Kegiatan (Timeline) -->
     <section class="agenda section" id="agenda" aria-labelledby="agenda-title">
       <div class="agenda-header sc-fade-up" style="--stagger: 1">
-        <div class="section-kicker"><span>04</span> Agenda Kegiatan</div>
+        <div class="section-kicker"><span>05</span> Agenda Kegiatan</div>
         <h2 id="agenda-title">Jadwal yang<br><em>sedang berjalan.</em></h2>
         <p>Rangkaian kegiatan terdekat dari seluruh departemen Kabinet Rahman 25.</p>
       </div>
@@ -507,7 +528,7 @@
     <!-- Kabar Terkini Section -->
     <section class="kabar section" id="kabar" aria-labelledby="kabar-title">
       <div class="kabar-header sc-fade-up" style="--stagger: 1">
-        <div class="section-kicker"><span>05</span> Kabar Terkini</div>
+        <div class="section-kicker"><span>06</span> Kabar Terkini</div>
         <h2 id="kabar-title">Catatan<br><em>pergerakan.</em></h2>
         <p>Kumpulan berita, rilis kegiatan, dan informasi terbaru dari lingkungan HIMAKOM ULM.</p>
       </div>
@@ -536,7 +557,7 @@
     <!-- Galeri Dokumentasi Kegiatan -->
     <section class="gallery section" id="galeri" aria-labelledby="gallery-title">
       <div class="gallery-header sc-fade-up" style="--stagger: 1">
-        <div class="section-kicker"><span>06</span> Galeri Kegiatan</div>
+        <div class="section-kicker"><span>07</span> Galeri Kegiatan</div>
         <h2 id="gallery-title">Jejak<br><em>dokumentasi.</em></h2>
         <p>Momen-momen yang terekam dari setiap pergerakan kabinet.</p>
       </div>
@@ -565,7 +586,7 @@
     <!-- FAQ Section -->
     <section class="faq section" id="faq" aria-labelledby="faq-title">
       <div class="faq-header sc-fade-up" style="--stagger: 1">
-        <div class="section-kicker"><span>07</span> FAQ</div>
+        <div class="section-kicker"><span>08</span> FAQ</div>
         <h2 id="faq-title">Pertanyaan<br><em>umum.</em></h2>
         <p>Hal-hal yang sering ditanyakan seputar HIMAKOM ULM dan Kabinet Rahman 25.</p>
       </div>
@@ -601,7 +622,7 @@
     <section class="contact section" id="aspirasi" aria-labelledby="contact-title">
       <div class="contact-content sc-fade-up" style="--stagger: 1">
         <div class="contact-text">
-          <div class="section-kicker"><span>08</span> Ruang Aspirasi</div>
+          <div class="section-kicker"><span>09</span> Ruang Aspirasi</div>
           <h2 id="contact-title">Sampaikan<br>Suaramu.</h2>
           <p>Kami hadir untuk mendengar keluhan, gagasan, dan pertanyaanmu. Privasi dijaga penuh oleh departemen terkait.</p>
         </div>
@@ -642,7 +663,7 @@
     <!-- Arsip Kabinet Section -->
     <section class="archive section" id="arsip" aria-labelledby="arsip-title">
       <div class="archive-header sc-fade-up" style="--stagger: 1">
-        <div class="section-kicker"><span>09</span> Arsip Kabinet</div>
+        <div class="section-kicker"><span>10</span> Arsip Kabinet</div>
         <h2 id="arsip-title">Jejak<br><em>kabinet.</em></h2>
         <p>Dokumentasi resmi periode-periode sebelumnya HIMAKOM ULM.</p>
       </div>

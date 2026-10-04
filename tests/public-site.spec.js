@@ -95,3 +95,75 @@ test('public build excludes source, tests, and project documentation', async () 
   }
   expect(await exists('dist/index.html')).toBe(true);
 });
+
+// ---- Logic-regression tests (overlay stack, scroll lock, stats, nav) ----
+
+test('stats render real numbers, never a permanent zero', async ({ page }) => {
+  await page.goto('/');
+  const numbers = await page.locator('.stat-number[data-count]').allTextContents();
+  expect(numbers.length).toBe(4);
+  for (const text of numbers) {
+    expect(text.trim()).not.toBe('0');
+    expect(text.trim()).toMatch(/^\d+\+?$/);
+  }
+  // Final values must match their data-count targets
+  const mismatched = await page.locator('.stat-number[data-count]').evaluateAll(els =>
+    els.filter(el => Number(el.textContent.replace('+', '')) !== Number(el.dataset.count)).length
+  );
+  expect(mismatched).toBe(0);
+});
+
+test('proker departemen renders 21 cards and filters per departemen', async ({ page }) => {
+  await page.goto('/');
+  const cards = page.locator('#prokerDeptGrid .proker-dept-card');
+  await expect(cards).toHaveCount(21);
+
+  await page.locator('.proker-filter-btn[data-proker-filter="hr"]').click();
+  await expect(page.locator('#prokerDeptGrid .proker-dept-card:visible')).toHaveCount(3);
+
+  await page.locator('.proker-filter-btn[data-proker-filter="all"]').click();
+  await expect(page.locator('#prokerDeptGrid .proker-dept-card:visible')).toHaveCount(21);
+});
+
+test('Escape closes only the topmost overlay and keeps scroll locked', async ({ page }) => {
+  await page.goto('/');
+
+  // Open cabinet modal
+  await page.locator('#openFullCabinetBtn').click();
+  await expect(page.locator('#fullCabinetModal')).toBeVisible();
+
+  // Open gallery lightbox on top of it (close modal first to reach the gallery)
+  await page.locator('#closeFullCabinetBtn').click();
+  await page.locator('.gallery-item').first().click();
+  await expect(page.locator('#lightbox')).toBeVisible();
+  expect(await page.evaluate(() => document.body.style.overflow)).toBe('hidden');
+
+  // Escape closes the lightbox only
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#lightbox')).toBeHidden();
+  expect(await page.evaluate(() => document.body.style.overflow)).toBe('');
+});
+
+test('tablet resize closes the mobile nav and keeps navigation usable', async ({ page }) => {
+  await page.setViewportSize({ width: 480, height: 900 });
+  await page.goto('/');
+
+  const menuButton = page.locator('.menu-toggle');
+  const nav = page.locator('#site-nav');
+  await menuButton.click();
+  await expect(nav).toBeVisible();
+  await expect(menuButton).toHaveAttribute('aria-expanded', 'true');
+
+  // Grow to desktop width — CSS switches to inline nav, JS must close the menu state
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
+  await expect(nav).not.toHaveClass(/is-open/);
+});
+
+test('section numbering is unique and ordered', async ({ page }) => {
+  await page.goto('/');
+  const kickers = await page.locator('.section-kicker span').allTextContents();
+  const nums = kickers.map(t => Number(t.trim())).filter(n => !Number.isNaN(n));
+  expect(new Set(nums).size).toBe(nums.length); // no duplicates
+  expect(nums).toEqual([...nums].sort((a, b) => a - b)); // ascending
+});

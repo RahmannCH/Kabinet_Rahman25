@@ -2,6 +2,42 @@
 // KABINET RAHMAN 25 - CORE SCRIPT (CLAYMORPHISM INTERACTION ENGINE)
 // ==========================================================================
 
+// 0. Scroll-Lock Manager (counter-based, supports multiple overlapping overlays)
+const ScrollLock = (() => {
+  let depth = 0;
+  const lock = () => {
+    depth++;
+    document.body.style.overflow = 'hidden';
+  };
+  const unlock = () => {
+    depth = Math.max(0, depth - 1);
+    if (depth === 0) document.body.style.overflow = '';
+  };
+  const forceReset = () => {
+    depth = 0;
+    document.body.style.overflow = '';
+  };
+  return { lock, unlock, forceReset, get depth() { return depth; } };
+})();
+
+// 0b. Overlay Manager (Escape priority: lightbox > article > cabinet)
+const OverlayManager = {
+  stack: [],
+  register(id, open, close) {
+    // replace if already registered
+    this.stack = this.stack.filter(o => o.id !== id);
+    this.stack.push({ id, open, close });
+  },
+  closeTop() {
+    for (let i = this.stack.length - 1; i >= 0; i--) {
+      const o = this.stack[i];
+      if (!o.close()) continue; // returns false if already closed
+      return true;
+    }
+    return false;
+  },
+};
+
 // 1. Theme Management (Light & Dark Clay State Controller)
 const themeButton = document.querySelector('.theme-toggle');
 const themeMeta = document.querySelector('meta[name="theme-color"]');
@@ -69,13 +105,17 @@ if (menuButton && navigation) {
     menuButton.focus();
   });
 
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 720) {
-      menuButton.setAttribute('aria-expanded', 'false');
-      menuButton.setAttribute('aria-label', 'Buka navigasi');
-      navigation.classList.remove('is-open');
-    }
+  const mqDesktop = window.matchMedia('(min-width: 961px)');
+  const closeMobileNav = () => {
+    menuButton.setAttribute('aria-expanded', 'false');
+    menuButton.setAttribute('aria-label', 'Buka navigasi');
+    navigation.classList.remove('is-open');
+  };
+  mqDesktop.addEventListener('change', e => {
+    if (e.matches) closeMobileNav();
   });
+  // Also check immediately on load
+  if (mqDesktop.matches) closeMobileNav();
 
   // Scrollspy: Highlight Active Nav Link
   const sections = document.querySelectorAll('main section[id]');
@@ -189,7 +229,7 @@ const DEPT_ROSTER = {
     ]
   },
   harmoni: {
-    name: 'Hari Momen Inspiratif',
+    name: 'Departemen Harmoni dan Kebersamaan',
     lead: { role: 'Kepala Departemen', name: 'Wulan Sari Andini', tag: 'HARMONI' },
     staff: [
       { name: 'Kevin Aditya Pratama' },
@@ -200,15 +240,49 @@ const DEPT_ROSTER = {
   }
 };
 
+// Program kerja per departemen (3 per departemen = 21 total)
+const DEPT_PROGRAMS = [
+  // HR
+  { key: 'hr', dept: 'HR', title: 'ORMAWA Gathering', desc: 'Forum kolaborasi seluruh organisasi mahasiswa tingkat fakultas dalam satu agenda bersama.', featured: true },
+  { key: 'hr', dept: 'HR', title: 'Open Recruitment Pengurus', desc: 'Seleksi terbuka bagi mahasiswa Ilmu Komputer yang ingin berkontribusi dalam kepengurusan.', featured: false },
+  { key: 'hr', dept: 'HR', title: 'Silaturahmi Alumni', desc: 'Pertemuan rutin dengan alumni untuk memperkuat jejaring dan sharing pengalaman industri.', featured: false },
+  // PADI
+  { key: 'padi', dept: 'PADI', title: 'Gemastik Preparation Camp', desc: 'Program intensif persiapan kompetisi teknologi informasi nasional untuk delegasi ULM.', featured: false },
+  { key: 'padi', dept: 'PADI', title: 'Tech Talk Series', desc: 'Seri seminar teknologi dengan pembicara praktisi dan akademisi dari berbagai bidang IT.', featured: false },
+  { key: 'padi', dept: 'PADI', title: 'Riset Bersama Dosen', desc: 'Wadah kolaborasi mahasiswa dan dosen dalam penelitian dan publikasi ilmiah.', featured: false },
+  // ORSE
+  { key: 'orse', dept: 'ORSE', title: 'Pekan Minat Bakat', desc: 'Olimpiade olahraga dan pentas seni antar angkatan Ilmu Komputer.', featured: true },
+  { key: 'orse', dept: 'ORSE', title: 'Fun Run Kampus', desc: 'Lari pagi bersama seluruh civitas akademika dengan rute kampus dan hadiah menarik.', featured: false },
+  { key: 'orse', dept: 'ORSE', title: 'Kompetisi E-Sport', desc: 'Turnamen game antar angkatan dan lintas jurusan untuk mempererat kebersamaan.', featured: false },
+  // KOMINFO
+  { key: 'kominfo', dept: 'KOMINFO', title: 'Media Sosial Campaign', desc: 'Strategi konten dan branding HIMAKOM ULM di berbagai platform media sosial.', featured: false },
+  { key: 'kominfo', dept: 'KOMINFO', title: 'Podcast Ilkom Ngobrol', desc: 'Podcast rutin membahas isu teknologi, kampus, dan kehidupan mahasiswa.', featured: false },
+  { key: 'kominfo', dept: 'KOMINFO', title: 'Desain Grafis Workshop', desc: 'Pelatihan desain visual dan branding untuk pengurus dan anggota aktif.', featured: false },
+  // PSDM
+  { key: 'psdm', dept: 'PSDM', title: 'Pelatihan Kepemimpinan', desc: 'Program kaderisasi internal untuk membekali pengurus baru dengan dasar manajemen organisasi.', featured: false },
+  { key: 'psdm', dept: 'PSDM', title: 'Mentoring Akademik', desc: 'Program bimbingan belajar antar angkatan untuk mata kuliah dasar dan lanjut.', featured: false },
+  { key: 'psdm', dept: 'PSDM', title: 'Soft Skill Bootcamp', desc: 'Pelatihan komunikasi, negosiasi, dan presentasi untuk mahasiswa Ilmu Komputer.', featured: false },
+  // SOSMA
+  { key: 'sosma', dept: 'SOSMA', title: 'Ilkom Goes To School', desc: 'Kunjungan edukasi teknologi ke sekolah menengah mitra di wilayah Kalimantan Selatan.', featured: true },
+  { key: 'sosma', dept: 'SOSMA', title: 'Bakti Sosial Kampus', desc: 'Aksi sosial berkala untuk masyarakat sekitar kampus dan lingkungan.', featured: false },
+  { key: 'sosma', dept: 'SOSMA', title: 'Donor Darah Rutin', desc: 'Kerja sama dengan PMI untuk penggalangan donor darah dari civitas akademika.', featured: false },
+  // HARMONI
+  { key: 'harmoni', dept: 'HARMONI', title: 'Malam Keakraban Kabinet', desc: 'Perayaan akhir periode sekaligus penguatan kekeluargaan antar pengurus dan angkatan.', featured: false },
+  { key: 'harmoni', dept: 'HARMONI', title: 'Buka Bersama Ramadhan', desc: 'Kegiatan buka puasa bersama seluruh pengurus dan anggota HIMAKOM ULM.', featured: false },
+  { key: 'harmoni', dept: 'HARMONI', title: 'Family Day Ilkom', desc: 'Hari rekreasi bersama keluarga besar Ilmu Komputer di destinasi lokal.', featured: false }
+];
+
 const treePanel = document.getElementById('treeDeptPanel');
 const treePanelBadge = document.getElementById('treePanelBadge');
 const treePanelName = document.getElementById('treePanelName');
 const treePanelLeadRow = document.getElementById('treePanelLeadRow');
 const treePanelStaffRow = document.getElementById('treePanelStaffRow');
 
-const buildMemberCard = ({ role, name, tag, isLead }) => `
-  <article class="member-card glow-card tree-node" data-department="${(tag || '').toLowerCase()}">
-    <div class="member-image-wrap"><img src="assets/ProfileRahman.jpeg" alt="Foto ${role} ${tag}" loading="lazy"></div>
+const DEFAULT_MEMBER_PHOTO = 'assets/ProfileRahman.jpeg';
+
+const buildMemberCard = ({ role, name, tag, isLead, image }) => `
+  <article class="member-card tree-node" data-department="${(tag || '').toLowerCase()}">
+    <div class="member-image-wrap"><img src="${image || DEFAULT_MEMBER_PHOTO}" alt="Foto ${role} ${tag}" loading="lazy"></div>
     <div class="member-info">
       <span class="member-role${isLead ? ' role-lead' : ''}">${role}</span>
       <h3 class="member-name">${name}</h3>
@@ -225,10 +299,11 @@ const renderDeptPanel = key => {
     role: dept.lead.role,
     name: dept.lead.name,
     tag: dept.lead.tag,
-    isLead: true
+    isLead: true,
+    image: dept.lead.image
   });
   treePanelStaffRow.innerHTML = dept.staff
-    .map(s => buildMemberCard({ role: 'Staff', name: s.name, tag: dept.lead.tag, isLead: false }))
+    .map(s => buildMemberCard({ role: 'Staff', name: s.name, tag: dept.lead.tag, isLead: false, image: s.image }))
     .join('');
   treePanel.hidden = false;
 };
@@ -417,16 +492,16 @@ let lastFocusedElement = null;
 
 if (openModalBtn && closeModalBtn && cabinetModal) {
   const openCabinetModal = () => {
-    if (!cabinetModal.hidden) return; // already open — prevent double-open & duplicate history
+    if (!cabinetModal.hidden) return;
     lastFocusedElement = document.activeElement;
     cabinetModal.hidden = false;
-    document.body.style.overflow = 'hidden';
+    ScrollLock.lock();
     openModalBtn.setAttribute('aria-expanded', 'true');
-    
-    if (window.location.hash !== '#struktur-lengkap') {
-      history.pushState(null, '', '#struktur-lengkap');
+
+    if (window.location.hash !== '#struktur') {
+      history.pushState(null, '', '#struktur');
     }
-    
+
     setTimeout(() => {
       const firstTabBtn = cabinetModal.querySelector('.modal-pill-btn');
       if (firstTabBtn) firstTabBtn.focus();
@@ -435,29 +510,26 @@ if (openModalBtn && closeModalBtn && cabinetModal) {
   };
 
   const closeCabinetModal = () => {
-    if (cabinetModal.hidden) return; // already closed
+    if (cabinetModal.hidden) return false;
     cabinetModal.hidden = true;
-    document.body.style.overflow = '';
+    ScrollLock.unlock();
     openModalBtn.setAttribute('aria-expanded', 'false');
-    
-    if (window.location.hash === '#struktur-lengkap') {
+
+    if (window.location.hash === '#struktur') {
       history.replaceState(null, '', window.location.pathname + window.location.search);
     }
-    
+
     if (lastFocusedElement) {
       lastFocusedElement.focus();
     }
+    return true;
   };
 
   openModalBtn.addEventListener('click', openCabinetModal);
   closeModalBtn.addEventListener('click', closeCabinetModal);
 
-  // Close on Escape key
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && !cabinetModal.hidden) {
-      closeCabinetModal();
-    }
-  });
+  // Register with the shared overlay manager (Escape priority handled centrally)
+  OverlayManager.register('cabinet', openCabinetModal, closeCabinetModal);
 
   // Accessible Focus Trap inside modal
   cabinetModal.addEventListener('keydown', e => {
@@ -482,14 +554,14 @@ if (openModalBtn && closeModalBtn && cabinetModal) {
 
   // Browser Back button integration
   window.addEventListener('popstate', () => {
-    if (window.location.hash !== '#struktur-lengkap' && !cabinetModal.hidden) {
+    if (window.location.hash !== '#struktur' && !cabinetModal.hidden) {
       closeCabinetModal();
-    } else if (window.location.hash === '#struktur-lengkap' && cabinetModal.hidden) {
+    } else if (window.location.hash === '#struktur' && cabinetModal.hidden) {
       openCabinetModal();
     }
   });
 
-  if (window.location.hash === '#struktur-lengkap') {
+  if (window.location.hash === '#struktur') {
     openCabinetModal();
   }
 
@@ -612,6 +684,7 @@ if (articleModal && articleTriggers.length) {
   const openArticle = key => {
     const data = ARTICLES[key];
     if (!data) return;
+    if (!articleModal.hidden) return; // already open — single-instance guard
     articleLastFocus = document.activeElement;
     articleKicker.textContent = data.kicker;
     articleTitle.textContent = data.title;
@@ -619,14 +692,17 @@ if (articleModal && articleTriggers.length) {
     articleAuthor.textContent = data.author;
     articleBody.innerHTML = data.body.map(p => `<p>${p}</p>`).join('');
     articleModal.hidden = false;
-    document.body.style.overflow = 'hidden';
+    articleModal.dataset.currentKey = key;
+    ScrollLock.lock();
     articleModal.querySelector('.article-sheet-close')?.focus();
   };
 
   const closeArticle = () => {
+    if (articleModal.hidden) return false;
     articleModal.hidden = true;
-    document.body.style.overflow = '';
+    ScrollLock.unlock();
     if (articleLastFocus) articleLastFocus.focus();
+    return true;
   };
 
   articleTriggers.forEach(btn => {
@@ -637,9 +713,7 @@ if (articleModal && articleTriggers.length) {
     el.addEventListener('click', closeArticle);
   });
 
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && !articleModal.hidden) closeArticle();
-  });
+  OverlayManager.register('article', () => openArticle(articleModal.dataset.currentKey), closeArticle);
 
   articleModal.addEventListener('keydown', e => {
     if (e.key !== 'Tab') return;
@@ -667,6 +741,11 @@ if (articleModal && articleTriggers.length) {
   const animateCount = (el) => {
     const target = parseInt(el.dataset.count, 10);
     const suffix = el.dataset.suffix || '';
+    // Respect reduced-motion: set final value instantly, no animation
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.textContent = target + suffix;
+      return;
+    }
     const duration = 1400;
     const start = performance.now();
     const step = (now) => {
@@ -685,7 +764,7 @@ if (articleModal && articleTriggers.length) {
         io.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.5 });
+  }, { threshold: 0.25 });
 
   statCards.forEach(card => io.observe(card));
 })();
@@ -735,32 +814,44 @@ if (articleModal && articleTriggers.length) {
   const open = (trigger) => {
     const img = trigger.querySelector('img');
     if (!img) return;
+    if (!lightbox.hidden) return; // already open — double-click guard
     lastFocused = document.activeElement;
     lightboxImg.src = img.src;
     lightboxImg.alt = img.alt || '';
     lightboxCap.textContent = trigger.dataset.caption || '';
     lightbox.hidden = false;
-    document.body.style.overflow = 'hidden';
+    ScrollLock.lock();
     lightbox.querySelector('.lightbox-close').focus();
   };
 
   const close = () => {
+    if (lightbox.hidden) return false;
     lightbox.hidden = true;
     lightboxImg.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
     lightboxImg.alt = '';
     lightboxCap.textContent = '';
-    document.body.style.overflow = '';
+    ScrollLock.unlock();
     if (lastFocused) lastFocused.focus();
+    return true;
   };
 
   triggers.forEach(btn => btn.addEventListener('click', () => open(btn)));
   lightbox.querySelectorAll('[data-lightbox-close]').forEach(el =>
     el.addEventListener('click', close)
   );
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && !lightbox.hidden) close();
-  });
+
+  // Escape priority: registered LAST so it is the topmost overlay
+  OverlayManager.register('lightbox', () => {}, close);
 })();
+
+// 14. Global Escape Handler (closes only the topmost overlay)
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  // Ignore when mobile nav is open — its own handler manages that
+  const menuBtn = document.querySelector('.menu-toggle');
+  if (menuBtn && menuBtn.getAttribute('aria-expanded') === 'true') return;
+  if (OverlayManager.closeTop()) e.preventDefault();
+});
 
 // ==========================================================================
 // 13. FAQ ACCORDION (single-open)
@@ -776,6 +867,46 @@ if (articleModal && articleTriggers.length) {
           if (other !== item && other.open) other.open = false;
         });
       }
+    });
+  });
+})();
+
+// ==========================================================================
+// 15. PROGRAM KERJA DEPARTEMEN (Render + Filter)
+// ==========================================================================
+(() => {
+  const grid = document.getElementById('prokerDeptGrid');
+  const filterBtns = document.querySelectorAll('.proker-filter-btn');
+  const empty = document.getElementById('prokerEmpty');
+  if (!grid || !DEPT_PROGRAMS.length) return;
+
+  const buildCard = prog => `
+    <article class="proker-dept-card" data-proker-dept="${prog.key}">
+      <span class="proker-dept-badge">${prog.dept}</span>
+      <h3>${prog.title}</h3>
+      <p>${prog.desc}</p>
+    </article>`;
+
+  grid.innerHTML = DEPT_PROGRAMS.map(buildCard).join('');
+
+  if (!filterBtns.length) return;
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.prokerFilter;
+      filterBtns.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+
+      let visible = 0;
+      grid.querySelectorAll('.proker-dept-card').forEach(card => {
+        const show = filter === 'all' || card.dataset.prokerDept === filter;
+        card.hidden = !show;
+        if (show) visible++;
+      });
+      if (empty) empty.hidden = visible > 0;
     });
   });
 })();
