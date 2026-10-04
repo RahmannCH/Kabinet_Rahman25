@@ -5,15 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#eef4fc">
+  <meta name="color-scheme" content="light dark">
   <title>Halaman tidak ditemukan | Kabinet Rahman 25</title>
   <link rel="stylesheet" href="css/style.css">
+  <script>
+    document.documentElement.classList.add('js');
+    try {
+      const preference = localStorage.getItem('kabinet-theme');
+      const theme = preference === 'light' || preference === 'dark'
+        ? preference
+        : matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.dataset.theme = theme;
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', theme === 'dark' ? '#090e17' : '#eef4fc');
+    } catch {
+      document.documentElement.dataset.theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+  </script>
 </head>
 <body>
   <main class="not-found">
     <p class="section-kicker">404 — HALAMAN TIDAK DITEMUKAN</p>
     <h1>Halaman ini belum tersedia.</h1>
     <p>Periksa kembali alamatnya atau kembali ke pratinjau Kabinet Rahman 25.</p>
-    <a class="button button-primary" href="/">Kembali ke beranda</a>
+    <a class="button button-primary" href="index.html">Kembali ke beranda</a>
   </main>
 </body>
 </html>
