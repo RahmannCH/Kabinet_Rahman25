@@ -103,8 +103,8 @@ if (menuButton && navigation) {
   }
 }
 
-// 4. Clay Button Spring Bounce Physics on Pointer
-const magneticBtns = document.querySelectorAll('.magnetic-btn');
+// 4. Clay Button Spring Bounce Physics on Pointer (applies to real interactive controls)
+const magneticBtns = document.querySelectorAll('.button, .nav-action, .theme-toggle, .filter-btn');
 if (magneticBtns.length && window.matchMedia('(pointer: fine)').matches) {
   magneticBtns.forEach(btn => {
     btn.addEventListener('mousemove', e => {
@@ -130,72 +130,72 @@ const legacyCards = document.querySelectorAll('.fungsionaris-grid .member-card')
 const DEPT_ROSTER = {
   hr: {
     name: 'Departemen Hubungan Relasi',
-    lead: { role: 'Kepala Departemen', name: 'Pak Hrdwi Rekrutmen', tag: 'HR' },
+    lead: { role: 'Kepala Departemen', name: 'Dedi Mulyadi Pratama', tag: 'HR' },
     staff: [
-      { name: 'Sisca Obrolan Ringan' },
-      { name: 'Rio Kopi Pagi' },
-      { name: 'Nadia Curhat Malam' },
-      { name: 'Bagas Absen Terus' }
+      { name: 'Naufal Zaki Ramadhan' },
+      { name: 'Putri Ayu Wandira' },
+      { name: 'Adit Nugraha Pratama' },
+      { name: 'Wawan Hermawan Saputra' }
     ]
   },
   padi: {
     name: 'Pengembangan Akademik dan Teknologi',
-    lead: { role: 'Kepala Departemen', name: 'Profesor Ngoding Tidur', tag: 'PADI' },
+    lead: { role: 'Kepala Departemen', name: 'Asep Sunandar Wijaya', tag: 'PADI' },
     staff: [
-      { name: 'Ilham Error 404' },
-      { name: 'Nadya Submit Tugas' },
-      { name: 'Raka Deadline Besok' },
-      { name: 'Maya Ngebug Dulu' }
+      { name: 'Rian Hidayatullah' },
+      { name: 'Dewi Anggraini Sari' },
+      { name: 'Fajar Sidiq Ramadhan' },
+      { name: 'Galih Permana Putra' }
     ]
   },
   orse: {
     name: 'Departemen Olahraga dan Seni',
-    lead: { role: 'Kepala Departemen', name: 'Kapten Futsal Kampung', tag: 'ORSE' },
+    lead: { role: 'Kepala Departemen', name: 'Joko Susilo Raharjo', tag: 'ORSE' },
     staff: [
-      { name: 'Rian Skipping Dulu' },
-      { name: 'Farhan Nonton Bola' },
-      { name: 'Nadia Rebahan Sportif' },
-      { name: 'Aldo Lupa Racket' }
+      { name: 'Bayu Setiawan Nugroho' },
+      { name: 'Dodi Prasetyo Aji' },
+      { name: 'Rina Marlina Sari' },
+      { name: 'Hendra Gunawan Saputra' }
     ]
   },
   kominfo: {
     name: 'Komunikasi dan Informasi',
-    lead: { role: 'Kepala Departemen', name: 'Sultan Konten Viral', tag: 'KOMINFO' },
+    lead: { role: 'Kepala Departemen', name: 'Bagas Dwi Cahyono', tag: 'KOMINFO' },
     staff: [
-      { name: 'Hida Edit Sampai Subuh' },
-      { name: 'Husain Scroll Terus' },
-      { name: 'Aisyah Filter Cantik' },
-      { name: 'Raka Live TikTok' }
+      { name: 'Rifki Maulana Yusuf' },
+      { name: 'Indah Permatasari' },
+      { name: 'Yogi Pratama Saputra' },
+      { name: 'Taufik Hidayat Ramadhan' }
     ]
   },
   psdm: {
     name: 'Pengembangan Sumber Daya Mahasiswa',
-    lead: { role: 'Kepala Departemen', name: 'Bapak Kaderisasi Sejati', tag: 'PSDM' },
+    lead: { role: 'Kepala Departemen', name: 'Slamet Riyadi Nugroho', tag: 'PSDM' },
     staff: [
-      { name: 'Annisa Semangat 45' },
-      { name: 'Kevin Maba Abadi' },
-      { name: 'Nabila Rapat Terus' },
-      { name: 'Maya Jarkom Mantap' }
+      { name: 'Arif Budiman Saputra' },
+      { name: 'Lestari Widya Ningsih' },
+      { name: 'Rendi Kurniawan Putra' },
+      { name: 'Sigit Purnomo Aji' }
     ]
   },
   sosma: {
     name: 'Sosial dan Masyarakat',
-    lead: { role: 'Kepala Departemen', name: 'Ketua RT Digital', tag: 'SOSMA' },
+    lead: { role: 'Kepala Departemen', name: 'Iwan Setiawan Saputra', tag: 'SOSMA' },
     staff: [
-      { name: 'Zahra Bakti Sosial' },
-      { name: 'Bintang Gotong Royong' },
-      { name: 'Rizky Dermawan' },
-      { name: 'Nisa Kasih Sayang' }
+      { name: 'Zaki Mubarak Ramadhan' },
+      { name: 'Nurul Aini Safitri' },
+      { name: 'Bima Arya Pratama' },
+      { name: 'Gilang Ramadhan Putra' }
     ]
   },
   harmoni: {
     name: 'Hari Momen Inspiratif',
-    lead: { role: 'Kepala Departemen', name: 'DJ Acara Kampung', tag: 'HARMONI' },
+    lead: { role: 'Kepala Departemen', name: 'Wulan Sari Andini', tag: 'HARMONI' },
     staff: [
-      { name: 'Maya Nostalgia' },
-      { name: 'Gilang Sound Sistem' },
-      { name: 'Kevin Makan Bareng' },
-      { name: 'Rina Karaoke Nostalgia' }
+      { name: 'Kevin Aditya Pratama' },
+      { name: 'Maya Sari Dewi' },
+      { name: 'Yusuf Ramadhan Hakim' },
+      { name: 'Rizky Ananda Putra' }
     ]
   }
 };
@@ -306,29 +306,81 @@ if (filterButtons.length) {
   });
 }
 
-// 6. Aspirasi Form Feedback Simulation
+// ==========================================================================
+// 6. Aspirasi Form — Real Client-Side Validation (no fake server claim)
+// ==========================================================================
 const form = document.getElementById('publicAspirasiForm');
 const alertBox = document.getElementById('formSuccessAlert');
 
+const setFieldError = (field, message) => {
+  if (!field) return;
+  let errorEl = field.parentElement.querySelector('.field-error');
+  if (!errorEl) {
+    errorEl = document.createElement('span');
+    errorEl.className = 'field-error';
+    errorEl.setAttribute('role', 'alert');
+    field.parentElement.appendChild(errorEl);
+  }
+  if (message) {
+    errorEl.textContent = message;
+    field.setAttribute('aria-invalid', 'true');
+  } else {
+    errorEl.textContent = '';
+    field.removeAttribute('aria-invalid');
+  }
+};
+
 if (form) {
+  const nameInput = form.querySelector('#namaInput');
+  const targetSelect = form.querySelector('#divisiTarget');
+  const messageInput = form.querySelector('#pesanInput');
+  const submitBtn = form.querySelector('button[type="submit"]');
+
+  // Live-clear errors as the user types
+  [nameInput, targetSelect, messageInput].forEach(field => {
+    if (!field) return;
+    field.addEventListener('input', () => setFieldError(field, ''));
+    field.addEventListener('change', () => setFieldError(field, ''));
+  });
+
   form.addEventListener('submit', event => {
     event.preventDefault();
-    const submitBtn = form.querySelector('button[type="submit"]');
     if (!submitBtn) return;
+
+    let valid = true;
+
+    if (!targetSelect || !targetSelect.value) {
+      setFieldError(targetSelect, 'Pilih departemen tujuan terlebih dahulu.');
+      valid = false;
+    }
+
+    const message = (messageInput?.value || '').trim();
+    if (message.length < 10) {
+      setFieldError(messageInput, 'Pesan minimal 10 karakter agar jelas.');
+      valid = false;
+    }
+
+    if (!valid) {
+      const firstInvalid = form.querySelector('[aria-invalid="true"]');
+      if (firstInvalid) firstInvalid.focus();
+      return;
+    }
 
     const previousText = submitBtn.textContent;
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Mengirimkan...';
+    submitBtn.textContent = 'Mengirim...';
 
-    setTimeout(() => {
+    // Local preview mode: no backend is connected yet.
+    window.setTimeout(() => {
       form.reset();
       submitBtn.disabled = false;
       submitBtn.textContent = previousText;
       if (alertBox) {
+        alertBox.textContent = 'Aspirasi tersimpan di pratinjau ini. Pengiriman nyata ke pengurus belum aktif.';
         alertBox.style.display = 'block';
-        setTimeout(() => {
+        window.setTimeout(() => {
           alertBox.style.display = 'none';
-        }, 5000);
+        }, 6000);
       }
     }, 600);
   });
@@ -365,6 +417,7 @@ let lastFocusedElement = null;
 
 if (openModalBtn && closeModalBtn && cabinetModal) {
   const openCabinetModal = () => {
+    if (!cabinetModal.hidden) return; // already open — prevent double-open & duplicate history
     lastFocusedElement = document.activeElement;
     cabinetModal.hidden = false;
     document.body.style.overflow = 'hidden';
@@ -382,6 +435,7 @@ if (openModalBtn && closeModalBtn && cabinetModal) {
   };
 
   const closeCabinetModal = () => {
+    if (cabinetModal.hidden) return; // already closed
     cabinetModal.hidden = true;
     document.body.style.overflow = '';
     openModalBtn.setAttribute('aria-expanded', 'false');
@@ -471,4 +525,134 @@ if (openModalBtn && closeModalBtn && cabinetModal) {
       });
     });
   }
+}
+
+// ==========================================================================
+// 9. ARTICLE READER MODAL (Kabar & Proker Detail — replaces dead links)
+// ==========================================================================
+const ARTICLES = {
+  'proker-igts': {
+    kicker: 'PROKER · SOSMA',
+    title: 'Ilkom Goes To School (IGTS)',
+    date: 'Program Unggulan 2026',
+    author: 'Departemen Sosial dan Masyarakat',
+    body: [
+      'Ilkom Goes To School adalah program pengabdian yang membawa mahasiswa Ilmu Komputer turun langsung ke sekolah-sekolah menengah untuk memperkenalkan dunia teknologi sejak dini.',
+      'Kegiatan ini mencakup pelatihan dasar pemrograman, pengenalan literasi digital, serta sesi motivasi karier di bidang teknologi informasi bagi para siswa.',
+      'Melalui IGTS, HIMAKOM ULM berkomitmen menjadi jembatan antara dunia kampus dan masyarakat, sekaligus menumbuhkan minat generasi muda terhadap ilmu komputer.'
+    ]
+  },
+  'proker-pmb': {
+    kicker: 'PROKER · ORSE',
+    title: 'Pekan Minat Bakat',
+    date: 'Program Unggulan 2026',
+    author: 'Departemen Olahraga dan Seni',
+    body: [
+      'Pekan Minat Bakat adalah olimpiade tahunan yang menjadi ajang kompetisi sportif sekaligus panggung ekspresi seni bagi seluruh mahasiswa Ilmu Komputer.',
+      'Berbagai cabang dipertandingkan, mulai dari futsal, badminton, hingga lomba band dan tari kontemporer antar angkatan.',
+      'Acara ini dirancang untuk mempererat kebersamaan, menyalurkan bakat terpendam, dan membangun jiwa sportivitas di lingkungan himpunan.'
+    ]
+  },
+  'proker-ormawa': {
+    kicker: 'PROKER · HR',
+    title: 'ORMAWA Gathering',
+    date: 'Program Unggulan 2026',
+    author: 'Departemen Hubungan Relasi',
+    body: [
+      'ORMAWA Gathering adalah inisiatif strategis yang mempertemukan seluruh organisasi mahasiswa di tingkat fakultas dalam satu forum kolaborasi.',
+      'Melalui kegiatan ini, setiap organisasi saling berbagi program kerja, mencari potensi sinergi, dan menyusun agenda bersama untuk kepentingan mahasiswa.',
+      'Tujuannya jelas: memperkuat persatuan antar lembaga dan menghadirkan gerakan mahasiswa yang lebih solid, terarah, dan berdampak.'
+    ]
+  },
+  'kabar-pelatihan': {
+    kicker: 'KABAR · PSDM',
+    title: 'Pelatihan Kepemimpinan Mahasiswa Sukses Digelar',
+    date: '12 Oktober 2026',
+    author: 'Departemen PSDM',
+    body: [
+      'Lebih dari 80 mahasiswa baru Ilmu Komputer mengikuti pelatihan kepemimpinan yang diselenggarakan untuk mempersiapkan kaderisasi masa depan himpunan.',
+      'Materi pelatihan mencakup dasar-dasar manajemen organisasi, komunikasi efektif, penyelesaian konflik, dan penyusunan program kerja berbasis kebutuhan anggota.',
+      'Peserta diharapkan mampu mengambil peran aktif ketika masa kepengurusan berikutnya berjalan.'
+    ]
+  },
+  'kabar-oprec': {
+    kicker: 'KABAR · HR',
+    title: 'HIMAKOM Buka Pendaftaran Open Recruitment Pengurus',
+    date: '8 Oktober 2026',
+    author: 'Departemen Hubungan Relasi',
+    body: [
+      'HIMAKOM ULM resmi membuka pendaftaran pengurus baru melalui jalur seleksi terbuka bagi seluruh mahasiswa Ilmu Komputer yang ingin mengambil peran.',
+      'Tahapan seleksi meliputi pengumpulan berkas, wawancara, dan evaluasi minat pada departemen yang dituju.',
+      'Ini kesempatan bagi mahasiswa untuk berkontribusi nyata dalam kabinet sekaligus mengembangkan keterampilan organisasi dan kepemimpinan.'
+    ]
+  },
+  'kabar-gemastik': {
+    kicker: 'KABAR · PADI',
+    title: 'Tim Riset ULM Sabet Juara Gemastik Nasional',
+    date: '28 September 2026',
+    author: 'Departemen Pengembangan Akademik dan Teknologi',
+    body: [
+      'Tim riset delegasi mahasiswa Ilmu Komputer berhasil meraih juara pada ajang kompetisi teknologi informasi nasional Gemastik tahun ini.',
+      'Prestasi ini merupakan buah dari pembinaan riset berkelanjutan yang difasilitasi departemen pengembangan akademik.',
+      'Capaian tersebut menjadi motivasi bagi mahasiswa lain untuk terus berprestasi di tingkat nasional.'
+    ]
+  }
+};
+
+const articleModal = document.getElementById('articleModal');
+const articleKicker = document.getElementById('articleKicker');
+const articleTitle = document.getElementById('articleTitle');
+const articleDate = document.getElementById('articleDate');
+const articleAuthor = document.getElementById('articleAuthor');
+const articleBody = document.getElementById('articleBody');
+const articleTriggers = document.querySelectorAll('[data-article]');
+let articleLastFocus = null;
+
+if (articleModal && articleTriggers.length) {
+  const openArticle = key => {
+    const data = ARTICLES[key];
+    if (!data) return;
+    articleLastFocus = document.activeElement;
+    articleKicker.textContent = data.kicker;
+    articleTitle.textContent = data.title;
+    articleDate.textContent = data.date;
+    articleAuthor.textContent = data.author;
+    articleBody.innerHTML = data.body.map(p => `<p>${p}</p>`).join('');
+    articleModal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    articleModal.querySelector('.article-sheet-close')?.focus();
+  };
+
+  const closeArticle = () => {
+    articleModal.hidden = true;
+    document.body.style.overflow = '';
+    if (articleLastFocus) articleLastFocus.focus();
+  };
+
+  articleTriggers.forEach(btn => {
+    btn.addEventListener('click', () => openArticle(btn.getAttribute('data-article')));
+  });
+
+  articleModal.querySelectorAll('[data-article-close]').forEach(el => {
+    el.addEventListener('click', closeArticle);
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !articleModal.hidden) closeArticle();
+  });
+
+  articleModal.addEventListener('keydown', e => {
+    if (e.key !== 'Tab') return;
+    const focusables = articleModal.querySelectorAll('button, [href], [tabindex]:not([tabindex="-1"])');
+    if (!focusables.length) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      last.focus();
+      e.preventDefault();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      first.focus();
+      e.preventDefault();
+    }
+  });
 }
