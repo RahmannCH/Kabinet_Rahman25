@@ -97,6 +97,31 @@
       <span class="hero-side-note" aria-hidden="true">FMIPA · UNIVERSITAS LAMBUNG MANGKURAT</span>
     </section>
 
+    <!-- Statistik Organisasi (Count-up) -->
+    <section class="stats section" id="statistik" aria-labelledby="stats-title">
+      <div class="stats-container sc-fade-up">
+        <h2 id="stats-title" class="sr-only">Statistik Skala Organisasi</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-number" data-count="44">0</span>
+            <span class="stat-label">Pengurus Aktif</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number" data-count="7">0</span>
+            <span class="stat-label">Departemen</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number" data-count="20" data-suffix="+">0</span>
+            <span class="stat-label">Program Kerja</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number" data-count="500" data-suffix="+">0</span>
+            <span class="stat-label">Mahasiswa Diayomi</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Sticky Layout Section for About -->
     <section class="intro-sticky section" id="tentang">
       <div class="sticky-container">
@@ -383,6 +408,99 @@
       </div>
     </section>
 
+    <!-- Agenda Kegiatan (Timeline) -->
+    <section class="agenda section" id="agenda" aria-labelledby="agenda-title">
+      <div class="agenda-header sc-fade-up" style="--stagger: 1">
+        <div class="section-kicker"><span>04</span> Agenda Kegiatan</div>
+        <h2 id="agenda-title">Jadwal yang<br><em>sedang berjalan.</em></h2>
+        <p>Rangkaian kegiatan terdekat dari seluruh departemen Kabinet Rahman 25.</p>
+      </div>
+
+      <div class="agenda-filter sc-fade-up" style="--stagger: 2" role="tablist" aria-label="Saring agenda berdasarkan bulan">
+        <button type="button" class="agenda-filter-btn active" data-agenda-filter="all" role="tab" aria-selected="true">Semua</button>
+        <button type="button" class="agenda-filter-btn" data-agenda-filter="okt" role="tab" aria-selected="false">Oktober</button>
+        <button type="button" class="agenda-filter-btn" data-agenda-filter="nov" role="tab" aria-selected="false">November</button>
+        <button type="button" class="agenda-filter-btn" data-agenda-filter="des" role="tab" aria-selected="false">Desember</button>
+      </div>
+
+      <ol class="agenda-timeline" id="agendaTimeline">
+        <li class="agenda-item sc-fade-up" data-month="okt" style="--stagger: 1">
+          <div class="agenda-node" aria-hidden="true"></div>
+          <div class="agenda-card">
+            <div class="agenda-meta">
+              <span class="agenda-date">05 Okt 2026</span>
+              <span class="agenda-status is-upcoming">Akan Datang</span>
+            </div>
+            <h3>Open Recruitment Pengurus</h3>
+            <p>Pembukaan pendaftaran calon pengurus baru Kabinet Rahman 25 bagi seluruh mahasiswa Ilmu Komputer.</p>
+            <span class="agenda-dept">HR</span>
+          </div>
+        </li>
+        <li class="agenda-item sc-fade-up" data-month="okt" style="--stagger: 2">
+          <div class="agenda-node" aria-hidden="true"></div>
+          <div class="agenda-card">
+            <div class="agenda-meta">
+              <span class="agenda-date">14 Okt 2026</span>
+              <span class="agenda-status is-running">Berjalan</span>
+            </div>
+            <h3>Pelatihan Kepemimpinan Mahasiswa</h3>
+            <p>Program kaderisasi internal untuk membekali pengurus baru dengan dasar manajemen organisasi.</p>
+            <span class="agenda-dept">PSDM</span>
+          </div>
+        </li>
+        <li class="agenda-item sc-fade-up" data-month="nov" style="--stagger: 3">
+          <div class="agenda-node" aria-hidden="true"></div>
+          <div class="agenda-card">
+            <div class="agenda-meta">
+              <span class="agenda-date">08 Nov 2026</span>
+              <span class="agenda-status is-upcoming">Akan Datang</span>
+            </div>
+            <h3>Ilkom Goes To School</h3>
+            <p>Kunjungan edukasi teknologi ke sekolah menengah mitra di wilayah Kalimantan Selatan.</p>
+            <span class="agenda-dept">SOSMA</span>
+          </div>
+        </li>
+        <li class="agenda-item sc-fade-up" data-month="nov" style="--stagger: 4">
+          <div class="agenda-node" aria-hidden="true"></div>
+          <div class="agenda-card">
+            <div class="agenda-meta">
+              <span class="agenda-date">22 Nov 2026</span>
+              <span class="agenda-status is-upcoming">Akan Datang</span>
+            </div>
+            <h3>Pekan Minat Bakat</h3>
+            <p>Olimpiade olahraga dan pentas seni antar angkatan Ilmu Komputer.</p>
+            <span class="agenda-dept">ORSE</span>
+          </div>
+        </li>
+        <li class="agenda-item sc-fade-up" data-month="des" style="--stagger: 5">
+          <div class="agenda-node" aria-hidden="true"></div>
+          <div class="agenda-card">
+            <div class="agenda-meta">
+              <span class="agenda-date">12 Des 2026</span>
+              <span class="agenda-status is-upcoming">Akan Datang</span>
+            </div>
+            <h3>ORMAWA Gathering</h3>
+            <p>Forum kolaborasi seluruh organisasi mahasiswa tingkat fakultas dalam satu agenda bersama.</p>
+            <span class="agenda-dept">HR</span>
+          </div>
+        </li>
+        <li class="agenda-item sc-fade-up" data-month="des" style="--stagger: 6">
+          <div class="agenda-node" aria-hidden="true"></div>
+          <div class="agenda-card">
+            <div class="agenda-meta">
+              <span class="agenda-date">20 Des 2026</span>
+              <span class="agenda-status is-upcoming">Akan Datang</span>
+            </div>
+            <h3>Malam Keakraban Kabinet</h3>
+            <p>Perayaan akhir periode sekaligus penguatan kekeluargaan antar pengurus dan angkatan.</p>
+            <span class="agenda-dept">HARMONI</span>
+          </div>
+        </li>
+      </ol>
+
+      <p class="agenda-empty" id="agendaEmpty" hidden>Belum ada agenda pada bulan ini.</p>
+    </section>
+
     <!-- Kabar Terkini Section -->
     <section class="kabar section" id="kabar" aria-labelledby="kabar-title">
       <div class="kabar-header sc-fade-up" style="--stagger: 1">
@@ -409,6 +527,35 @@
           <p>Prestasi membanggakan dari delegasi mahasiswa Ilmu Komputer pada ajang kompetisi IT nasional bergengsi tahun ini.</p>
           <button type="button" class="action-link" data-article="kabar-gemastik" aria-haspopup="dialog">Baca selengkapnya ↗</button>
         </article>
+      </div>
+    </section>
+
+    <!-- Galeri Dokumentasi Kegiatan -->
+    <section class="gallery section" id="galeri" aria-labelledby="gallery-title">
+      <div class="gallery-header sc-fade-up" style="--stagger: 1">
+        <div class="section-kicker"><span>05</span> Galeri Kegiatan</div>
+        <h2 id="gallery-title">Jejak<br><em>dokumentasi.</em></h2>
+        <p>Momen-momen yang terekam dari setiap pergerakan kabinet.</p>
+      </div>
+      <div class="gallery-grid" id="galleryGrid">
+        <button type="button" class="gallery-item gallery-item-wide sc-fade-up" style="--stagger: 2" data-caption="Pembukaan Open Recruitment Kabinet Rahman 25" aria-haspopup="dialog">
+          <img src="https://picsum.photos/seed/kabinet-oprec/800/600" alt="Dokumentasi pembukaan open recruitment" loading="lazy" width="800" height="600">
+        </button>
+        <button type="button" class="gallery-item sc-fade-up" style="--stagger: 3" data-caption="Sesi pelatihan kepemimpinan mahasiswa" aria-haspopup="dialog">
+          <img src="https://picsum.photos/seed/kabinet-pelatihan/500/500" alt="Dokumentasi sesi pelatihan kepemimpinan" loading="lazy" width="500" height="500">
+        </button>
+        <button type="button" class="gallery-item sc-fade-up" style="--stagger: 4" data-caption="Kunjungan Ilkom Goes To School" aria-haspopup="dialog">
+          <img src="https://picsum.photos/seed/kabinet-igts/500/500" alt="Dokumentasi kunjungan Ilkom Goes To School" loading="lazy" width="500" height="500">
+        </button>
+        <button type="button" class="gallery-item gallery-item-tall sc-fade-up" style="--stagger: 5" data-caption="Pekan Minat Bakat antar angkatan" aria-haspopup="dialog">
+          <img src="https://picsum.photos/seed/kabinet-pmb/600/900" alt="Dokumentasi Pekan Minat Bakat" loading="lazy" width="600" height="900">
+        </button>
+        <button type="button" class="gallery-item sc-fade-up" style="--stagger: 6" data-caption="Sesi foto bersama pengurus kabinet" aria-haspopup="dialog">
+          <img src="https://picsum.photos/seed/kabinet-pengurus/500/500" alt="Dokumentasi sesi foto pengurus" loading="lazy" width="500" height="500">
+        </button>
+        <button type="button" class="gallery-item sc-fade-up" style="--stagger: 7" data-caption="Malam keakraban kabinet" aria-haspopup="dialog">
+          <img src="https://picsum.photos/seed/kabinet-makrab/500/500" alt="Dokumentasi malam keakraban" loading="lazy" width="500" height="500">
+        </button>
       </div>
     </section>
 
@@ -1030,6 +1177,18 @@
       </div>
       <div class="article-body" id="articleBody"></div>
     </div>
+  </div>
+
+  <!-- GALLERY LIGHTBOX -->
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Pratinjau foto" hidden>
+    <div class="lightbox-backdrop" data-lightbox-close></div>
+    <figure class="lightbox-figure">
+      <button type="button" class="lightbox-close" data-lightbox-close aria-label="Tutup pratinjau">
+        <span aria-hidden="true">✕</span>
+      </button>
+      <img id="lightboxImage" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="">
+      <figcaption id="lightboxCaption"></figcaption>
+    </figure>
   </div>
 </body>
 </html>
