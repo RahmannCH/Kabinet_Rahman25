@@ -1000,14 +1000,15 @@ document.addEventListener('keydown', e => {
   const empty = document.getElementById('prokerEmpty');
   if (!grid || !DEPT_PROGRAMS.length) return;
 
-  const buildCard = prog => `
-    <article class="proker-dept-card" data-proker-dept="${prog.key}">
+  const buildCard = (prog, i) => `
+    <article class="proker-dept-card sc-fade-up" data-proker-dept="${prog.key}" style="--stagger:${i % 6 + 1}">
       <span class="proker-dept-badge">${prog.dept}</span>
       <h3>${prog.title}</h3>
       <p>${prog.desc}</p>
     </article>`;
 
   grid.innerHTML = DEPT_PROGRAMS.map(buildCard).join('');
+  RevealEngine.observe(grid.querySelectorAll('.sc-fade-up'));
 
   if (!filterBtns.length) return;
   filterBtns.forEach(btn => {

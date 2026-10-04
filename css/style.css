@@ -3157,3 +3157,18 @@ html[data-theme="dark"] .proker-dept-card {
   overflow-wrap: break-word;
   word-break: break-word;
 }
+
+/* Touch devices: neutralise hover lift transforms (they fire on tap and feel janky) */
+@media (hover: none) {
+  .content-card:hover,
+  .member-card:hover,
+  .tree-node:hover,
+  .program-card:hover,
+  .kabar-card:hover,
+  .agenda-card:hover,
+  .gallery-item:hover,
+  .archive-card:hover,
+  .proker-dept-card:hover {
+    transform: none;
+  }
+}
