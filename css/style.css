@@ -2118,14 +2118,8 @@ html[data-theme="dark"] .footer-bottom {
     flex-direction: column;
     gap: 2.8rem;
   }
-}
 
-@media (max-width: 720px) {
-  .site-header {
-    border-radius: 24px;
-    padding: 0.6rem 1.1rem;
-  }
-
+  /* Tablet: switch nav to mobile menu to prevent overflow with 8+ links */
   .menu-toggle {
     display: grid;
     width: 42px;
@@ -2179,6 +2173,13 @@ html[data-theme="dark"] .footer-bottom {
   .site-nav > a {
     min-height: 48px;
     padding: 0.75rem 1.2rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .site-header {
+    border-radius: 24px;
+    padding: 0.6rem 1.1rem;
   }
 
   .hero h1 {
@@ -2731,5 +2732,205 @@ html[data-theme="dark"] .gallery-item {
 
   .gallery-item-tall {
     grid-row: span 1;
+  }
+}
+
+/* ==========================================================================
+   FAQ (Accordion)
+   ========================================================================== */
+.faq {
+  border-top: 1px solid var(--line);
+}
+
+.faq-header {
+  margin-bottom: 2.5rem;
+}
+
+.faq-header h2 {
+  font: 800 clamp(2.2rem, 4vw, 3.2rem) / 1.15 var(--display);
+  letter-spacing: -0.04em;
+  margin-bottom: 0.8rem;
+}
+
+.faq-header p {
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.faq-item {
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 22px;
+  background: var(--clay-white);
+  box-shadow: var(--clay-shadow-card);
+  overflow: hidden;
+  transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-theme="dark"] .faq-item {
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.faq-item[open] {
+  box-shadow: var(--clay-shadow-card-hover);
+}
+
+.faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.3rem 1.6rem;
+  cursor: pointer;
+  font: 800 1.05rem var(--display);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  list-style: none;
+  user-select: none;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item summary::after {
+  content: "+";
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--clay-blue-light);
+  color: var(--clay-blue-dark);
+  font-size: 1.2rem;
+  font-weight: 800;
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.faq-item[open] summary::after {
+  transform: rotate(45deg);
+  background: var(--clay-blue);
+  color: #ffffff;
+}
+
+.faq-item p {
+  margin: 0;
+  padding: 0 1.6rem 1.4rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+
+/* ==========================================================================
+   ARSIP KABINET
+   ========================================================================== */
+.archive {
+  border-top: 1px solid var(--line);
+}
+
+.archive-header {
+  margin-bottom: 2.5rem;
+}
+
+.archive-header h2 {
+  font: 800 clamp(2.2rem, 4vw, 3.2rem) / 1.15 var(--display);
+  letter-spacing: -0.04em;
+  margin-bottom: 0.8rem;
+}
+
+.archive-header p {
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.archive-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.4rem;
+}
+
+.archive-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.6rem;
+  border-radius: 26px;
+  background: var(--clay-white);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: var(--clay-shadow-card);
+  transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-theme="dark"] .archive-card {
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.archive-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--clay-shadow-card-hover);
+}
+
+.archive-card-current {
+  background: linear-gradient(135deg, var(--clay-blue-light), var(--clay-white));
+  border-color: var(--clay-blue-border);
+}
+
+.archive-year {
+  font: 800 0.78rem var(--display);
+  letter-spacing: 0.04em;
+  color: var(--clay-blue-dark);
+  margin-bottom: 0.2rem;
+}
+
+.archive-card h3 {
+  margin: 0 0 0.4rem;
+  font: 800 1.18rem var(--display);
+  letter-spacing: -0.02em;
+}
+
+.archive-card p {
+  margin: 0 0 0.8rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.65;
+  flex-grow: 1;
+}
+
+.archive-status {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 0.22rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  background: var(--clay-canvas);
+  color: var(--muted);
+  box-shadow: var(--clay-shadow-pill);
+}
+
+.archive-status.is-active {
+  background: var(--clay-blue);
+  color: #ffffff;
+  box-shadow: var(--clay-shadow-btn-primary);
+}
+
+@media (max-width: 960px) {
+  .archive-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .archive-grid {
+    grid-template-columns: 1fr;
   }
 }

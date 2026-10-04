@@ -656,3 +656,126 @@ if (articleModal && articleTriggers.length) {
     }
   });
 }
+
+// ==========================================================================
+// 10. STATISTIK COUNT-UP (IntersectionObserver)
+// ==========================================================================
+(() => {
+  const statCards = document.querySelectorAll('.stat-number[data-count]');
+  if (!statCards.length) return;
+
+  const animateCount = (el) => {
+    const target = parseInt(el.dataset.count, 10);
+    const suffix = el.dataset.suffix || '';
+    const duration = 1400;
+    const start = performance.now();
+    const step = (now) => {
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased) + suffix;
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateCount(entry.target);
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  statCards.forEach(card => io.observe(card));
+})();
+
+// ==========================================================================
+// 11. AGENDA FILTER (by month)
+// ==========================================================================
+(() => {
+  const filterBtns = document.querySelectorAll('.agenda-filter-btn');
+  const items = document.querySelectorAll('.agenda-item[data-month]');
+  const empty = document.getElementById('agendaEmpty');
+  if (!filterBtns.length) return;
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const month = btn.dataset.agendaFilter;
+      filterBtns.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+
+      let visible = 0;
+      items.forEach(item => {
+        const show = month === 'all' || item.dataset.month === month;
+        item.hidden = !show;
+        if (show) visible++;
+      });
+      if (empty) empty.hidden = visible > 0;
+    });
+  });
+})();
+
+// ==========================================================================
+// 12. GALLERY LIGHTBOX
+// ==========================================================================
+(() => {
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImage');
+  const lightboxCap = document.getElementById('lightboxCaption');
+  const triggers = document.querySelectorAll('.gallery-item[data-caption]');
+  if (!lightbox || !triggers.length) return;
+
+  let lastFocused = null;
+
+  const open = (trigger) => {
+    const img = trigger.querySelector('img');
+    if (!img) return;
+    lastFocused = document.activeElement;
+    lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt || '';
+    lightboxCap.textContent = trigger.dataset.caption || '';
+    lightbox.hidden = false;
+    document.body.style.overflow = 'hidden';
+    lightbox.querySelector('.lightbox-close').focus();
+  };
+
+  const close = () => {
+    lightbox.hidden = true;
+    lightboxImg.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+    lightboxImg.alt = '';
+    lightboxCap.textContent = '';
+    document.body.style.overflow = '';
+    if (lastFocused) lastFocused.focus();
+  };
+
+  triggers.forEach(btn => btn.addEventListener('click', () => open(btn)));
+  lightbox.querySelectorAll('[data-lightbox-close]').forEach(el =>
+    el.addEventListener('click', close)
+  );
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !lightbox.hidden) close();
+  });
+})();
+
+// ==========================================================================
+// 13. FAQ ACCORDION (single-open)
+// ==========================================================================
+(() => {
+  const items = document.querySelectorAll('.faq-item');
+  if (!items.length) return;
+
+  items.forEach(item => {
+    item.addEventListener('toggle', () => {
+      if (item.open) {
+        items.forEach(other => {
+          if (other !== item && other.open) other.open = false;
+        });
+      }
+    });
+  });
+})();

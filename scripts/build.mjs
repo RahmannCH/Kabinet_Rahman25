@@ -6,7 +6,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, 'dist');
 const publicFiles = ['index.html', '404.html', 'assets', 'css', 'js'];
 
-await rm(output, { recursive: true, force: true, maxRetries: 5, retryDelay: 150 });
+await rm(output, { recursive: true, force: true, maxRetries: 10, retryDelay: 300 });
 await mkdir(output, { recursive: true });
 for (const file of publicFiles) {
   await cp(path.join(root, file), path.join(output, file), { recursive: true });
