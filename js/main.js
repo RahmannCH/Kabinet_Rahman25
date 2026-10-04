@@ -123,6 +123,8 @@ if (menuButton && navigation) {
     menuButton.setAttribute('aria-expanded', 'false');
     menuButton.setAttribute('aria-label', 'Buka navigasi');
     navigation.classList.remove('is-open');
+    // Return focus to the toggle so keyboard/AT users keep their place
+    menuButton.focus();
   });
 
   document.addEventListener('keydown', event => {
@@ -173,7 +175,11 @@ if (menuButton && navigation) {
 
 // 4. Clay Button Spring Bounce Physics on Pointer (applies to real interactive controls)
 const magneticBtns = document.querySelectorAll('.button, .nav-action, .theme-toggle, .filter-btn');
-if (magneticBtns.length && window.matchMedia('(pointer: fine)').matches) {
+if (
+  magneticBtns.length &&
+  window.matchMedia('(pointer: fine)').matches &&
+  !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+) {
   magneticBtns.forEach(btn => {
     btn.addEventListener('mousemove', e => {
       const rect = btn.getBoundingClientRect();
@@ -839,9 +845,9 @@ if (articleModal && articleTriggers.length) {
   // --- Dynamic status based on date (timezone-safe: compare YYYY-MM-DD strings) ---
   const computeStatus = (dateStr) => {
     const todayStr = new Date().toISOString().slice(0, 10);
-    if (dateStr < todayStr) return { cls: 'is-selesai', label: 'Selesai' };
-    if (dateStr === todayStr) return { cls: 'is-running', label: 'Berjalan' };
-    return { cls: 'is-upcoming', label: 'Akan Datang' };
+    if (dateStr < todayStr) return { cls: 'is-selesai', label: '✓ Selesai' };
+    if (dateStr === todayStr) return { cls: 'is-running', label: '▶ Berjalan' };
+    return { cls: 'is-upcoming', label: '○ Akan Datang' };
   };
 
   // --- Format date: "12 Apr 2027" ---

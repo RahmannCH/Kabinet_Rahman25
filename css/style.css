@@ -292,6 +292,15 @@ h1, h2, h3, h4, p {
   border-radius: 8px;
 }
 
+/* Pill-shaped buttons need pill-shaped outline to avoid visual clipping */
+.filter-btn:focus-visible,
+.agenda-filter-btn:focus-visible,
+.proker-filter-btn:focus-visible,
+.modal-pill-btn:focus-visible {
+  border-radius: 999px;
+  outline-offset: 2px;
+}
+
 /* Accessibility Skip Link (Clay Capsule) */
 .skip-link {
   position: fixed;
@@ -2080,13 +2089,33 @@ html[data-theme="dark"] .footer-bottom {
   opacity: 1;
 }
 
-/* Respect reduced-motion: never hide content from users who opt out of animation */
+/* Respect reduced-motion: never hide content, disable all motion */
 @media (prefers-reduced-motion: reduce) {
   .sc-fade-up,
   .sc-fade-in {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  .hero-glow,
+  .pulse-dot {
+    animation: none;
+  }
+
+  .cabinet-modal-content,
+  .article-sheet,
+  .lightbox-figure,
+  .tree-dept-panel,
+  .faq-item summary::after {
+    animation: none;
+    transition: none;
+  }
+
+  .cabinet-modal-backdrop,
+  .article-backdrop,
+  .lightbox-backdrop {
+    animation: none;
   }
 }
 
