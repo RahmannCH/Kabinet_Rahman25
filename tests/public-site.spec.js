@@ -167,3 +167,53 @@ test('section numbering is unique and ordered', async ({ page }) => {
   expect(new Set(nums).size).toBe(nums.length); // no duplicates
   expect(nums).toEqual([...nums].sort((a, b) => a - b)); // ascending
 });
+
+test('agenda renders 18 data-driven items with auto-generated filter pills', async ({ page }) => {
+  await page.goto('/');
+
+  // 18 items rendered by JS from AGENDA_ITEMS
+  const items = page.locator('#agendaTimeline .agenda-item');
+  await expect(items).toHaveCount(18);
+
+  // 10 filter pills: "Semua" + 9 months (Apr–Des)
+  const pills = page.locator('#agendaFilter .agenda-filter-btn');
+  await expect(pills).toHaveCount(10);
+
+  // "Semua" is active by default and shows all 18
+  await expect(pills.first()).toHaveAttribute('aria-selected', 'true');
+  await expect(page.locator('#agendaTimeline .agenda-item:not([hidden])')).toHaveCount(18);
+
+  // Filter by April → 2 items
+  await page.locator('#agendaFilter .agenda-filter-btn[data-agenda-filter="apr"]').click();
+  await expect(page.locator('#agendaTimeline .agenda-item:not([hidden])')).toHaveCount(2);
+
+  // Filter by December → 2 items
+  await page.locator('#agendaFilter .agenda-filter-btn[data-agenda-filter="des"]').click();
+  await expect(page.locator('#agendaTimeline .agenda-item:not([hidden])')).toHaveCount(2);
+
+  // Back to "Semua"
+  await page.locator('#agendaFilter .agenda-filter-btn[data-agenda-filter="all"]').click();
+  await expect(page.locator('#agendaTimeline .agenda-item:not([hidden])')).toHaveCount(18);
+});
+
+test('every agenda item has a valid status badge class', async ({ page }) => {
+  await page.goto('/');
+  const statuses = await page.locator('#agendaTimeline .agenda-status').evaluateAll(els =>
+    els.map(el => [...el.classList].filter(c => c.startsWith('is-')))
+  );
+  expect(statuses.length).toBe(18);
+  for (const cls of statuses) {
+    expect(cls.length).toBe(1); // exactly one is-* class
+    expect(['is-selesai', 'is-running', 'is-upcoming']).toContain(cls[0]);
+  }
+});
+
+test('all agenda years are 2027 (not stale 2026)', async ({ page }) => {
+  await page.goto('/');
+  const dates = await page.locator('#agendaTimeline .agenda-date').allTextContents();
+  expect(dates.length).toBe(18);
+  for (const d of dates) {
+    expect(d).toContain('2027');
+    expect(d).not.toContain('2026');
+  }
+});

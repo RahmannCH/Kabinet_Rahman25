@@ -1,4 +1,4 @@
-// ==========================================================================
+﻿// ==========================================================================
 // KABINET RAHMAN 25 - CORE SCRIPT (CLAYMORPHISM INTERACTION ENGINE)
 // ==========================================================================
 
@@ -272,6 +272,33 @@ const DEPT_PROGRAMS = [
   { key: 'harmoni', dept: 'HARMONI', title: 'Family Day Ilkom', desc: 'Hari rekreasi bersama keluarga besar Ilmu Komputer di destinasi lokal.', featured: false }
 ];
 
+// Agenda timeline data: April – Desember 2027 (18 items, 2 per month, all 7 depts)
+const AGENDA_ITEMS = [
+  { month: 'apr', date: '2027-04-12', title: 'Open Recruitment Pengurus', dept: 'HR', desc: 'Pembukaan pendaftaran calon pengurus baru Kabinet Rahman 25 bagi seluruh mahasiswa Ilmu Komputer.' },
+  { month: 'apr', date: '2027-04-25', title: 'Tech Talk Series #1', dept: 'PADI', desc: 'Seri seminar teknologi dengan pembicara praktisi dan akademisi dari berbagai bidang IT.' },
+  { month: 'mei', date: '2027-05-10', title: 'Pelatihan Kepemimpinan Mahasiswa', dept: 'PSDM', desc: 'Program kaderisasi internal untuk membekali pengurus baru dengan dasar manajemen organisasi.' },
+  { month: 'mei', date: '2027-05-24', title: 'Ilkom Goes To School', dept: 'SOSMA', desc: 'Kunjungan edukasi teknologi ke sekolah menengah mitra di wilayah Kalimantan Selatan.' },
+  { month: 'jun', date: '2027-06-07', title: 'Fun Run Kampus', dept: 'ORSE', desc: 'Lari pagi bersama seluruh civitas akademika dengan rute kampus dan hadiah menarik.' },
+  { month: 'jun', date: '2027-06-21', title: 'Donor Darah Rutin', dept: 'SOSMA', desc: 'Kerja sama dengan PMI untuk penggalangan donor darah dari civitas akademika.' },
+  { month: 'jul', date: '2027-07-12', title: 'Pekan Minat Bakat', dept: 'ORSE', desc: 'Olimpiade olahraga dan pentas seni antar angkatan Ilmu Komputer.' },
+  { month: 'jul', date: '2027-07-26', title: 'Bakti Sosial Kampus', dept: 'SOSMA', desc: 'Aksi sosial berkala untuk masyarakat sekitar kampus dan lingkungan.' },
+  { month: 'agu', date: '2027-08-09', title: 'Gemastik Preparation Camp', dept: 'PADI', desc: 'Program intensif persiapan kompetisi teknologi informasi nasional untuk delegasi ULM.' },
+  { month: 'agu', date: '2027-08-23', title: 'Silaturahmi Alumni', dept: 'HR', desc: 'Pertemuan rutin dengan alumni untuk memperkuat jejaring dan sharing pengalaman industri.' },
+  { month: 'sep', date: '2027-09-13', title: 'Media Sosial Campaign Launch', dept: 'KOMINFO', desc: 'Peluncuran strategi konten dan branding HIMAKOM ULM di berbagai platform media sosial.' },
+  { month: 'sep', date: '2027-09-27', title: 'Mentoring Akademik', dept: 'PSDM', desc: 'Program bimbingan belajar antar angkatan untuk mata kuliah dasar dan lanjut.' },
+  { month: 'okt', date: '2027-10-11', title: 'Kompetisi E-Sport', dept: 'ORSE', desc: 'Turnamen game antar angkatan dan lintas jurusan untuk mempererat kebersamaan.' },
+  { month: 'okt', date: '2027-10-25', title: 'Desain Grafis Workshop', dept: 'KOMINFO', desc: 'Pelatihan desain visual dan branding untuk pengurus dan anggota aktif.' },
+  { month: 'nov', date: '2027-11-08', title: 'ORMAWA Gathering', dept: 'HR', desc: 'Forum kolaborasi seluruh organisasi mahasiswa tingkat fakultas dalam satu agenda bersama.' },
+  { month: 'nov', date: '2027-11-22', title: 'Podcast Ilkom Ngobrol Live', dept: 'KOMINFO', desc: 'Live recording podcast rutin yang membahas isu teknologi, kampus, dan kehidupan mahasiswa.' },
+  { month: 'des', date: '2027-12-13', title: 'Malam Keakraban Kabinet', dept: 'HARMONI', desc: 'Perayaan akhir periode sekaligus penguatan kekeluargaan antar pengurus dan angkatan.' },
+  { month: 'des', date: '2027-12-20', title: 'Family Day Ilkom', dept: 'HARMONI', desc: 'Hari rekreasi bersama keluarga besar Ilmu Komputer di destinasi lokal.' }
+];
+
+const MONTH_LABELS = {
+  apr: 'April', mei: 'Mei', jun: 'Juni', jul: 'Juli',
+  agu: 'Agustus', sep: 'September', okt: 'Oktober', nov: 'November', des: 'Desember'
+};
+
 const treePanel = document.getElementById('treeDeptPanel');
 const treePanelBadge = document.getElementById('treePanelBadge');
 const treePanelName = document.getElementById('treePanelName');
@@ -461,26 +488,28 @@ if (form) {
   });
 }
 
-// 7. Fluid Scroll Reveal Engine
-if ('IntersectionObserver' in window) {
-  const revealElements = document.querySelectorAll('.sc-fade-up, .sc-fade-in');
-  
-  const revealObserver = new IntersectionObserver(
-    (entries, observer) => {
+// 7. Fluid Scroll Reveal Engine (exposed so dynamically-injected nodes also reveal)
+const RevealEngine = (() => {
+  if (!('IntersectionObserver' in window)) {
+    return {
+      observe: els => els.forEach(el => el.classList.add('sc-in'))
+    };
+  }
+  const observer = new IntersectionObserver(
+    (entries, obs) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('sc-in');
-          observer.unobserve(entry.target);
+          obs.unobserve(entry.target);
         }
       });
     },
     { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
   );
-
-  revealElements.forEach(el => revealObserver.observe(el));
-} else {
-  document.querySelectorAll('.sc-fade-up, .sc-fade-in').forEach(el => el.classList.add('sc-in'));
-}
+  const observe = els => els.forEach(el => observer.observe(el));
+  observe(document.querySelectorAll('.sc-fade-up, .sc-fade-in'));
+  return { observe };
+})();
 
 // ==========================================================================
 // 8. FULL-SCREEN CABINET EXPLORER MODAL CONTROLLER
@@ -606,7 +635,7 @@ const ARTICLES = {
   'proker-igts': {
     kicker: 'PROKER · SOSMA',
     title: 'Ilkom Goes To School (IGTS)',
-    date: 'Program Unggulan 2026',
+    date: 'Program Unggulan 2027',
     author: 'Departemen Sosial dan Masyarakat',
     body: [
       'Ilkom Goes To School adalah program pengabdian yang membawa mahasiswa Ilmu Komputer turun langsung ke sekolah-sekolah menengah untuk memperkenalkan dunia teknologi sejak dini.',
@@ -617,7 +646,7 @@ const ARTICLES = {
   'proker-pmb': {
     kicker: 'PROKER · ORSE',
     title: 'Pekan Minat Bakat',
-    date: 'Program Unggulan 2026',
+    date: 'Program Unggulan 2027',
     author: 'Departemen Olahraga dan Seni',
     body: [
       'Pekan Minat Bakat adalah olimpiade tahunan yang menjadi ajang kompetisi sportif sekaligus panggung ekspresi seni bagi seluruh mahasiswa Ilmu Komputer.',
@@ -628,7 +657,7 @@ const ARTICLES = {
   'proker-ormawa': {
     kicker: 'PROKER · HR',
     title: 'ORMAWA Gathering',
-    date: 'Program Unggulan 2026',
+    date: 'Program Unggulan 2027',
     author: 'Departemen Hubungan Relasi',
     body: [
       'ORMAWA Gathering adalah inisiatif strategis yang mempertemukan seluruh organisasi mahasiswa di tingkat fakultas dalam satu forum kolaborasi.',
@@ -639,7 +668,7 @@ const ARTICLES = {
   'kabar-pelatihan': {
     kicker: 'KABAR · PSDM',
     title: 'Pelatihan Kepemimpinan Mahasiswa Sukses Digelar',
-    date: '12 Oktober 2026',
+    date: '12 Oktober 2027',
     author: 'Departemen PSDM',
     body: [
       'Lebih dari 80 mahasiswa baru Ilmu Komputer mengikuti pelatihan kepemimpinan yang diselenggarakan untuk mempersiapkan kaderisasi masa depan himpunan.',
@@ -650,7 +679,7 @@ const ARTICLES = {
   'kabar-oprec': {
     kicker: 'KABAR · HR',
     title: 'HIMAKOM Buka Pendaftaran Open Recruitment Pengurus',
-    date: '8 Oktober 2026',
+    date: '8 Oktober 2027',
     author: 'Departemen Hubungan Relasi',
     body: [
       'HIMAKOM ULM resmi membuka pendaftaran pengurus baru melalui jalur seleksi terbuka bagi seluruh mahasiswa Ilmu Komputer yang ingin mengambil peran.',
@@ -661,7 +690,7 @@ const ARTICLES = {
   'kabar-gemastik': {
     kicker: 'KABAR · PADI',
     title: 'Tim Riset ULM Sabet Juara Gemastik Nasional',
-    date: '28 September 2026',
+    date: '28 September 2027',
     author: 'Departemen Pengembangan Akademik dan Teknologi',
     body: [
       'Tim riset delegasi mahasiswa Ilmu Komputer berhasil meraih juara pada ajang kompetisi teknologi informasi nasional Gemastik tahun ini.',
@@ -770,13 +799,71 @@ if (articleModal && articleTriggers.length) {
 })();
 
 // ==========================================================================
-// 11. AGENDA FILTER (by month)
+// 11. AGENDA TIMELINE (Data-driven render + auto filter pills + dynamic status)
 // ==========================================================================
 (() => {
-  const filterBtns = document.querySelectorAll('.agenda-filter-btn');
-  const items = document.querySelectorAll('.agenda-item[data-month]');
+  const timeline = document.getElementById('agendaTimeline');
+  const filterContainer = document.getElementById('agendaFilter');
   const empty = document.getElementById('agendaEmpty');
-  if (!filterBtns.length) return;
+  if (!timeline || !AGENDA_ITEMS.length) return;
+
+  // --- Dynamic status based on date ---
+  const computeStatus = (dateStr) => {
+    const itemDate = new Date(dateStr + 'T00:00:00');
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (itemDate < today) return { cls: 'is-selesai', label: 'Selesai' };
+    if (itemDate.getTime() === today.getTime()) return { cls: 'is-running', label: 'Berjalan' };
+    return { cls: 'is-upcoming', label: 'Akan Datang' };
+  };
+
+  // --- Format date: "12 Apr 2027" ---
+  const MONTH_SHORT = { apr: 'Apr', mei: 'Mei', jun: 'Jun', jul: 'Jul', agu: 'Agu', sep: 'Sep', okt: 'Okt', nov: 'Nov', des: 'Des' };
+  const formatDate = (dateStr, monthKey) => {
+    const day = new Date(dateStr + 'T00:00:00').getDate();
+    return `${day} ${MONTH_SHORT[monthKey]} 2027`;
+  };
+
+  // --- Render timeline items ---
+  const renderItem = (item, index) => {
+    const status = computeStatus(item.date);
+    const li = document.createElement('li');
+    li.className = 'agenda-item sc-fade-up';
+    li.dataset.month = item.month;
+    li.style.setProperty('--stagger', index + 1);
+    li.innerHTML = `
+      <div class="agenda-node" aria-hidden="true"></div>
+      <div class="agenda-card">
+        <div class="agenda-meta">
+          <span class="agenda-date">${formatDate(item.date, item.month)}</span>
+          <span class="agenda-status ${status.cls}">${status.label}</span>
+        </div>
+        <h3>${item.title}</h3>
+        <p>${item.desc}</p>
+        <span class="agenda-dept">${item.dept}</span>
+      </div>`;
+    return li;
+  };
+
+  timeline.innerHTML = '';
+  AGENDA_ITEMS.forEach((item, i) => timeline.appendChild(renderItem(item, i)));
+
+  // Register freshly-injected nodes with the reveal engine
+  RevealEngine.observe(timeline.querySelectorAll('.sc-fade-up'));
+
+  // --- Generate filter pills automatically from data ---
+  if (filterContainer) {
+    const months = [...new Set(AGENDA_ITEMS.map(a => a.month))];
+    // Preserve insertion order (Apr → Des, already sorted in data)
+    const pills = [{ key: 'all', label: 'Semua' }, ...months.map(m => ({ key: m, label: MONTH_LABELS[m] }))];
+    filterContainer.innerHTML = pills
+      .map((p, i) => `<button type="button" class="agenda-filter-btn${i === 0 ? ' active' : ''}" data-agenda-filter="${p.key}" role="tab" aria-selected="${i === 0 ? 'true' : 'false'}">${p.label}</button>`)
+      .join('');
+  }
+
+  // --- Filter logic ---
+  const filterBtns = filterContainer ? filterContainer.querySelectorAll('.agenda-filter-btn') : [];
+  const items = timeline.querySelectorAll('.agenda-item');
 
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {

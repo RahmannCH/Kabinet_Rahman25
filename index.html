@@ -95,7 +95,7 @@
         <img src="assets/Logo-Kabinet.jpg" alt="Ilustrasi Visual Kabinet" width="800" height="800" fetchpriority="high">
         <figcaption class="glass-caption">
           <img src="assets/logo-himakom.jpg" alt="" aria-hidden="true">
-          <span><small>Kabinet Berjalan</small><strong>Periode 2025-2026</strong></span>
+          <span><small>Kabinet Berjalan</small><strong>Periode 2026-2027</strong></span>
         </figcaption>
       </figure>
       <span class="hero-side-note" aria-hidden="true">FMIPA · UNIVERSITAS LAMBUNG MANGKURAT</span>
@@ -437,90 +437,12 @@
       <div class="agenda-header sc-fade-up" style="--stagger: 1">
         <div class="section-kicker"><span>05</span> Agenda Kegiatan</div>
         <h2 id="agenda-title">Jadwal yang<br><em>sedang berjalan.</em></h2>
-        <p>Rangkaian kegiatan terdekat dari seluruh departemen Kabinet Rahman 25.</p>
+        <p>Rangkaian kegiatan terdekat dari seluruh departemen Kabinet Rahman 25 — April hingga Desember 2027.</p>
       </div>
 
-      <div class="agenda-filter sc-fade-up" style="--stagger: 2" role="tablist" aria-label="Saring agenda berdasarkan bulan">
-        <button type="button" class="agenda-filter-btn active" data-agenda-filter="all" role="tab" aria-selected="true">Semua</button>
-        <button type="button" class="agenda-filter-btn" data-agenda-filter="okt" role="tab" aria-selected="false">Oktober</button>
-        <button type="button" class="agenda-filter-btn" data-agenda-filter="nov" role="tab" aria-selected="false">November</button>
-        <button type="button" class="agenda-filter-btn" data-agenda-filter="des" role="tab" aria-selected="false">Desember</button>
-      </div>
+      <div class="agenda-filter sc-fade-up" style="--stagger: 2" id="agendaFilter" role="tablist" aria-label="Saring agenda berdasarkan bulan"></div>
 
-      <ol class="agenda-timeline" id="agendaTimeline">
-        <li class="agenda-item sc-fade-up" data-month="okt" style="--stagger: 1">
-          <div class="agenda-node" aria-hidden="true"></div>
-          <div class="agenda-card">
-            <div class="agenda-meta">
-              <span class="agenda-date">05 Okt 2026</span>
-              <span class="agenda-status is-upcoming">Akan Datang</span>
-            </div>
-            <h3>Open Recruitment Pengurus</h3>
-            <p>Pembukaan pendaftaran calon pengurus baru Kabinet Rahman 25 bagi seluruh mahasiswa Ilmu Komputer.</p>
-            <span class="agenda-dept">HR</span>
-          </div>
-        </li>
-        <li class="agenda-item sc-fade-up" data-month="okt" style="--stagger: 2">
-          <div class="agenda-node" aria-hidden="true"></div>
-          <div class="agenda-card">
-            <div class="agenda-meta">
-              <span class="agenda-date">14 Okt 2026</span>
-              <span class="agenda-status is-running">Berjalan</span>
-            </div>
-            <h3>Pelatihan Kepemimpinan Mahasiswa</h3>
-            <p>Program kaderisasi internal untuk membekali pengurus baru dengan dasar manajemen organisasi.</p>
-            <span class="agenda-dept">PSDM</span>
-          </div>
-        </li>
-        <li class="agenda-item sc-fade-up" data-month="nov" style="--stagger: 3">
-          <div class="agenda-node" aria-hidden="true"></div>
-          <div class="agenda-card">
-            <div class="agenda-meta">
-              <span class="agenda-date">08 Nov 2026</span>
-              <span class="agenda-status is-upcoming">Akan Datang</span>
-            </div>
-            <h3>Ilkom Goes To School</h3>
-            <p>Kunjungan edukasi teknologi ke sekolah menengah mitra di wilayah Kalimantan Selatan.</p>
-            <span class="agenda-dept">SOSMA</span>
-          </div>
-        </li>
-        <li class="agenda-item sc-fade-up" data-month="nov" style="--stagger: 4">
-          <div class="agenda-node" aria-hidden="true"></div>
-          <div class="agenda-card">
-            <div class="agenda-meta">
-              <span class="agenda-date">22 Nov 2026</span>
-              <span class="agenda-status is-upcoming">Akan Datang</span>
-            </div>
-            <h3>Pekan Minat Bakat</h3>
-            <p>Olimpiade olahraga dan pentas seni antar angkatan Ilmu Komputer.</p>
-            <span class="agenda-dept">ORSE</span>
-          </div>
-        </li>
-        <li class="agenda-item sc-fade-up" data-month="des" style="--stagger: 5">
-          <div class="agenda-node" aria-hidden="true"></div>
-          <div class="agenda-card">
-            <div class="agenda-meta">
-              <span class="agenda-date">12 Des 2026</span>
-              <span class="agenda-status is-upcoming">Akan Datang</span>
-            </div>
-            <h3>ORMAWA Gathering</h3>
-            <p>Forum kolaborasi seluruh organisasi mahasiswa tingkat fakultas dalam satu agenda bersama.</p>
-            <span class="agenda-dept">HR</span>
-          </div>
-        </li>
-        <li class="agenda-item sc-fade-up" data-month="des" style="--stagger: 6">
-          <div class="agenda-node" aria-hidden="true"></div>
-          <div class="agenda-card">
-            <div class="agenda-meta">
-              <span class="agenda-date">20 Des 2026</span>
-              <span class="agenda-status is-upcoming">Akan Datang</span>
-            </div>
-            <h3>Malam Keakraban Kabinet</h3>
-            <p>Perayaan akhir periode sekaligus penguatan kekeluargaan antar pengurus dan angkatan.</p>
-            <span class="agenda-dept">HARMONI</span>
-          </div>
-        </li>
-      </ol>
+      <ol class="agenda-timeline" id="agendaTimeline"></ol>
 
       <p class="agenda-empty" id="agendaEmpty" hidden>Belum ada agenda pada bulan ini.</p>
     </section>
@@ -534,19 +456,19 @@
       </div>
       <div class="kabar-grid">
         <article class="kabar-card sc-fade-up" style="--stagger: 2">
-          <div class="kabar-date">12 OKT 2026</div>
+          <div class="kabar-date">12 OKT 2027</div>
           <h3>Pelatihan Kepemimpinan Mahasiswa Sukses Digelar</h3>
           <p>Lebih dari 80 mahasiswa baru Ilmu Komputer mengikuti pelatihan kepemimpinan untuk mempersiapkan kaderisasi masa depan.</p>
           <button type="button" class="action-link" data-article="kabar-pelatihan" aria-haspopup="dialog">Baca selengkapnya ↗</button>
         </article>
         <article class="kabar-card sc-fade-up" style="--stagger: 3">
-          <div class="kabar-date">08 OKT 2026</div>
+          <div class="kabar-date">08 OKT 2027</div>
           <h3>HIMAKOM Buka Pendaftaran Open Recruitment Pengurus</h3>
           <p>Kesempatan bagi mahasiswa untuk mengambil peran dalam kabinet baru melalui jalur seleksi terbuka.</p>
           <button type="button" class="action-link" data-article="kabar-oprec" aria-haspopup="dialog">Baca selengkapnya ↗</button>
         </article>
         <article class="kabar-card sc-fade-up" style="--stagger: 4">
-          <div class="kabar-date">28 SEP 2026</div>
+          <div class="kabar-date">28 SEP 2027</div>
           <h3>Tim Riset ULM Sabet Juara Gemastik Nasional</h3>
           <p>Prestasi membanggakan dari delegasi mahasiswa Ilmu Komputer pada ajang kompetisi IT nasional bergengsi tahun ini.</p>
           <button type="button" class="action-link" data-article="kabar-gemastik" aria-haspopup="dialog">Baca selengkapnya ↗</button>
@@ -687,7 +609,7 @@
           <span class="archive-status">Selesai</span>
         </article>
         <article class="archive-card archive-card-current sc-fade-up" style="--stagger: 5">
-          <div class="archive-year">2025/2026</div>
+          <div class="archive-year">2026/2027</div>
           <h3>Kabinet Rahman 25</h3>
           <p>Periode berjalan — berfokus pada penguatan ekosistem mahasiswa Ilmu Komputer ULM.</p>
           <span class="archive-status is-active">Berjalan</span>
@@ -720,7 +642,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <small class="copyright">© 2026 HIMAKOM ULM. Hak Cipta Dilindungi.</small>
+      <small class="copyright">© 2027 HIMAKOM ULM. Hak Cipta Dilindungi.</small>
       <a class="back-top" href="#beranda" aria-label="Kembali ke atas">Ke Atas ↑</a>
     </div>
   </footer>

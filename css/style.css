@@ -2499,6 +2499,11 @@ html[data-theme="dark"] .agenda-card {
   color: var(--accent-gold);
 }
 
+.agenda-status.is-selesai {
+  background: var(--clay-canvas);
+  color: var(--muted);
+}
+
 .agenda-card h3 {
   margin: 0 0 0.5rem;
   font: 800 1.18rem var(--display);
