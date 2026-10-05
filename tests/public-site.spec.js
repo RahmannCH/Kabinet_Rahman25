@@ -87,6 +87,15 @@ test('unknown route returns an actual 404 page', async ({ request }) => {
   await expect(response.text()).resolves.toContain('Halaman tidak ditemukan');
 });
 
+test('404 page is styled with skip link and card layout', async ({ request }) => {
+  const baseURL = process.env.BASE_URL ?? 'http://127.0.0.1:49173';
+  const response = await request.get(`${baseURL}/another-missing-page`);
+  const html = await response.text();
+  expect(html).toContain('skip-link');
+  expect(html).toContain('not-found-card');
+  expect(html).toContain('Kembali ke beranda');
+});
+
 test('public build excludes source, tests, and project documentation', async () => {
   const { access } = await import('node:fs/promises');
   const exists = async path => access(path).then(() => true, () => false);
@@ -286,4 +295,25 @@ test('agenda status uses Jakarta timezone', async ({ page }) => {
   // because Jakarta date is 2027-04-13, so 2027-04-12 < 2027-04-13
   const item = page.locator('#agendaTimeline .agenda-item[data-date="2027-04-12"]');
   await expect(item.locator('.agenda-status')).toHaveClass(/is-selesai/);
+});
+
+test('cabinet modal back/forward does not duplicate history entries', async ({ page }) => {
+  await page.goto('/');
+  const modal = page.locator('#fullCabinetModal');
+  await expect(modal).toBeHidden();
+
+  const initialLength = await page.evaluate(() => history.length);
+
+  await page.locator('#openFullCabinetBtn').click();
+  await expect(modal).toBeVisible();
+  const afterOpen = await page.evaluate(() => history.length);
+  expect(afterOpen).toBe(initialLength + 1);
+
+  await page.goBack();
+  await expect(modal).toBeHidden();
+  await page.goForward();
+  await expect(modal).toBeVisible();
+  // Forward navigation must NOT push a fresh entry (the bug we fixed)
+  const afterForward = await page.evaluate(() => history.length);
+  expect(afterForward).toBe(afterOpen);
 });

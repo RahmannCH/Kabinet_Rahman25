@@ -551,22 +551,27 @@ const cabinetModal = document.getElementById('fullCabinetModal');
 let lastFocusedElement = null;
 
 if (openModalBtn && closeModalBtn && cabinetModal) {
-  const openCabinetModal = () => {
+  // showCabinet: purely visual — no history mutation
+  const showCabinet = () => {
     if (!cabinetModal.hidden) return;
     lastFocusedElement = document.activeElement;
     cabinetModal.hidden = false;
     ScrollLock.lock();
     openModalBtn.setAttribute('aria-expanded', 'true');
-
-    if (window.location.hash !== '#struktur') {
-      history.pushState(null, '', '#struktur');
-    }
-
     setTimeout(() => {
       const firstTabBtn = cabinetModal.querySelector('.modal-pill-btn');
       if (firstTabBtn) firstTabBtn.focus();
       else closeModalBtn.focus();
     }, 50);
+  };
+
+  // openCabinetModal: user-initiated open + push history entry
+  const openCabinetModal = () => {
+    if (!cabinetModal.hidden) return;
+    showCabinet();
+    if (window.location.hash !== '#struktur') {
+      history.pushState({ cabinet: true }, '', '#struktur');
+    }
   };
 
   const closeCabinetModal = () => {
@@ -613,17 +618,19 @@ if (openModalBtn && closeModalBtn && cabinetModal) {
     }
   });
 
-  // Browser Back button integration
+  // Browser Back/Forward integration — popstate fires on back/forward nav
   window.addEventListener('popstate', () => {
     if (window.location.hash !== '#struktur' && !cabinetModal.hidden) {
       closeCabinetModal();
     } else if (window.location.hash === '#struktur' && cabinetModal.hidden) {
-      openCabinetModal();
+      // Navigated to #struktur via back/forward — show without pushing a new entry
+      showCabinet();
     }
   });
 
   if (window.location.hash === '#struktur') {
-    openCabinetModal();
+    // Direct load on #struktur — show without pushing (URL already has the hash)
+    showCabinet();
   }
 
   // Modal Internal Quick Filter Logic

@@ -306,11 +306,22 @@ html[data-theme="dark"] ::selection {
   border-radius: 8px;
 }
 
-/* Pill-shaped buttons need pill-shaped outline to avoid visual clipping */
+/* Pill-shaped / circular buttons need pill-shaped outline to avoid visual clipping */
 .filter-btn:focus-visible,
 .agenda-filter-btn:focus-visible,
 .proker-filter-btn:focus-visible,
-.modal-pill-btn:focus-visible {
+.modal-pill-btn:focus-visible,
+.button:focus-visible,
+.button-primary:focus-visible,
+.button-quiet:focus-visible,
+.site-nav a:focus-visible,
+.nav-action:focus-visible,
+.theme-toggle:focus-visible,
+.menu-toggle:focus-visible,
+.back-top:focus-visible,
+.article-sheet-close:focus-visible,
+.modal-close-btn:focus-visible,
+.lightbox-close:focus-visible {
   border-radius: 999px;
   outline-offset: 2px;
 }
@@ -1797,6 +1808,47 @@ html[data-theme="dark"] .footer-bottom {
   border-top-color: rgba(30, 48, 77, 0.8);
 }
 
+/* ==========================================================================
+   404 NOT-FOUND PAGE (standalone, shares the clay design system)
+   ========================================================================== */
+.not-found {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 2rem 1.5rem;
+}
+
+.not-found-card {
+  max-width: 40rem;
+  width: 100%;
+  text-align: center;
+  padding: 3rem 2.25rem;
+  border-radius: 32px;
+  background: var(--clay-white);
+  box-shadow: var(--clay-shadow-card);
+}
+
+.not-found-card h1 {
+  margin: 1rem 0 0.75rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  color: var(--ink);
+}
+
+.not-found-card p {
+  color: var(--muted);
+  margin-bottom: 1.75rem;
+}
+
+.not-found-card .section-kicker {
+  margin-bottom: 0;
+}
+
+html[data-theme="dark"] .not-found-card {
+  background: var(--clay-white);
+  box-shadow: var(--clay-shadow-card);
+}
+
 .copyright {
   color: var(--muted);
   font-size: 0.82rem;
@@ -3190,5 +3242,29 @@ html[data-theme="dark"] .proker-dept-card {
   .archive-card:hover,
   .proker-dept-card:hover {
     transform: none;
+  }
+
+  /* Neutralise "stuck hover" background/colour changes on touch devices */
+  .article-sheet-close:hover,
+  .modal-close-btn:hover {
+    background: var(--clay-white);
+    color: var(--ink);
+    box-shadow: var(--clay-shadow-pill);
+    transform: none;
+  }
+
+  .member-card:hover .member-info {
+    transform: none;
+    background: rgba(255, 255, 255, 0.94);
+  }
+
+  html[data-theme="dark"] .article-sheet-close:hover,
+  html[data-theme="dark"] .modal-close-btn:hover {
+    background: var(--clay-white);
+    color: var(--ink);
+  }
+
+  html[data-theme="dark"] .member-card:hover .member-info {
+    background: rgba(15, 23, 42, 0.94);
   }
 }
