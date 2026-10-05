@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 
 const viewports = [
   { name: 'desktop', width: 1440, height: 1000 },
+  { name: 'split-screen-desktop', width: 1024, height: 900 },
   { name: 'tablet', width: 768, height: 1024 },
   { name: 'mobile', width: 390, height: 844 },
   { name: 'narrow', width: 320, height: 720 },
@@ -185,8 +186,17 @@ test('tablet resize closes the mobile nav and keeps navigation usable', async ({
   await expect(nav).toBeVisible();
   await expect(menuButton).toHaveAttribute('aria-expanded', 'true');
 
-  // Grow to desktop width (>= 960px) — CSS switches to inline nav, JS must close the menu state
-  await page.setViewportSize({ width: 960, height: 900 });
+  // Clicking outside closes the drawer
+  await page.evaluate(() => document.body.click());
+  await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
+  await expect(nav).not.toHaveClass(/is-open/);
+
+  // Open again
+  await menuButton.click();
+  await expect(menuButton).toHaveAttribute('aria-expanded', 'true');
+
+  // Grow to desktop width (>= 1140px) — CSS switches to inline nav, JS must close the menu state
+  await page.setViewportSize({ width: 1200, height: 900 });
   await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
   await expect(nav).not.toHaveClass(/is-open/);
 });
@@ -426,4 +436,19 @@ test('aspirasi form updates char counter and swaps to permanent success state', 
   await expect(page.locator('#publicAspirasiForm')).toBeVisible();
   await expect(successCard).toBeHidden();
   await expect(counter).toContainText('0 / 500');
+});
+
+test('navbar elements never overlap across desktop and intermediate viewports', async ({ page }) => {
+  for (const width of [1024, 1100, 1140, 1200, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/');
+
+    const brandBox = await page.locator('#siteHeader .brand').boundingBox();
+    const actionsBox = await page.locator('#siteHeader .header-actions').boundingBox();
+    expect(brandBox).not.toBeNull();
+    expect(actionsBox).not.toBeNull();
+
+    // Brand and header actions must not overlap horizontally
+    expect(brandBox.x + brandBox.width).toBeLessThanOrEqual(actionsBox.x);
+  }
 });

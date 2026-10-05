@@ -2322,33 +2322,8 @@ html[data-theme="dark"] .modal-nav-bar {
 /* ==========================================================================
    RESPONSIVE DESIGN & MOBILE ERGONOMICS
    ========================================================================== */
-@media (max-width: 960px) {
-  .hero {
-    grid-template-columns: 1fr;
-    gap: 3.5rem;
-    padding-top: 2.5rem;
-  }
-
-  .sticky-container {
-    grid-template-columns: 1fr;
-    gap: 2.8rem;
-  }
-
-  .sticky-sidebar {
-    position: static;
-  }
-
-  .contact-content {
-    grid-template-columns: 1fr;
-    gap: 2.8rem;
-  }
-
-  .footer-inner {
-    flex-direction: column;
-    gap: 2.8rem;
-  }
-
-  /* Tablet: switch nav to mobile menu to prevent overflow with 8+ links */
+/* 1. Viewports <= 1140px: Collapse Desktop Nav into Floating Capsule Drawer */
+@media (max-width: 1140px) {
   .menu-toggle {
     display: grid;
     width: 42px;
@@ -2405,6 +2380,74 @@ html[data-theme="dark"] .modal-nav-bar {
   }
 }
 
+/* 2. Viewports <= 960px: Layout Reflows (Hero, Sidebar, Contact, Grids) */
+@media (max-width: 960px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 3.5rem;
+    padding-top: 2.5rem;
+  }
+
+  .sticky-container {
+    grid-template-columns: 1fr;
+    gap: 2.8rem;
+  }
+
+  .sticky-sidebar {
+    position: static;
+  }
+
+  .contact-content {
+    grid-template-columns: 1fr;
+    gap: 2.8rem;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    gap: 2.8rem;
+  }
+
+  .tree-row,
+  .tree-row-pinnacle {
+    gap: 1rem;
+  }
+
+  .tree-connector-rail::after {
+    width: 92%;
+  }
+
+  .tree-tier-expanded {
+    padding: 1.3rem;
+    border-radius: 28px;
+  }
+
+  .program-grid,
+  .kabar-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: 1.2rem;
+    align-items: flex-start;
+  }
+}
+
+/* 3. Viewports <= 768px: Mobile Tree Rail Clean & Performance */
+@media (max-width: 768px) {
+  .tree-connector-rail::after {
+    display: none;
+  }
+  .tree-connector-rail .tree-line-v {
+    height: 2.2rem;
+  }
+  .hero-glow {
+    animation: none;
+    opacity: 0.5;
+  }
+}
+
+/* 4. Viewports <= 720px: Padding & Scale */
 @media (max-width: 720px) {
   .site-header {
     border-radius: 24px;
@@ -2452,6 +2495,7 @@ html[data-theme="dark"] .modal-nav-bar {
   }
 }
 
+/* 5. Viewports <= 480px: Small Screen Optimization */
 @media (max-width: 480px) {
   /* Reduced shadow intensity for high-DPI screens */
   :root {
@@ -2490,43 +2534,6 @@ html[data-theme="dark"] .modal-nav-bar {
     width: 100%;
     max-width: 100%;
     flex: 1 1 100%;
-  }
-
-  .tree-row,
-  .tree-row-pinnacle {
-    gap: 1rem;
-  }
-
-  .tree-connector-rail::after {
-    width: 92%;
-  }
-
-  @media (max-width: 768px) {
-    .tree-connector-rail::after {
-      display: none;
-    }
-    .tree-connector-rail .tree-line-v {
-      height: 2.2rem;
-    }
-    .hero-glow {
-      animation: none;
-      opacity: 0.5;
-    }
-  }
-
-  .tree-tier-expanded {
-    padding: 1.3rem;
-    border-radius: 28px;
-  }
-
-  .program-grid, .kabar-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .footer-bottom {
-    flex-direction: column;
-    gap: 1.2rem;
-    align-items: flex-start;
   }
 }
 

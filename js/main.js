@@ -141,7 +141,18 @@ if (menuButton && navigation) {
     menuButton.focus();
   });
 
-  const mqDesktop = window.matchMedia('(min-width: 960px)');
+  // Close mobile nav when clicking outside the navbar header
+  document.addEventListener('click', event => {
+    if (menuButton.getAttribute('aria-expanded') !== 'true') return;
+    const header = document.getElementById('siteHeader');
+    if (header && !header.contains(event.target)) {
+      menuButton.setAttribute('aria-expanded', 'false');
+      menuButton.setAttribute('aria-label', 'Buka navigasi');
+      navigation.classList.remove('is-open');
+    }
+  });
+
+  const mqDesktop = window.matchMedia('(min-width: 1140px)');
   const closeMobileNav = () => {
     menuButton.setAttribute('aria-expanded', 'false');
     menuButton.setAttribute('aria-label', 'Buka navigasi');
@@ -158,22 +169,26 @@ if (menuButton && navigation) {
   const navLinks = navigation.querySelectorAll('a[href^="#"]');
 
   if ('IntersectionObserver' in window && sections.length) {
+    let currentActiveId = null;
     const observer = new IntersectionObserver(
       entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const id = entry.target.getAttribute('id');
-            navLinks.forEach(link => {
-              if (link.getAttribute('href') === `#${id}`) {
-                link.classList.add('active');
-              } else {
-                link.classList.remove('active');
-              }
-            });
-          }
-        });
+        const visibleEntries = entries.filter(e => e.isIntersecting);
+        if (!visibleEntries.length) return;
+        visibleEntries.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        const topEntry = visibleEntries[0];
+        const id = topEntry.target.getAttribute('id');
+        if (id && id !== currentActiveId) {
+          currentActiveId = id;
+          navLinks.forEach(link => {
+            if (link.getAttribute('href') === `#${id}`) {
+              link.classList.add('active');
+            } else {
+              link.classList.remove('active');
+            }
+          });
+        }
       },
-      { rootMargin: '-20% 0px -70% 0px' }
+      { rootMargin: '-15% 0px -45% 0px', threshold: [0.1, 0.3, 0.6] }
     );
     sections.forEach(section => observer.observe(section));
   }
