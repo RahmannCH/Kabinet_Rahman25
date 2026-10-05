@@ -185,8 +185,8 @@ test('tablet resize closes the mobile nav and keeps navigation usable', async ({
   await expect(nav).toBeVisible();
   await expect(menuButton).toHaveAttribute('aria-expanded', 'true');
 
-  // Grow to desktop width — CSS switches to inline nav, JS must close the menu state
-  await page.setViewportSize({ width: 1280, height: 900 });
+  // Grow to desktop width (>= 960px) — CSS switches to inline nav, JS must close the menu state
+  await page.setViewportSize({ width: 960, height: 900 });
   await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
   await expect(nav).not.toHaveClass(/is-open/);
 });
@@ -316,4 +316,26 @@ test('cabinet modal back/forward does not duplicate history entries', async ({ p
   // Forward navigation must NOT push a fresh entry (the bug we fixed)
   const afterForward = await page.evaluate(() => history.length);
   expect(afterForward).toBe(afterOpen);
+});
+
+test('lightbox rapid click switches image without closing', async ({ page }) => {
+  await page.goto('/');
+  const galleryItems = page.locator('.gallery-item');
+  const count = await galleryItems.count();
+  expect(count).toBeGreaterThan(1);
+
+  // Click first image
+  await galleryItems.nth(0).click();
+  const lightbox = page.locator('#lightbox');
+  await expect(lightbox).toBeVisible();
+  const firstSrc = await page.locator('#lightboxImage').getAttribute('src');
+
+  // Trigger click on second image programmatically while lightbox is open
+  await galleryItems.nth(1).evaluate(el => el.click());
+  await expect(lightbox).toBeVisible();
+  const secondSrc = await page.locator('#lightboxImage').getAttribute('src');
+
+  expect(secondSrc).not.toBe(firstSrc);
+  await page.keyboard.press('Escape');
+  await expect(lightbox).toBeHidden();
 });

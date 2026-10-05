@@ -43,9 +43,11 @@ const FOCUSABLE_SELECTOR =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 const getVisibleFocusables = (root) =>
-  Array.from(root.querySelectorAll(FOCUSABLE_SELECTOR)).filter(
-    el => el.offsetParent !== null && !el.closest('[hidden]')
-  );
+  Array.from(root.querySelectorAll(FOCUSABLE_SELECTOR)).filter(el => {
+    if (el.closest('[hidden]')) return false;
+    const style = getComputedStyle(el);
+    return style.display !== 'none' && style.visibility !== 'hidden';
+  });
 
 
 //
@@ -59,7 +61,12 @@ const OverlayManager = {
   },
   closeTop() {
     for (let i = this.stack.length - 1; i >= 0; i--) {
-      if (this.stack[i].close()) return true;
+      try {
+        if (this.stack[i].close()) return true;
+      } catch {
+        // A single broken close() must not block Escape for lower overlays.
+        continue;
+      }
     }
     return false;
   },
@@ -134,7 +141,7 @@ if (menuButton && navigation) {
     menuButton.focus();
   });
 
-  const mqDesktop = window.matchMedia('(min-width: 961px)');
+  const mqDesktop = window.matchMedia('(min-width: 960px)');
   const closeMobileNav = () => {
     menuButton.setAttribute('aria-expanded', 'false');
     menuButton.setAttribute('aria-label', 'Buka navigasi');
@@ -493,7 +500,8 @@ if (form) {
     submitBtn.textContent = 'Mengirim...';
 
     // Local preview mode: no backend is connected yet.
-    window.setTimeout(() => {
+    if (form._submitTimer) clearTimeout(form._submitTimer);
+    form._submitTimer = window.setTimeout(() => {
       form.reset();
       submitBtn.disabled = false;
       submitBtn.textContent = previousText;
@@ -760,7 +768,6 @@ if (articleModal && articleTriggers.length) {
     articleAuthor.textContent = data.author;
     articleBody.innerHTML = data.body.map(p => `<p>${p}</p>`).join('');
     articleModal.hidden = false;
-    articleModal.dataset.currentKey = key;
     ScrollLock.lock();
     articleModal.querySelector('.article-sheet-close')?.focus();
   };
@@ -939,7 +946,13 @@ if (articleModal && articleTriggers.length) {
   const open = (trigger) => {
     const img = trigger.querySelector('img');
     if (!img) return;
-    if (!lightbox.hidden) return; // already open — double-click guard
+    // If already open, just swap the image (rapid gallery navigation)
+    if (!lightbox.hidden) {
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt || '';
+      lightboxCap.textContent = trigger.dataset.caption || '';
+      return;
+    }
     lastFocused = document.activeElement;
     lightboxImg.src = img.src;
     lightboxImg.alt = img.alt || '';

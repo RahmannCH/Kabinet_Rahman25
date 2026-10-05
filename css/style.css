@@ -1297,7 +1297,7 @@ html[data-theme="dark"] .article-sheet {
   gap: 0.8rem;
   margin-bottom: 1.6rem;
   padding-bottom: 1.2rem;
-  border-bottom: 2px dashed rgba(186, 215, 245, 0.6);
+  border-bottom: 2px dashed var(--line);
   color: var(--muted);
   font-size: 0.82rem;
   font-weight: 700;
@@ -2062,7 +2062,7 @@ html[data-theme="dark"] .modal-nav-bar {
 .modal-dept-header {
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 2px dashed rgba(186, 215, 245, 0.6);
+  border-bottom: 2px dashed var(--line);
 }
 
 .dept-badge {
