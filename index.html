@@ -420,6 +420,10 @@
         <h2 id="prokerDeptTitle">21 program<br><em>7 departemen.</em></h2>
         <p>Rangkaian program kerja seluruh departemen Kabinet Rahman 25 — saring berdasarkan departemen.</p>
       </div>
+      <div class="proker-search-wrap sc-fade-up" style="--stagger: 2">
+        <span class="proker-search-icon" aria-hidden="true">🔍</span>
+        <input type="search" id="prokerSearchInput" class="proker-search-input" placeholder="Cari program kerja (misal: Tech Talk, Donor Darah)..." aria-label="Cari program kerja">
+      </div>
       <div class="proker-dept-filter sc-fade-up" style="--stagger: 2" role="tablist" aria-label="Saring proker per departemen">
         <button type="button" class="proker-filter-btn active" data-proker-filter="all" role="tab" aria-selected="true">Semua</button>
         <button type="button" class="proker-filter-btn" data-proker-filter="hr" role="tab" aria-selected="false">HR</button>
@@ -431,7 +435,7 @@
         <button type="button" class="proker-filter-btn" data-proker-filter="harmoni" role="tab" aria-selected="false">HARMONI</button>
       </div>
       <div class="proker-dept-grid" id="prokerDeptGrid"></div>
-      <p class="proker-empty" id="prokerEmpty" hidden>Tidak ada program untuk departemen ini.</p>
+      <p class="proker-empty" id="prokerEmpty" hidden>Tidak ada program yang sesuai dengan pencarian atau filter ini.</p>
     </section>
 
     <!-- Agenda Kegiatan (Timeline) -->
@@ -554,7 +558,7 @@
           <form id="publicAspirasiForm" class="styled-form" novalidate>
             <div class="form-group">
               <label for="namaInput">Nama (Opsional)</label>
-              <input type="text" id="namaInput" placeholder="Anonim diizinkan">
+              <input type="text" id="namaInput" placeholder="Anonim diizinkan" maxlength="80">
             </div>
             <div class="form-group">
               <label for="divisiTarget">Tujuan Struktur / Departemen *</label>
@@ -572,14 +576,23 @@
               </select>
             </div>
             <div class="form-group">
-              <label for="pesanInput">Pesan Aspirasi *</label>
-              <textarea id="pesanInput" rows="4" placeholder="Tuliskan keluhan atau masukanmu secara objektif..." required></textarea>
+              <div class="form-label-row">
+                <label for="pesanInput">Pesan Aspirasi *</label>
+                <span class="char-counter" id="pesanCounter">0 / 500</span>
+              </div>
+              <textarea id="pesanInput" rows="4" placeholder="Tuliskan keluhan atau masukanmu secara objektif..." maxlength="500" required></textarea>
             </div>
             <button type="submit" class="button button-primary">Kirim Aspirasi</button>
             <div id="formSuccessAlert" class="alert-box" style="display: none;" aria-live="polite">
               Aspirasi tersimpan di pratinjau ini. Pengiriman nyata ke pengurus belum aktif.
             </div>
           </form>
+          <div id="aspirasiSuccessCard" class="aspirasi-success-card" hidden aria-live="polite">
+            <div class="success-icon" aria-hidden="true">✓</div>
+            <h3>Aspirasi Terkirim!</h3>
+            <p>Terima kasih telah menyuarakan aspirasimu. Pesan kamu telah tercatat dalam sistem pratinjau ini untuk departemen yang dituju.</p>
+            <button type="button" class="button button-quiet" id="aspirasiResetBtn">Kirim Aspirasi Lainnya</button>
+          </div>
         </div>
       </div>
     </section>
@@ -1183,9 +1196,14 @@
   <div id="articleModal" class="article-modal" role="dialog" aria-modal="true" aria-labelledby="articleTitle" hidden>
     <div class="article-backdrop" data-article-close></div>
     <div class="article-sheet">
-      <button type="button" class="article-sheet-close" data-article-close aria-label="Tutup artikel">
-        <span aria-hidden="true">✕</span>
-      </button>
+      <div class="article-sheet-actions">
+        <button type="button" class="article-share-btn" id="articleShareBtn" aria-label="Salin tautan artikel">
+          <span aria-hidden="true">🔗</span> <span class="share-label">Salin Tautan</span>
+        </button>
+        <button type="button" class="article-sheet-close" data-article-close aria-label="Tutup artikel">
+          <span aria-hidden="true">✕</span>
+        </button>
+      </div>
       <span class="article-kicker" id="articleKicker">Kabar</span>
       <h2 class="article-title" id="articleTitle">Judul</h2>
       <div class="article-meta">
@@ -1194,6 +1212,14 @@
         <span id="articleAuthor">HIMAKOM ULM</span>
       </div>
       <div class="article-body" id="articleBody"></div>
+      <div class="article-footer-nav">
+        <button type="button" class="article-nav-btn article-prev-btn" id="articlePrevBtn">
+          <span aria-hidden="true">‹</span> Sebelumnya
+        </button>
+        <button type="button" class="article-nav-btn article-next-btn" id="articleNextBtn">
+          Selanjutnya <span aria-hidden="true">›</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1203,6 +1229,12 @@
     <figure class="lightbox-figure">
       <button type="button" class="lightbox-close" data-lightbox-close aria-label="Tutup pratinjau">
         <span aria-hidden="true">✕</span>
+      </button>
+      <button type="button" class="lightbox-nav lightbox-prev" aria-label="Foto sebelumnya" hidden>
+        <span aria-hidden="true">‹</span>
+      </button>
+      <button type="button" class="lightbox-nav lightbox-next" aria-label="Foto berikutnya" hidden>
+        <span aria-hidden="true">›</span>
       </button>
       <img id="lightboxImage" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="">
       <figcaption id="lightboxCaption"></figcaption>

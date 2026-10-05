@@ -113,11 +113,11 @@ test('stats render real numbers, never a permanent zero', async ({ page }) => {
   expect(numbers.length).toBe(4);
   for (const text of numbers) {
     expect(text.trim()).not.toBe('0');
-    expect(text.trim()).toMatch(/^\d+\+?$/);
+    expect(text.trim()).toMatch(/^[0-9.]+\+?$/);
   }
   // Final values must match their data-count targets
   const mismatched = await page.locator('.stat-number[data-count]').evaluateAll(els =>
-    els.filter(el => Number(el.textContent.replace('+', '')) !== Number(el.dataset.count)).length
+    els.filter(el => Number(el.textContent.replace('+', '').replace(/\./g, '')) !== Number(el.dataset.count)).length
   );
   expect(mismatched).toBe(0);
 });
@@ -338,4 +338,92 @@ test('lightbox rapid click switches image without closing', async ({ page }) => 
   expect(secondSrc).not.toBe(firstSrc);
   await page.keyboard.press('Escape');
   await expect(lightbox).toBeHidden();
+});
+
+test('lightbox arrow keys navigate gallery images', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('.gallery-item').first().click();
+  const lightbox = page.locator('#lightbox');
+  await expect(lightbox).toBeVisible();
+
+  const firstSrc = await page.locator('#lightboxImage').getAttribute('src');
+  await page.keyboard.press('ArrowRight');
+  const secondSrc = await page.locator('#lightboxImage').getAttribute('src');
+  expect(secondSrc).not.toBe(firstSrc);
+
+  await page.keyboard.press('ArrowLeft');
+  const backSrc = await page.locator('#lightboxImage').getAttribute('src');
+  expect(backSrc).toBe(firstSrc);
+
+  await page.keyboard.press('Escape');
+  await expect(lightbox).toBeHidden();
+});
+
+test('article modal supports deep-linking via hash and next/prev navigation', async ({ page }) => {
+  await page.goto('/#kabar-pelatihan');
+  const modal = page.locator('#articleModal');
+  await expect(modal).toBeVisible();
+  await expect(page.locator('#articleTitle')).toContainText('Pelatihan Kepemimpinan');
+
+  // Next article
+  await page.locator('#articleNextBtn').click();
+  await expect(page.locator('#articleTitle')).toContainText('Open Recruitment');
+  expect(page.url()).toContain('#kabar-oprec');
+
+  // Prev article
+  await page.locator('#articlePrevBtn').click();
+  await expect(page.locator('#articleTitle')).toContainText('Pelatihan Kepemimpinan');
+
+  await page.keyboard.press('Escape');
+  await expect(modal).toBeHidden();
+});
+
+test('proker live search filters cards dynamically', async ({ page }) => {
+  await page.goto('/');
+  const searchInput = page.locator('#prokerSearchInput');
+  await expect(searchInput).toBeVisible();
+
+  // Search for "Talk" (Tech Talk)
+  await searchInput.fill('Talk');
+  const visibleCards = page.locator('#prokerDeptGrid .proker-dept-card:visible');
+  const count = await visibleCards.count();
+  expect(count).toBeGreaterThan(0);
+  expect(count).toBeLessThan(21);
+  await expect(visibleCards.first()).toContainText('Tech Talk');
+
+  // Search for non-existent keyword
+  await searchInput.fill('xyz999nomatch');
+  await expect(page.locator('#prokerDeptGrid .proker-dept-card:visible')).toHaveCount(0);
+  await expect(page.locator('#prokerEmpty')).toBeVisible();
+
+  // Clear search
+  await searchInput.fill('');
+  await expect(page.locator('#prokerDeptGrid .proker-dept-card:visible')).toHaveCount(21);
+  await expect(page.locator('#prokerEmpty')).toBeHidden();
+});
+
+test('aspirasi form updates char counter and swaps to permanent success state', async ({ page }) => {
+  await page.goto('/');
+  const pesanInput = page.locator('#pesanInput');
+  const counter = page.locator('#pesanCounter');
+
+  await expect(counter).toContainText('0 / 500');
+  await pesanInput.fill('Halo pengurus kabinet');
+  await expect(counter).toContainText('21 / 500');
+
+  // Select target
+  await page.locator('#divisiTarget').selectOption('kominfo');
+  await page.locator('#publicAspirasiForm button[type="submit"]').click();
+
+  // Success card appears permanently
+  const successCard = page.locator('#aspirasiSuccessCard');
+  await expect(successCard).toBeVisible();
+  await expect(successCard).toContainText('Aspirasi Terkirim');
+  await expect(page.locator('#publicAspirasiForm')).toBeHidden();
+
+  // Reset button returns the form
+  await page.locator('#aspirasiResetBtn').click();
+  await expect(page.locator('#publicAspirasiForm')).toBeVisible();
+  await expect(successCard).toBeHidden();
+  await expect(counter).toContainText('0 / 500');
 });

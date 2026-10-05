@@ -440,6 +440,8 @@ if (filterButtons.length) {
 // ==========================================================================
 const form = document.getElementById('publicAspirasiForm');
 const alertBox = document.getElementById('formSuccessAlert');
+const successCard = document.getElementById('aspirasiSuccessCard');
+const resetBtn = document.getElementById('aspirasiResetBtn');
 
 const setFieldError = (field, message) => {
   if (!field) return;
@@ -463,7 +465,15 @@ if (form) {
   const nameInput = form.querySelector('#namaInput');
   const targetSelect = form.querySelector('#divisiTarget');
   const messageInput = form.querySelector('#pesanInput');
+  const pesanCounter = form.querySelector('#pesanCounter');
   const submitBtn = form.querySelector('button[type="submit"]');
+
+  // Live character counter & error clearing
+  if (messageInput && pesanCounter) {
+    messageInput.addEventListener('input', () => {
+      pesanCounter.textContent = `${messageInput.value.length} / 500`;
+    });
+  }
 
   // Live-clear errors as the user types
   [nameInput, targetSelect, messageInput].forEach(field => {
@@ -503,9 +513,15 @@ if (form) {
     if (form._submitTimer) clearTimeout(form._submitTimer);
     form._submitTimer = window.setTimeout(() => {
       form.reset();
+      if (pesanCounter) pesanCounter.textContent = '0 / 500';
       submitBtn.disabled = false;
       submitBtn.textContent = previousText;
-      if (alertBox) {
+
+      if (successCard) {
+        form.hidden = true;
+        successCard.hidden = false;
+        resetBtn?.focus();
+      } else if (alertBox) {
         alertBox.textContent = 'Aspirasi tersimpan di pratinjau ini. Pengiriman nyata ke pengurus belum aktif.';
         alertBox.style.display = 'block';
         window.setTimeout(() => {
@@ -513,6 +529,12 @@ if (form) {
         }, 6000);
       }
     }, 600);
+  });
+
+  resetBtn?.addEventListener('click', () => {
+    if (successCard) successCard.hidden = true;
+    form.hidden = false;
+    nameInput?.focus();
   });
 }
 
@@ -753,29 +775,57 @@ const articleTitle = document.getElementById('articleTitle');
 const articleDate = document.getElementById('articleDate');
 const articleAuthor = document.getElementById('articleAuthor');
 const articleBody = document.getElementById('articleBody');
+const articleShareBtn = document.getElementById('articleShareBtn');
+const articlePrevBtn = document.getElementById('articlePrevBtn');
+const articleNextBtn = document.getElementById('articleNextBtn');
 const articleTriggers = document.querySelectorAll('[data-article]');
+const articleKeys = Object.keys(ARTICLES);
+let currentArticleKey = null;
 let articleLastFocus = null;
 
 if (articleModal && articleTriggers.length) {
-  const openArticle = key => {
+  const updateFooterNav = key => {
+    const idx = articleKeys.indexOf(key);
+    if (articlePrevBtn) articlePrevBtn.disabled = idx <= 0;
+    if (articleNextBtn) articleNextBtn.disabled = idx >= articleKeys.length - 1;
+  };
+
+  const openArticle = (key, skipHistory = false) => {
     const data = ARTICLES[key];
     if (!data) return;
-    if (!articleModal.hidden) return; // already open — single-instance guard
-    articleLastFocus = document.activeElement;
+    const isAlreadyOpen = !articleModal.hidden;
+    currentArticleKey = key;
+
     articleKicker.textContent = data.kicker;
     articleTitle.textContent = data.title;
     articleDate.textContent = data.date;
     articleAuthor.textContent = data.author;
     articleBody.innerHTML = data.body.map(p => `<p>${p}</p>`).join('');
-    articleModal.hidden = false;
-    ScrollLock.lock();
-    articleModal.querySelector('.article-sheet-close')?.focus();
+    updateFooterNav(key);
+
+    if (!isAlreadyOpen) {
+      articleLastFocus = document.activeElement;
+      articleModal.hidden = false;
+      ScrollLock.lock();
+      articleModal.querySelector('.article-sheet-close')?.focus();
+    }
+
+    if (!skipHistory && window.location.hash !== '#' + key) {
+      history.pushState({ article: key }, '', '#' + key);
+    }
   };
 
   const closeArticle = () => {
     if (articleModal.hidden) return false;
     articleModal.hidden = true;
     ScrollLock.unlock();
+
+    const hashKey = window.location.hash.slice(1);
+    if (ARTICLES[hashKey]) {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+
+    currentArticleKey = null;
     if (articleLastFocus) articleLastFocus.focus();
     return true;
   };
@@ -787,6 +837,51 @@ if (articleModal && articleTriggers.length) {
   articleModal.querySelectorAll('[data-article-close]').forEach(el => {
     el.addEventListener('click', closeArticle);
   });
+
+  articlePrevBtn?.addEventListener('click', () => {
+    const idx = articleKeys.indexOf(currentArticleKey);
+    if (idx > 0) openArticle(articleKeys[idx - 1]);
+  });
+
+  articleNextBtn?.addEventListener('click', () => {
+    const idx = articleKeys.indexOf(currentArticleKey);
+    if (idx < articleKeys.length - 1) openArticle(articleKeys[idx + 1]);
+  });
+
+  articleShareBtn?.addEventListener('click', async () => {
+    if (!currentArticleKey) return;
+    const url = `${window.location.origin}${window.location.pathname}#${currentArticleKey}`;
+    const labelSpan = articleShareBtn.querySelector('.share-label');
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(url);
+      }
+      if (labelSpan) {
+        const originalText = labelSpan.textContent;
+        labelSpan.textContent = '✓ Tersalin!';
+        setTimeout(() => {
+          labelSpan.textContent = originalText;
+        }, 2000);
+      }
+    } catch {
+      if (labelSpan) labelSpan.textContent = url;
+    }
+  });
+
+  window.addEventListener('popstate', () => {
+    const hashKey = window.location.hash.slice(1);
+    if (ARTICLES[hashKey]) {
+      openArticle(hashKey, true);
+    } else if (!articleModal.hidden) {
+      closeArticle();
+    }
+  });
+
+  // Open article directly if accessed via deep link
+  const initialHash = window.location.hash.slice(1);
+  if (ARTICLES[initialHash]) {
+    openArticle(initialHash, true);
+  }
 
   OverlayManager.register('article', closeArticle);
 
@@ -813,12 +908,14 @@ if (articleModal && articleTriggers.length) {
   const statCards = document.querySelectorAll('.stat-number[data-count]');
   if (!statCards.length) return;
 
+  const numFormat = new Intl.NumberFormat('id-ID');
+
   const animateCount = (el) => {
     const target = parseInt(el.dataset.count, 10);
     const suffix = el.dataset.suffix || '';
     // Respect reduced-motion: set final value instantly, no animation
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      el.textContent = target + suffix;
+      el.textContent = numFormat.format(target) + suffix;
       return;
     }
     const duration = 1400;
@@ -826,7 +923,7 @@ if (articleModal && articleTriggers.length) {
     const step = (now) => {
       const p = Math.min((now - start) / duration, 1);
       const eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(target * eased) + suffix;
+      el.textContent = numFormat.format(Math.round(target * eased)) + suffix;
       if (p < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
@@ -903,12 +1000,13 @@ if (articleModal && articleTriggers.length) {
     const pills = [{ key: 'all', label: 'Semua' }, ...months.map(m => ({ key: m, label: MONTH_LABELS[m] }))];
     filterContainer.innerHTML = pills
       .map((p, i) => `<button type="button" class="agenda-filter-btn${i === 0 ? ' active' : ''}" data-agenda-filter="${p.key}" role="tab" aria-selected="${i === 0 ? 'true' : 'false'}">${p.label}</button>`)
-      .join('');
+      .join('') + `<button type="button" class="agenda-action-btn" id="agendaScrollNext" aria-label="Ke jadwal terdekat">↓ Terdekat</button>`;
   }
 
   // --- Filter logic ---
   const filterBtns = filterContainer ? filterContainer.querySelectorAll('.agenda-filter-btn') : [];
   const items = timeline.querySelectorAll('.agenda-item');
+  const btnScrollNext = document.getElementById('agendaScrollNext');
 
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -927,8 +1025,38 @@ if (articleModal && articleTriggers.length) {
         if (show) visible++;
       });
       if (empty) empty.hidden = visible > 0;
+      
+      // Update quick-scroll button visibility
+      if (btnScrollNext) {
+        btnScrollNext.style.display = month === 'all' ? 'inline-block' : 'none';
+      }
     });
   });
+
+  if (btnScrollNext) {
+    btnScrollNext.addEventListener('click', () => {
+      const activeOrUpcoming = Array.from(items).find(el => {
+        const statusEl = el.querySelector('.agenda-status');
+        return statusEl && (statusEl.classList.contains('is-running') || statusEl.classList.contains('is-upcoming'));
+      });
+      if (activeOrUpcoming) {
+        activeOrUpcoming.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const card = activeOrUpcoming.querySelector('.agenda-card');
+        if (card) {
+          card.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
+          card.style.transform = 'scale(1.03)';
+          card.style.boxShadow = 'var(--clay-shadow-btn-primary)';
+          setTimeout(() => {
+            card.style.transform = '';
+            card.style.boxShadow = '';
+          }, 1200);
+        }
+      } else {
+        btnScrollNext.textContent = 'Semua Selesai';
+        btnScrollNext.disabled = true;
+      }
+    });
+  }
 })();
 
 // ==========================================================================
@@ -938,25 +1066,42 @@ if (articleModal && articleTriggers.length) {
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImage');
   const lightboxCap = document.getElementById('lightboxCaption');
-  const triggers = document.querySelectorAll('.gallery-item[data-caption]');
+  const prevBtn = lightbox?.querySelector('.lightbox-prev');
+  const nextBtn = lightbox?.querySelector('.lightbox-next');
+  const triggers = Array.from(document.querySelectorAll('.gallery-item[data-caption]'));
   if (!lightbox || !triggers.length) return;
 
   let lastFocused = null;
+  let currentIndex = -1;
 
-  const open = (trigger) => {
+  const showIndex = (index) => {
+    if (!triggers.length) return;
+    currentIndex = (index + triggers.length) % triggers.length;
+    const trigger = triggers[currentIndex];
     const img = trigger.querySelector('img');
     if (!img) return;
-    // If already open, just swap the image (rapid gallery navigation)
-    if (!lightbox.hidden) {
-      lightboxImg.src = img.src;
-      lightboxImg.alt = img.alt || '';
-      lightboxCap.textContent = trigger.dataset.caption || '';
-      return;
-    }
-    lastFocused = document.activeElement;
+
     lightboxImg.src = img.src;
     lightboxImg.alt = img.alt || '';
     lightboxCap.textContent = trigger.dataset.caption || '';
+
+    const multiple = triggers.length > 1;
+    if (prevBtn) prevBtn.hidden = !multiple;
+    if (nextBtn) nextBtn.hidden = !multiple;
+  };
+
+  const open = (trigger) => {
+    const idx = triggers.indexOf(trigger);
+    if (idx === -1) return;
+
+    // If already open, just swap the image (rapid gallery navigation)
+    if (!lightbox.hidden) {
+      showIndex(idx);
+      return;
+    }
+
+    lastFocused = document.activeElement;
+    showIndex(idx);
     lightbox.hidden = false;
     ScrollLock.lock();
     lightbox.querySelector('.lightbox-close')?.focus();
@@ -972,6 +1117,27 @@ if (articleModal && articleTriggers.length) {
     if (lastFocused) lastFocused.focus();
     return true;
   };
+
+  prevBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    showIndex(currentIndex - 1);
+  });
+
+  nextBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    showIndex(currentIndex + 1);
+  });
+
+  lightbox.addEventListener('keydown', (e) => {
+    if (lightbox.hidden) return;
+    if (e.key === 'ArrowLeft') {
+      showIndex(currentIndex - 1);
+      e.preventDefault();
+    } else if (e.key === 'ArrowRight') {
+      showIndex(currentIndex + 1);
+      e.preventDefault();
+    }
+  });
 
   triggers.forEach(btn => btn.addEventListener('click', () => open(btn)));
   lightbox.querySelectorAll('[data-lightbox-close]').forEach(el =>
@@ -1010,13 +1176,17 @@ document.addEventListener('keydown', e => {
 })();
 
 // ==========================================================================
-// 15. PROGRAM KERJA DEPARTEMEN (Render + Filter)
+// 15. PROGRAM KERJA DEPARTEMEN (Render + Live Search + Filter)
 // ==========================================================================
 (() => {
   const grid = document.getElementById('prokerDeptGrid');
   const filterBtns = document.querySelectorAll('.proker-filter-btn');
+  const searchInput = document.getElementById('prokerSearchInput');
   const empty = document.getElementById('prokerEmpty');
   if (!grid || !DEPT_PROGRAMS.length) return;
+
+  let activeDept = 'all';
+  let searchTerm = '';
 
   const buildCard = (prog, i) => `
     <article class="proker-dept-card sc-fade-up" data-proker-dept="${prog.key}" style="--stagger:${i % 6 + 1}">
@@ -1028,24 +1198,38 @@ document.addEventListener('keydown', e => {
   grid.innerHTML = DEPT_PROGRAMS.map(buildCard).join('');
   RevealEngine.observe(grid.querySelectorAll('.sc-fade-up'));
 
-  if (!filterBtns.length) return;
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const filter = btn.dataset.prokerFilter;
-      filterBtns.forEach(b => {
-        b.classList.remove('active');
-        b.setAttribute('aria-selected', 'false');
-      });
-      btn.classList.add('active');
-      btn.setAttribute('aria-selected', 'true');
-
-      let visible = 0;
-      grid.querySelectorAll('.proker-dept-card').forEach(card => {
-        const show = filter === 'all' || card.dataset.prokerDept === filter;
-        card.hidden = !show;
-        if (show) visible++;
-      });
-      if (empty) empty.hidden = visible > 0;
+  const applyFilter = () => {
+    let visible = 0;
+    const term = searchTerm.toLowerCase().trim();
+    grid.querySelectorAll('.proker-dept-card').forEach(card => {
+      const deptMatch = activeDept === 'all' || card.dataset.prokerDept === activeDept;
+      const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
+      const desc = card.querySelector('p')?.textContent.toLowerCase() || '';
+      const textMatch = !term || title.includes(term) || desc.includes(term);
+      const show = deptMatch && textMatch;
+      card.hidden = !show;
+      if (show) visible++;
     });
+    if (empty) empty.hidden = visible > 0;
+  };
+
+  if (filterBtns.length) {
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeDept = btn.dataset.prokerFilter;
+        filterBtns.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        applyFilter();
+      });
+    });
+  }
+
+  searchInput?.addEventListener('input', e => {
+    searchTerm = e.target.value;
+    applyFilter();
   });
 })();
