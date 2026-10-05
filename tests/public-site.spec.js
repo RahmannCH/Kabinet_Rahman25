@@ -239,3 +239,51 @@ test('all agenda years are 2027 (not stale 2026)', async ({ page }) => {
     expect(d).not.toContain('2026');
   }
 });
+
+test('lightbox close button is visible in dark mode', async ({ page }) => {
+  await page.goto('/');
+  // Force dark theme via DOM (inline script checks localStorage/prefers-color-scheme)
+  await page.evaluate(() => {
+    document.documentElement.dataset.theme = 'dark';
+  });
+  // Open lightbox by clicking first gallery item
+  await page.locator('.gallery-item').first().click();
+  const btn = page.locator('.lightbox-close');
+  await expect(btn).toBeVisible();
+  const bg = await btn.evaluate(el => getComputedStyle(el).backgroundColor);
+  // Dark-mode background should be dark (rgba(15,23,42,0.92) ≈ rgb(15,23,42))
+  expect(bg).toContain('15');
+  expect(bg).toContain('42');
+});
+
+test('reduced-motion reveals all scroll content immediately', async ({ page }) => {
+  await page.goto('/');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const opacities = await page.locator('.sc-fade-up').evaluateAll(els =>
+    els.map(el => getComputedStyle(el).opacity)
+  );
+  for (const op of opacities) {
+    expect(parseFloat(op)).toBe(1);
+  }
+});
+
+test('agenda status uses Jakarta timezone', async ({ page }) => {
+  // Mock: UTC 2027-04-12T18:30:00Z = 2027-04-13T01:30:00+07:00 (WIB)
+  // In UTC, toISOString().slice(0,10) would return "2027-04-12" (wrong).
+  // With Jakarta timezone fix, it should return "2027-04-13".
+  await page.addInitScript(() => {
+    const RealDate = Date;
+    // eslint-disable-next-line no-global-assign
+    Date = class extends RealDate {
+      constructor(...args) {
+        if (args.length === 0) return new RealDate('2027-04-12T18:30:00Z');
+        return new RealDate(...args);
+      }
+    };
+  });
+  await page.goto('/');
+  // Item with date 2027-04-12 should show "is-selesai" (yesterday in Jakarta)
+  // because Jakarta date is 2027-04-13, so 2027-04-12 < 2027-04-13
+  const item = page.locator('#agendaTimeline .agenda-item[data-date="2027-04-12"]');
+  await expect(item.locator('.agenda-status')).toHaveClass(/is-selesai/);
+});

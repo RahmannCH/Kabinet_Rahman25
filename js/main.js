@@ -26,9 +26,8 @@ const ScrollLock = (() => {
   };
   // Safety net: if nothing is actually open but we still hold a lock, release it.
   const reconcile = () => {
-    const anyOpen = document.querySelector(
-      '.cabinet-modal:not([hidden]), .article-modal:not([hidden]), .lightbox:not([hidden])'
-    );
+    const anyOpen = Array.from(document.querySelectorAll('.cabinet-modal, .article-modal, .lightbox'))
+      .some(el => !el.hidden && getComputedStyle(el).display !== 'none');
     if (!anyOpen && depth !== 0) forceReset();
   };
   // Never leave the page frozen across a bfcache restore / tab return.
@@ -511,9 +510,17 @@ if (form) {
 
 // 7. Fluid Scroll Reveal Engine (exposed so dynamically-injected nodes also reveal)
 const RevealEngine = (() => {
-  if (!('IntersectionObserver' in window)) {
+  const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  // Force-reveal everything — used for reduced-motion and as a safety net so no
+  // content can ever stay permanently hidden (WCAG 1.4.10 / 2.3.3).
+  const revealAll = () =>
+    document.querySelectorAll('.sc-fade-up, .sc-fade-in').forEach(el => el.classList.add('sc-in'));
+
+  if (!('IntersectionObserver' in window) || reduceMotion) {
+    revealAll();
     return {
-      observe: els => els.forEach(el => el.classList.add('sc-in'))
+      observe: els => els.forEach(el => el.classList.add('sc-in')),
+      revealAll,
     };
   }
   const observer = new IntersectionObserver(
@@ -529,7 +536,10 @@ const RevealEngine = (() => {
   );
   const observe = els => els.forEach(el => observer.observe(el));
   observe(document.querySelectorAll('.sc-fade-up, .sc-fade-in'));
-  return { observe };
+  // Safety net: if the observer never fires for any node (e.g. injected late),
+  // guarantee readability after a short grace period.
+  window.setTimeout(revealAll, 3000);
+  return { observe, revealAll };
 })();
 
 // ==========================================================================
@@ -829,12 +839,12 @@ if (articleModal && articleTriggers.length) {
   const empty = document.getElementById('agendaEmpty');
   if (!timeline || !AGENDA_ITEMS.length) return;
 
-  // --- Dynamic status based on date (timezone-safe: compare YYYY-MM-DD strings) ---
+  // --- Dynamic status based on date (timezone-safe: Jakarta/WIB) ---
   const computeStatus = (dateStr) => {
-    const todayStr = new Date().toISOString().slice(0, 10);
-    if (dateStr < todayStr) return { cls: 'is-selesai', label: '✓ Selesai' };
-    if (dateStr === todayStr) return { cls: 'is-running', label: '▶ Berjalan' };
-    return { cls: 'is-upcoming', label: '○ Akan Datang' };
+    const todayStr = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Jakarta' }).format(new Date());
+    if (dateStr < todayStr) return { cls: 'is-selesai', label: '\u2713 Selesai' };
+    if (dateStr === todayStr) return { cls: 'is-running', label: '\u25B6 Berjalan' };
+    return { cls: 'is-upcoming', label: '\u25CB Akan Datang' };
   };
 
   // --- Format date: "12 Apr 2027" ---
@@ -850,6 +860,7 @@ if (articleModal && articleTriggers.length) {
     const li = document.createElement('li');
     li.className = 'agenda-item sc-fade-up';
     li.dataset.month = item.month;
+    li.dataset.date = item.date;
     li.style.setProperty('--stagger', index + 1);
     li.innerHTML = `
       <div class="agenda-node" aria-hidden="true"></div>

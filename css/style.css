@@ -295,6 +295,11 @@ h1, h2, h3, h4, p {
   background: var(--blue-pastel-pill);
 }
 
+html[data-theme="dark"] ::selection {
+  background: var(--clay-blue-dark);
+  color: var(--clay-white);
+}
+
 :focus-visible {
   outline: 3px solid var(--clay-blue);
   outline-offset: 3px;
@@ -2118,8 +2123,8 @@ html[data-theme="dark"] .modal-nav-bar {
 
 /* Respect reduced-motion: never hide content, disable all motion */
 @media (prefers-reduced-motion: reduce) {
-  .sc-fade-up,
-  .sc-fade-in {
+  .js .sc-fade-up,
+  .js .sc-fade-in {
     opacity: 1;
     transform: none;
     transition: none;
@@ -2547,12 +2552,12 @@ html[data-theme="dark"] .agenda-card {
 
 .agenda-status.is-upcoming {
   background: var(--clay-blue-light);
-  color: var(--clay-blue-dark);
+  color: #075985;
 }
 
 .agenda-status.is-running {
   background: var(--gold-pill);
-  color: var(--accent-gold);
+  color: #92400e;
 }
 
 .agenda-status.is-selesai {
@@ -2741,6 +2746,12 @@ html[data-theme="dark"] .gallery-item {
   cursor: pointer;
   box-shadow: var(--clay-shadow-pill);
   transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+html[data-theme="dark"] .lightbox-close {
+  background: rgba(15, 23, 42, 0.92);
+  color: var(--clay-white);
+  border: 1px solid var(--line);
 }
 
 .lightbox-close:hover {
