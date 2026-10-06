@@ -45,9 +45,9 @@ const FOCUSABLE_SELECTOR =
 
 const getVisibleFocusables = (root) =>
   Array.from(root.querySelectorAll(FOCUSABLE_SELECTOR)).filter(el => {
-    if (el.closest('[hidden]')) return false;
+    if (el.closest('[hidden]') || el.closest('.is-modal-hidden')) return false;
     const style = getComputedStyle(el);
-    return style.display !== 'none' && style.visibility !== 'hidden';
+    return style.display !== 'none' && style.visibility !== 'hidden' && el.getBoundingClientRect().width > 0;
   });
 
 
@@ -192,6 +192,15 @@ if (menuButton && navigation) {
       { rootMargin: '-15% 0px -45% 0px', threshold: [0.1, 0.3, 0.6] }
     );
     sections.forEach(section => observer.observe(section));
+  }
+
+  // Pause offscreen hero animation loops to conserve CPU/GPU
+  const heroSection = document.getElementById('beranda');
+  if (heroSection && 'IntersectionObserver' in window) {
+    const heroObserver = new IntersectionObserver(([entry]) => {
+      heroSection.classList.toggle('is-paused', !entry.isIntersecting);
+    }, { threshold: 0 });
+    heroObserver.observe(heroSection);
   }
 }
 
@@ -461,19 +470,23 @@ const resetBtn = document.getElementById('aspirasiResetBtn');
 
 const setFieldError = (field, message) => {
   if (!field) return;
-  const errorEl = field.parentElement.querySelector('.field-error');
+  const errorId = field.id + '-error';
+  let errorEl = field.parentElement.querySelector('.field-error');
   if (message) {
     if (!errorEl) {
-      const el = document.createElement('span');
-      el.className = 'field-error';
-      el.setAttribute('role', 'alert');
-      field.parentElement.appendChild(el);
+      errorEl = document.createElement('span');
+      errorEl.className = 'field-error';
+      errorEl.id = errorId;
+      errorEl.setAttribute('aria-live', 'polite');
+      field.parentElement.appendChild(errorEl);
     }
-    field.parentElement.querySelector('.field-error').textContent = message;
+    errorEl.textContent = message;
     field.setAttribute('aria-invalid', 'true');
+    field.setAttribute('aria-describedby', errorId);
   } else {
     if (errorEl) errorEl.remove();
     field.removeAttribute('aria-invalid');
+    field.removeAttribute('aria-describedby');
   }
 };
 
@@ -500,7 +513,7 @@ if (form) {
 
   form.addEventListener('submit', event => {
     event.preventDefault();
-    if (!submitBtn) return;
+    if (!submitBtn || submitBtn.disabled) return;
 
     let valid = true;
 
@@ -623,6 +636,7 @@ if (openModalBtn && closeModalBtn && cabinetModal) {
     ScrollLock.lock();
     openModalBtn.setAttribute('aria-expanded', 'true');
     setTimeout(() => {
+      if (cabinetModal.hidden) return;
       const firstTabBtn = cabinetModal.querySelector('.modal-pill-btn');
       if (firstTabBtn) firstTabBtn.focus();
       else closeModalBtn.focus();
@@ -898,7 +912,7 @@ if (articleModal && articleTriggers.length) {
   });
 
   articleShareBtn?.addEventListener('click', async () => {
-    if (!currentArticleKey) return;
+    if (!currentArticleKey || articleShareBtn._copying) return;
     const url = `${window.location.origin}${window.location.pathname}#${currentArticleKey}`;
     const labelSpan = articleShareBtn.querySelector('.share-label');
     try {
@@ -906,10 +920,12 @@ if (articleModal && articleTriggers.length) {
         await navigator.clipboard.writeText(url);
       }
       if (labelSpan) {
+        articleShareBtn._copying = true;
         const originalText = labelSpan.textContent;
         labelSpan.textContent = '✓ Tersalin!';
         setTimeout(() => {
           labelSpan.textContent = originalText;
+          articleShareBtn._copying = false;
         }, 2000);
       }
     } catch {

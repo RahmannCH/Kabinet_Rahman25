@@ -288,6 +288,7 @@ img {
 
 h1, h2, h3, h4, p {
   margin-top: 0;
+  overflow-wrap: break-word;
 }
 
 ::selection {
@@ -567,6 +568,11 @@ html[data-theme="dark"] .site-header.is-scrolled {
   z-index: var(--z-decor);
   opacity: 0.85;
   will-change: transform;
+}
+
+.hero.is-paused .hero-glow,
+.hero.is-paused .pulse-dot {
+  animation-play-state: paused !important;
 }
 
 .hero-glow-1 {
@@ -1539,8 +1545,10 @@ html[data-theme="dark"] .member-card:hover .member-info {
   font-weight: 800;
   font-family: var(--display);
   letter-spacing: -0.02em;
-  margin-bottom: 0.4rem;
-  line-height: 1.2;
+  margin: 0.2rem 0 0.5rem;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 
 .member-dept-tag {

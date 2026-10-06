@@ -177,10 +177,10 @@
         </div>
 
         <!-- ORGANIZATIONAL TREE (Bagan Pohon Keluarga Kabinet) -->
-        <div class="org-tree" id="fungsionarisGrid" role="tree" aria-label="Bagan Struktur Kabinet">
+        <div class="org-tree" id="fungsionarisGrid" aria-label="Bagan Struktur Kabinet">
 
           <!-- ============ TIER 1: DPO ============ -->
-          <div class="tree-tier tree-tier-dpo" data-group="dpo" role="treeitem">
+          <div class="tree-tier tree-tier-dpo" data-group="dpo">
             <div class="tree-tier-label">
               <span class="tree-tier-badge">DPO</span>
               <span class="tree-tier-name">Dewan Pertimbangan Organisasi</span>
@@ -219,7 +219,7 @@
           </div>
 
           <!-- ============ TIER 2: BPH ============ -->
-          <div class="tree-tier tree-tier-bph" data-group="bph" role="treeitem">
+          <div class="tree-tier tree-tier-bph" data-group="bph">
             <div class="tree-tier-label">
               <span class="tree-tier-badge">BPH</span>
               <span class="tree-tier-name">Badan Pengurus Harian</span>
@@ -285,7 +285,7 @@
           </div>
 
           <!-- ============ TIER 3: 7 KEPALA DEPARTEMEN ============ -->
-          <div class="tree-tier tree-tier-dept" data-group="departments" role="treeitem">
+          <div class="tree-tier tree-tier-dept" data-group="departments">
             <div class="tree-tier-label">
               <span class="tree-tier-badge tree-tier-badge-alt">KADEP</span>
               <span class="tree-tier-name">7 Kepala Departemen</span>
@@ -435,7 +435,7 @@
         <button type="button" class="proker-filter-btn" data-proker-filter="harmoni" role="tab" aria-selected="false">HARMONI</button>
       </div>
       <div class="proker-dept-grid" id="prokerDeptGrid"></div>
-      <p class="proker-empty" id="prokerEmpty" hidden>Tidak ada program yang sesuai dengan pencarian atau filter ini.</p>
+      <p class="proker-empty" id="prokerEmpty" role="status" aria-live="polite" hidden>Tidak ada program yang sesuai dengan pencarian atau filter ini.</p>
     </section>
 
     <!-- Agenda Kegiatan (Timeline) -->
@@ -450,7 +450,7 @@
 
       <ol class="agenda-timeline" id="agendaTimeline"></ol>
 
-      <p class="agenda-empty" id="agendaEmpty" hidden>Belum ada agenda pada bulan ini.</p>
+      <p class="agenda-empty" id="agendaEmpty" role="status" aria-live="polite" hidden>Belum ada agenda pada bulan ini.</p>
     </section>
 
     <!-- Kabar Terkini Section -->

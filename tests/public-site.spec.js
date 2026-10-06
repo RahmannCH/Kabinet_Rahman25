@@ -421,9 +421,19 @@ test('aspirasi form updates char counter and swaps to permanent success state', 
   await pesanInput.fill('Halo pengurus kabinet');
   await expect(counter).toContainText('21 / 500');
 
+  // Submit missing target to test ARIA describedby logic
+  const submitBtn = page.locator('#publicAspirasiForm button[type="submit"]');
+  await submitBtn.click();
+  const targetSelect = page.locator('#divisiTarget');
+  await expect(targetSelect).toHaveAttribute('aria-invalid', 'true');
+  const errorId = await targetSelect.getAttribute('aria-describedby');
+  expect(errorId).toBeTruthy();
+  const errorMsg = page.locator(`#${errorId}`);
+  await expect(errorMsg).toBeVisible();
+
   // Select target
-  await page.locator('#divisiTarget').selectOption('kominfo');
-  await page.locator('#publicAspirasiForm button[type="submit"]').click();
+  await targetSelect.selectOption('kominfo');
+  await submitBtn.click();
 
   // Success card appears permanently
   const successCard = page.locator('#aspirasiSuccessCard');
@@ -436,6 +446,17 @@ test('aspirasi form updates char counter and swaps to permanent success state', 
   await expect(page.locator('#publicAspirasiForm')).toBeVisible();
   await expect(successCard).toBeHidden();
   await expect(counter).toContainText('0 / 500');
+  await expect(targetSelect).not.toHaveAttribute('aria-invalid');
+});
+
+test('offscreen hero animations pause to save GPU', async ({ page }) => {
+  await page.goto('/');
+  const hero = page.locator('.hero');
+  await expect(hero).not.toHaveClass(/is-paused/);
+
+  // Scroll to footer to push hero out of view
+  await page.locator('.footer').scrollIntoViewIfNeeded();
+  await expect(hero).toHaveClass(/is-paused/);
 });
 
 test('navbar elements never overlap across desktop and intermediate viewports', async ({ page }) => {
