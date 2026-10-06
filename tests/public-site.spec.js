@@ -449,6 +449,13 @@ test('aspirasi form updates char counter and swaps to permanent success state', 
   await expect(targetSelect).not.toHaveAttribute('aria-invalid');
 });
 
+test('hero glow bubbles never sit above the hero portrait logo card', async ({ page }) => {
+  await page.goto('/');
+  const glowZ = await page.locator('.hero-glow-1').evaluate(el => parseInt(getComputedStyle(el).zIndex, 10) || 0);
+  const portraitZ = await page.locator('.hero-portrait').evaluate(el => parseInt(getComputedStyle(el).zIndex, 10) || 0);
+  expect(portraitZ).toBeGreaterThan(glowZ);
+});
+
 test('offscreen hero animations pause to save GPU', async ({ page }) => {
   await page.goto('/');
   const hero = page.locator('.hero');
