@@ -195,8 +195,8 @@ test('tablet resize closes the mobile nav and keeps navigation usable', async ({
   await menuButton.click();
   await expect(menuButton).toHaveAttribute('aria-expanded', 'true');
 
-  // Grow to desktop width (>= 1140px) — CSS switches to inline nav, JS must close the menu state
-  await page.setViewportSize({ width: 1200, height: 900 });
+  // Grow to desktop width (>= 1280px) — CSS switches to inline nav, JS must close the menu state
+  await page.setViewportSize({ width: 1366, height: 900 });
   await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
   await expect(nav).not.toHaveClass(/is-open/);
 });
@@ -451,4 +451,58 @@ test('navbar elements never overlap across desktop and intermediate viewports', 
     // Brand and header actions must not overlap horizontally
     expect(brandBox.x + brandBox.width).toBeLessThanOrEqual(actionsBox.x);
   }
+});
+
+test('cabinet modal auto-resets department filter on reopen', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('#openFullCabinetBtn').click();
+  const modal = page.locator('#fullCabinetModal');
+  await expect(modal).toBeVisible();
+
+  // Filter to DPO
+  await page.locator('.modal-pill-btn[data-modal-filter="sec-dpo"]').click();
+  await expect(page.locator('#sec-dpo')).not.toHaveClass(/is-modal-hidden/);
+  await expect(page.locator('#sec-bph')).toHaveClass(/is-modal-hidden/);
+
+  // Close modal via close button
+  await page.locator('#closeFullCabinetBtn').click();
+  await expect(modal).toBeHidden();
+
+  // Re-open modal
+  await page.locator('#openFullCabinetBtn').click();
+  await expect(modal).toBeVisible();
+
+  // Filters must be reset to 'Semua' and all sections unhidden
+  const firstPill = page.locator('.modal-pill-btn').first();
+  await expect(firstPill).toHaveClass(/active/);
+  await expect(firstPill).toHaveAttribute('aria-selected', 'true');
+  await expect(page.locator('#sec-bph')).not.toHaveClass(/is-modal-hidden/);
+  await expect(page.locator('#sec-dpo')).not.toHaveClass(/is-modal-hidden/);
+
+  await page.keyboard.press('Escape');
+  await expect(modal).toBeHidden();
+});
+
+test('article modal next/prev replaces state instead of stacking history', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('[data-article="kabar-pelatihan"]').first().click();
+  const modal = page.locator('#articleModal');
+  await expect(modal).toBeVisible();
+
+  const lengthAfterOpen = await page.evaluate(() => history.length);
+
+  // Cycle Next -> Next
+  await page.locator('#articleNextBtn').click();
+  await expect(page.locator('#articleTitle')).toContainText('Open Recruitment');
+
+  await page.locator('#articleNextBtn').click();
+  await expect(page.locator('#articleTitle')).toContainText('Gemastik');
+
+  // History length must remain unchanged because replaceState was used
+  const lengthAfterCycling = await page.evaluate(() => history.length);
+  expect(lengthAfterCycling).toBe(lengthAfterOpen);
+
+  // Close modal
+  await page.locator('.article-sheet-close').click();
+  await expect(modal).toBeHidden();
 });

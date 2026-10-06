@@ -420,6 +420,7 @@ html[data-theme="dark"] .site-header.is-scrolled {
   align-items: center;
   gap: 0.75rem;
   text-decoration: none;
+  flex-shrink: 0;
 }
 
 .brand img {
@@ -452,6 +453,8 @@ html[data-theme="dark"] .site-header.is-scrolled {
   display: flex;
   align-items: center;
   gap: clamp(0.3rem, 1.2vw, 0.8rem);
+  flex-wrap: nowrap;
+  overflow: hidden;
 }
 
 .site-nav a {
@@ -504,6 +507,7 @@ html[data-theme="dark"] .site-header.is-scrolled {
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  flex-shrink: 0;
 }
 
 /* Clay Spherical Theme Button */
@@ -2322,8 +2326,8 @@ html[data-theme="dark"] .modal-nav-bar {
 /* ==========================================================================
    RESPONSIVE DESIGN & MOBILE ERGONOMICS
    ========================================================================== */
-/* 1. Viewports <= 1140px: Collapse Desktop Nav into Floating Capsule Drawer */
-@media (max-width: 1140px) {
+/* 1. Viewports <= 1280px: Collapse Desktop Nav into Floating Capsule Drawer */
+@media (max-width: 1280px) {
   .menu-toggle {
     display: grid;
     width: 42px;
@@ -2368,6 +2372,7 @@ html[data-theme="dark"] .modal-nav-bar {
     margin-top: 0.8rem;
     background: var(--clay-white);
     box-shadow: var(--clay-shadow-card-hover);
+    overflow: visible;
   }
 
   .site-nav.is-open {

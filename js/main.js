@@ -24,11 +24,12 @@ const ScrollLock = (() => {
     depth = 0;
     apply();
   };
-  // Safety net: if nothing is actually open but we still hold a lock, release it.
+  // Safety net: bidirectional sync for bfcache/tab returns
   const reconcile = () => {
     const anyOpen = Array.from(document.querySelectorAll('.cabinet-modal, .article-modal, .lightbox'))
       .some(el => !el.hidden && getComputedStyle(el).display !== 'none');
     if (!anyOpen && depth !== 0) forceReset();
+    else if (anyOpen && depth === 0) lock();
   };
   // Never leave the page frozen across a bfcache restore / tab return.
   window.addEventListener('pagehide', forceReset);
@@ -152,7 +153,7 @@ if (menuButton && navigation) {
     }
   });
 
-  const mqDesktop = window.matchMedia('(min-width: 1140px)');
+  const mqDesktop = window.matchMedia('(min-width: 1280px)');
   const closeMobileNav = () => {
     menuButton.setAttribute('aria-expanded', 'false');
     menuButton.setAttribute('aria-label', 'Buka navigasi');
@@ -549,6 +550,7 @@ if (form) {
   resetBtn?.addEventListener('click', () => {
     if (successCard) successCard.hidden = true;
     form.hidden = false;
+    [nameInput, targetSelect, messageInput].forEach(field => setFieldError(field, ''));
     nameInput?.focus();
   });
 }
@@ -594,11 +596,28 @@ const openModalBtn = document.getElementById('openFullCabinetBtn');
 const closeModalBtn = document.getElementById('closeFullCabinetBtn');
 const cabinetModal = document.getElementById('fullCabinetModal');
 let lastFocusedElement = null;
+let cabinetPushed = false;
 
 if (openModalBtn && closeModalBtn && cabinetModal) {
+  const modalFilterBtns = cabinetModal.querySelectorAll('.modal-pill-btn');
+  const modalDeptSections = cabinetModal.querySelectorAll('.modal-dept-section');
+
+  const resetModalFilters = () => {
+    if (modalFilterBtns.length && modalDeptSections.length) {
+      modalFilterBtns.forEach((b, i) => {
+        b.classList.toggle('active', i === 0);
+        b.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+      });
+      modalDeptSections.forEach(section => {
+        section.classList.remove('is-modal-hidden');
+      });
+    }
+  };
+
   // showCabinet: purely visual — no history mutation
   const showCabinet = () => {
     if (!cabinetModal.hidden) return;
+    resetModalFilters();
     lastFocusedElement = document.activeElement;
     cabinetModal.hidden = false;
     ScrollLock.lock();
@@ -615,6 +634,7 @@ if (openModalBtn && closeModalBtn && cabinetModal) {
     if (!cabinetModal.hidden) return;
     showCabinet();
     if (window.location.hash !== '#struktur') {
+      cabinetPushed = true;
       history.pushState({ cabinet: true }, '', '#struktur');
     }
   };
@@ -626,7 +646,12 @@ if (openModalBtn && closeModalBtn && cabinetModal) {
     openModalBtn.setAttribute('aria-expanded', 'false');
 
     if (window.location.hash === '#struktur') {
-      history.replaceState(null, '', window.location.pathname + window.location.search);
+      if (cabinetPushed && history.state && history.state.cabinet) {
+        cabinetPushed = false;
+        history.back();
+      } else {
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
     }
 
     if (lastFocusedElement) {
@@ -679,9 +704,6 @@ if (openModalBtn && closeModalBtn && cabinetModal) {
   }
 
   // Modal Internal Quick Filter Logic
-  const modalFilterBtns = cabinetModal.querySelectorAll('.modal-pill-btn');
-  const modalDeptSections = cabinetModal.querySelectorAll('.modal-dept-section');
-
   if (modalFilterBtns.length && modalDeptSections.length) {
     modalFilterBtns.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -797,6 +819,7 @@ const articleTriggers = document.querySelectorAll('[data-article]');
 const articleKeys = Object.keys(ARTICLES);
 let currentArticleKey = null;
 let articleLastFocus = null;
+let articlePushed = false;
 
 if (articleModal && articleTriggers.length) {
   const updateFooterNav = key => {
@@ -826,7 +849,13 @@ if (articleModal && articleTriggers.length) {
     }
 
     if (!skipHistory && window.location.hash !== '#' + key) {
-      history.pushState({ article: key }, '', '#' + key);
+      if (!isAlreadyOpen) {
+        articlePushed = true;
+        history.pushState({ article: key }, '', '#' + key);
+      } else {
+        // Cycling Next/Prev inside open modal uses replaceState so Back button is not trapped
+        history.replaceState({ article: key }, '', '#' + key);
+      }
     }
   };
 
@@ -837,7 +866,12 @@ if (articleModal && articleTriggers.length) {
 
     const hashKey = window.location.hash.slice(1);
     if (ARTICLES[hashKey]) {
-      history.replaceState(null, '', window.location.pathname + window.location.search);
+      if (articlePushed && history.state && history.state.article) {
+        articlePushed = false;
+        history.back();
+      } else {
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
     }
 
     currentArticleKey = null;
@@ -1151,7 +1185,23 @@ if (articleModal && articleTriggers.length) {
     } else if (e.key === 'ArrowRight') {
       showIndex(currentIndex + 1);
       e.preventDefault();
+    } else if (e.key === 'Tab') {
+      const focusables = getVisibleFocusables(lightbox);
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        last.focus();
+        e.preventDefault();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        first.focus();
+        e.preventDefault();
+      }
     }
+  });
+
+  window.addEventListener('popstate', () => {
+    if (!lightbox.hidden) close();
   });
 
   triggers.forEach(btn => btn.addEventListener('click', () => open(btn)));
