@@ -915,18 +915,33 @@ if (articleModal && articleTriggers.length) {
     if (!currentArticleKey || articleShareBtn._copying) return;
     const url = `${window.location.origin}${window.location.pathname}#${currentArticleKey}`;
     const labelSpan = articleShareBtn.querySelector('.share-label');
+
+    const handleSuccess = () => {
+      if (!labelSpan) return;
+      articleShareBtn._copying = true;
+      const originalText = labelSpan.dataset.original || labelSpan.textContent;
+      labelSpan.dataset.original = originalText;
+      labelSpan.textContent = '✓ Tersalin!';
+      setTimeout(() => {
+        labelSpan.textContent = originalText;
+        articleShareBtn._copying = false;
+      }, 2000);
+    };
+
     try {
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(url);
-      }
-      if (labelSpan) {
-        articleShareBtn._copying = true;
-        const originalText = labelSpan.textContent;
-        labelSpan.textContent = '✓ Tersalin!';
-        setTimeout(() => {
-          labelSpan.textContent = originalText;
-          articleShareBtn._copying = false;
-        }, 2000);
+        handleSuccess();
+      } else {
+        // Fallback for missing clipboard API (e.g. non-secure origins)
+        const input = document.createElement('input');
+        input.value = url;
+        document.body.appendChild(input);
+        input.select();
+        const success = document.execCommand('copy');
+        document.body.removeChild(input);
+        if (success) handleSuccess();
+        else if (labelSpan) labelSpan.textContent = url;
       }
     } catch {
       if (labelSpan) labelSpan.textContent = url;
@@ -1054,6 +1069,24 @@ if (articleModal && articleTriggers.length) {
 
   timeline.innerHTML = '';
   AGENDA_ITEMS.forEach((item, i) => timeline.appendChild(renderItem(item, i)));
+
+  // Refresh status on tab focus and midnight transition
+  const refreshStatuses = () => {
+    timeline.querySelectorAll('.agenda-item').forEach(li => {
+      const dateStr = li.dataset.date;
+      if (!dateStr) return;
+      const status = computeStatus(dateStr);
+      const statusEl = li.querySelector('.agenda-status');
+      if (statusEl) {
+        statusEl.className = `agenda-status ${status.cls}`;
+        statusEl.textContent = status.label;
+      }
+    });
+  };
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') refreshStatuses();
+  });
 
   // Register freshly-injected nodes with the reveal engine
   RevealEngine.observe(timeline.querySelectorAll('.sc-fade-up'));
