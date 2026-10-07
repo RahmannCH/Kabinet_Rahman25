@@ -1151,7 +1151,7 @@ html[data-theme="dark"] .tree-line-v {
 
 /* Tree node hover lift (kartu = bukan tombol, tetap cursor default) */
 .tree-node:hover {
-  transform: translateY(-6px) scale(1.02);
+  transform: translateY(-2px);
   box-shadow: var(--clay-shadow-card-hover);
 }
 
@@ -1433,7 +1433,7 @@ html[data-theme="dark"] .member-card {
 }
 
 .member-card:hover {
-  transform: translateY(-6px) scale(1.02);
+  transform: translateY(-2px);
   box-shadow: var(--clay-shadow-card-hover);
 }
 
