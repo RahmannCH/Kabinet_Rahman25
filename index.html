@@ -162,18 +162,17 @@
       </div>
 
       <div class="fungsionaris-container sc-fade-up" style="--stagger: 2">
-        <!-- Filter Tabs -->
-        <div class="fungsionaris-filter" role="tablist" aria-label="Saring Fungsionaris Berdasarkan Struktur">
-          <button class="filter-btn active" type="button" role="tab" aria-selected="true" data-filter="all">Semua Struktur</button>
-          <button class="filter-btn" type="button" role="tab" aria-selected="false" data-filter="dpo">DPO</button>
-          <button class="filter-btn" type="button" role="tab" aria-selected="false" data-filter="bph">BPH</button>
-          <button class="filter-btn" type="button" role="tab" aria-selected="false" data-filter="hr">HR</button>
-          <button class="filter-btn" type="button" role="tab" aria-selected="false" data-filter="padi">PADI</button>
-          <button class="filter-btn" type="button" role="tab" aria-selected="false" data-filter="orse">ORSE</button>
-          <button class="filter-btn" type="button" role="tab" aria-selected="false" data-filter="kominfo">KOMINFO</button>
-          <button class="filter-btn" type="button" role="tab" aria-selected="false" data-filter="psdm">PSDM</button>
-          <button class="filter-btn" type="button" role="tab" aria-selected="false" data-filter="sosma">SOSMA</button>
-          <button class="filter-btn" type="button" role="tab" aria-selected="false" data-filter="harmoni">HARMONI</button>
+        <div class="fungsionaris-filter" aria-label="Saring Fungsionaris Berdasarkan Struktur">
+          <button class="filter-btn active" type="button" aria-pressed="true" data-filter="all">Semua Struktur</button>
+          <button class="filter-btn" type="button" aria-pressed="false" data-filter="dpo">DPO</button>
+          <button class="filter-btn" type="button" aria-pressed="false" data-filter="bph">BPH</button>
+          <button class="filter-btn" type="button" aria-pressed="false" data-filter="hr">HR</button>
+          <button class="filter-btn" type="button" aria-pressed="false" data-filter="padi">PADI</button>
+          <button class="filter-btn" type="button" aria-pressed="false" data-filter="orse">ORSE</button>
+          <button class="filter-btn" type="button" aria-pressed="false" data-filter="kominfo">KOMINFO</button>
+          <button class="filter-btn" type="button" aria-pressed="false" data-filter="psdm">PSDM</button>
+          <button class="filter-btn" type="button" aria-pressed="false" data-filter="sosma">SOSMA</button>
+          <button class="filter-btn" type="button" aria-pressed="false" data-filter="harmoni">HARMONI</button>
         </div>
 
         <!-- ORGANIZATIONAL TREE (Bagan Pohon Keluarga Kabinet) -->
@@ -424,15 +423,15 @@
         <span class="proker-search-icon" aria-hidden="true">🔍</span>
         <input type="search" id="prokerSearchInput" class="proker-search-input" placeholder="Cari program kerja (misal: Tech Talk, Donor Darah)..." aria-label="Cari program kerja">
       </div>
-      <div class="proker-dept-filter sc-fade-up" style="--stagger: 2" role="tablist" aria-label="Saring proker per departemen">
-        <button type="button" class="proker-filter-btn active" data-proker-filter="all" role="tab" aria-selected="true">Semua</button>
-        <button type="button" class="proker-filter-btn" data-proker-filter="hr" role="tab" aria-selected="false">HR</button>
-        <button type="button" class="proker-filter-btn" data-proker-filter="padi" role="tab" aria-selected="false">PADI</button>
-        <button type="button" class="proker-filter-btn" data-proker-filter="orse" role="tab" aria-selected="false">ORSE</button>
-        <button type="button" class="proker-filter-btn" data-proker-filter="kominfo" role="tab" aria-selected="false">KOMINFO</button>
-        <button type="button" class="proker-filter-btn" data-proker-filter="psdm" role="tab" aria-selected="false">PSDM</button>
-        <button type="button" class="proker-filter-btn" data-proker-filter="sosma" role="tab" aria-selected="false">SOSMA</button>
-        <button type="button" class="proker-filter-btn" data-proker-filter="harmoni" role="tab" aria-selected="false">HARMONI</button>
+      <div class="proker-dept-filter sc-fade-up" style="--stagger: 2" aria-label="Saring proker per departemen">
+        <button type="button" class="proker-filter-btn active" data-proker-filter="all" aria-pressed="true">Semua</button>
+        <button type="button" class="proker-filter-btn" data-proker-filter="hr" aria-pressed="false">HR</button>
+        <button type="button" class="proker-filter-btn" data-proker-filter="padi" aria-pressed="false">PADI</button>
+        <button type="button" class="proker-filter-btn" data-proker-filter="orse" aria-pressed="false">ORSE</button>
+        <button type="button" class="proker-filter-btn" data-proker-filter="kominfo" aria-pressed="false">KOMINFO</button>
+        <button type="button" class="proker-filter-btn" data-proker-filter="psdm" aria-pressed="false">PSDM</button>
+        <button type="button" class="proker-filter-btn" data-proker-filter="sosma" aria-pressed="false">SOSMA</button>
+        <button type="button" class="proker-filter-btn" data-proker-filter="harmoni" aria-pressed="false">HARMONI</button>
       </div>
       <div class="proker-dept-grid" id="prokerDeptGrid"></div>
       <p class="proker-empty" id="prokerEmpty" role="status" aria-live="polite" hidden>Tidak ada program yang sesuai dengan pencarian atau filter ini.</p>
@@ -446,7 +445,7 @@
         <p>Rangkaian kegiatan terdekat dari seluruh departemen Kabinet Rahman 25 — April hingga Desember 2027.</p>
       </div>
 
-      <div class="agenda-filter sc-fade-up" style="--stagger: 2" id="agendaFilter" role="tablist" aria-label="Saring agenda berdasarkan bulan"></div>
+      <div class="agenda-filter sc-fade-up" style="--stagger: 2" id="agendaFilter" aria-label="Saring agenda berdasarkan bulan"></div>
 
       <ol class="agenda-timeline" id="agendaTimeline"></ol>
 
@@ -688,17 +687,17 @@
 
       <!-- Quick Filter Nav -->
       <div class="modal-nav-bar">
-        <div class="modal-pills-wrap" role="tablist" aria-label="Saring Departemen">
-          <button class="modal-pill-btn active" type="button" role="tab" aria-selected="true" data-modal-filter="all">Semua Fungsionaris (44)</button>
-          <button class="modal-pill-btn" type="button" role="tab" aria-selected="false" data-modal-filter="sec-dpo">DPO (3)</button>
-          <button class="modal-pill-btn" type="button" role="tab" aria-selected="false" data-modal-filter="sec-bph">BPH (6)</button>
-          <button class="modal-pill-btn" type="button" role="tab" aria-selected="false" data-modal-filter="sec-hr">HR (5)</button>
-          <button class="modal-pill-btn" type="button" role="tab" aria-selected="false" data-modal-filter="sec-padi">PADI (5)</button>
-          <button class="modal-pill-btn" type="button" role="tab" aria-selected="false" data-modal-filter="sec-orse">ORSE (5)</button>
-          <button class="modal-pill-btn" type="button" role="tab" aria-selected="false" data-modal-filter="sec-kominfo">KOMINFO (5)</button>
-          <button class="modal-pill-btn" type="button" role="tab" aria-selected="false" data-modal-filter="sec-psdm">PSDM (5)</button>
-          <button class="modal-pill-btn" type="button" role="tab" aria-selected="false" data-modal-filter="sec-sosma">SOSMA (5)</button>
-          <button class="modal-pill-btn" type="button" role="tab" aria-selected="false" data-modal-filter="sec-harmoni">HARMONI (5)</button>
+        <div class="modal-pills-wrap" aria-label="Saring Departemen">
+          <button class="modal-pill-btn active" type="button" aria-pressed="true" data-modal-filter="all">Semua Fungsionaris (44)</button>
+          <button class="modal-pill-btn" type="button" aria-pressed="false" data-modal-filter="sec-dpo">DPO (3)</button>
+          <button class="modal-pill-btn" type="button" aria-pressed="false" data-modal-filter="sec-bph">BPH (6)</button>
+          <button class="modal-pill-btn" type="button" aria-pressed="false" data-modal-filter="sec-hr">HR (5)</button>
+          <button class="modal-pill-btn" type="button" aria-pressed="false" data-modal-filter="sec-padi">PADI (5)</button>
+          <button class="modal-pill-btn" type="button" aria-pressed="false" data-modal-filter="sec-orse">ORSE (5)</button>
+          <button class="modal-pill-btn" type="button" aria-pressed="false" data-modal-filter="sec-kominfo">KOMINFO (5)</button>
+          <button class="modal-pill-btn" type="button" aria-pressed="false" data-modal-filter="sec-psdm">PSDM (5)</button>
+          <button class="modal-pill-btn" type="button" aria-pressed="false" data-modal-filter="sec-sosma">SOSMA (5)</button>
+          <button class="modal-pill-btn" type="button" aria-pressed="false" data-modal-filter="sec-harmoni">HARMONI (5)</button>
         </div>
       </div>
 

@@ -415,10 +415,10 @@ if (filterButtons.length) {
     btn.addEventListener('click', () => {
       filterButtons.forEach(b => {
         b.classList.remove('active');
-        b.setAttribute('aria-selected', 'false');
+        b.setAttribute('aria-pressed', 'false');
       });
       btn.classList.add('active');
-      btn.setAttribute('aria-selected', 'true');
+      btn.setAttribute('aria-pressed', 'true');
 
       const filter = btn.getAttribute('data-filter');
 
@@ -619,7 +619,7 @@ if (openModalBtn && closeModalBtn && cabinetModal) {
     if (modalFilterBtns.length && modalDeptSections.length) {
       modalFilterBtns.forEach((b, i) => {
         b.classList.toggle('active', i === 0);
-        b.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+        b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
       });
       modalDeptSections.forEach(section => {
         section.classList.remove('is-modal-hidden');
@@ -723,10 +723,10 @@ if (openModalBtn && closeModalBtn && cabinetModal) {
       btn.addEventListener('click', () => {
         modalFilterBtns.forEach(b => {
           b.classList.remove('active');
-          b.setAttribute('aria-selected', 'false');
+          b.setAttribute('aria-pressed', 'false');
         });
         btn.classList.add('active');
-        btn.setAttribute('aria-selected', 'true');
+        btn.setAttribute('aria-pressed', 'true');
 
         const filterVal = btn.getAttribute('data-modal-filter');
 
@@ -1064,7 +1064,7 @@ if (articleModal && articleTriggers.length) {
     // Preserve insertion order (Apr → Des, already sorted in data)
     const pills = [{ key: 'all', label: 'Semua' }, ...months.map(m => ({ key: m, label: MONTH_LABELS[m] }))];
     filterContainer.innerHTML = pills
-      .map((p, i) => `<button type="button" class="agenda-filter-btn${i === 0 ? ' active' : ''}" data-agenda-filter="${p.key}" role="tab" aria-selected="${i === 0 ? 'true' : 'false'}">${p.label}</button>`)
+      .map((p, i) => `<button type="button" class="agenda-filter-btn${i === 0 ? ' active' : ''}" data-agenda-filter="${p.key}" aria-pressed="${i === 0 ? 'true' : 'false'}">${p.label}</button>`)
       .join('') + `<button type="button" class="agenda-action-btn" id="agendaScrollNext" aria-label="Ke jadwal terdekat">↓ Terdekat</button>`;
   }
 
@@ -1078,10 +1078,10 @@ if (articleModal && articleTriggers.length) {
       const month = btn.dataset.agendaFilter;
       filterBtns.forEach(b => {
         b.classList.remove('active');
-        b.setAttribute('aria-selected', 'false');
+        b.setAttribute('aria-pressed', 'false');
       });
       btn.classList.add('active');
-      btn.setAttribute('aria-selected', 'true');
+      btn.setAttribute('aria-pressed', 'true');
 
       let visible = 0;
       items.forEach(item => {
@@ -1300,10 +1300,10 @@ document.addEventListener('keydown', e => {
         activeDept = btn.dataset.prokerFilter;
         filterBtns.forEach(b => {
           b.classList.remove('active');
-          b.setAttribute('aria-selected', 'false');
+          b.setAttribute('aria-pressed', 'false');
         });
         btn.classList.add('active');
-        btn.setAttribute('aria-selected', 'true');
+        btn.setAttribute('aria-pressed', 'true');
         applyFilter();
       });
     });

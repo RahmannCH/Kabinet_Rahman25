@@ -221,7 +221,7 @@ test('agenda renders 18 data-driven items with auto-generated filter pills', asy
   await expect(pills).toHaveCount(10);
 
   // "Semua" is active by default and shows all 18
-  await expect(pills.first()).toHaveAttribute('aria-selected', 'true');
+  await expect(pills.first()).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#agendaTimeline .agenda-item:not([hidden])')).toHaveCount(18);
 
   // Filter by April → 2 items
@@ -503,7 +503,7 @@ test('cabinet modal auto-resets department filter on reopen', async ({ page }) =
   // Filters must be reset to 'Semua' and all sections unhidden
   const firstPill = page.locator('.modal-pill-btn').first();
   await expect(firstPill).toHaveClass(/active/);
-  await expect(firstPill).toHaveAttribute('aria-selected', 'true');
+  await expect(firstPill).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('#sec-bph')).not.toHaveClass(/is-modal-hidden/);
   await expect(page.locator('#sec-dpo')).not.toHaveClass(/is-modal-hidden/);
 
