@@ -560,14 +560,14 @@ html[data-theme="dark"] .site-header.is-scrolled {
   overflow: hidden;
 }
 
-/* CSS-Generated Clay Geometric Floating Blobs */
+/* Ambient background glow — soft and restrained */
 .hero-glow {
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.85;
-  will-change: transform;
+  opacity: 0.35;
+  filter: blur(40px);
 }
 
 .hero.is-paused .hero-glow,
@@ -578,48 +578,22 @@ html[data-theme="dark"] .site-header.is-scrolled {
 .hero-glow-1 {
   width: 320px;
   height: 320px;
-  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #bae6fd 60%, #7dd3fc 100%);
-  box-shadow: 
-    25px 35px 70px rgba(186, 215, 245, 0.5),
-    inset -15px -15px 30px rgba(56, 189, 248, 0.4),
-    inset 15px 15px 30px rgba(255, 255, 255, 0.8);
+  background: radial-gradient(circle, var(--clay-blue-light) 0%, transparent 70%);
   top: 10%;
   right: 5%;
-  animation: floatSlow 8s ease-in-out infinite alternate;
 }
 
 .hero-glow-2 {
   width: 220px;
   height: 220px;
-  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #e0f2fe 50%, #bae6fd 100%);
-  box-shadow: 
-    18px 25px 50px rgba(186, 215, 245, 0.45),
-    inset -10px -10px 20px rgba(2, 132, 199, 0.3),
-    inset 10px 10px 20px rgba(255, 255, 255, 0.9);
+  background: radial-gradient(circle, var(--clay-blue-light) 0%, transparent 70%);
   bottom: 8%;
   left: 2%;
-  animation: floatSlow 6s ease-in-out infinite alternate-reverse;
 }
 
-@keyframes floatSlow {
-  0% { transform: translateY(0px) rotate(0deg); }
-  100% { transform: translateY(-24px) rotate(8deg); }
-}
-
-html[data-theme="dark"] .hero-glow-1 {
-  background: radial-gradient(circle at 35% 35%, #1e293b 0%, #0369a1 70%, #0c4a6e 100%);
-  box-shadow: 
-    25px 35px 70px rgba(0, 0, 0, 0.6),
-    inset -15px -15px 30px rgba(0, 0, 0, 0.8),
-    inset 15px 15px 30px rgba(56, 189, 248, 0.2);
-}
-
+html[data-theme="dark"] .hero-glow-1,
 html[data-theme="dark"] .hero-glow-2 {
-  background: radial-gradient(circle at 35% 35%, #1e293b 0%, #0f172a 70%, #0369a1 100%);
-  box-shadow: 
-    18px 25px 50px rgba(0, 0, 0, 0.6),
-    inset -10px -10px 20px rgba(0, 0, 0, 0.8),
-    inset 10px 10px 20px rgba(56, 189, 248, 0.15);
+  opacity: 0.2;
 }
 
 .hero-copy {
@@ -670,10 +644,9 @@ html[data-theme="dark"] .hero-glow-2 {
 }
 
 .hero h1 em {
-  color: var(--clay-blue);
+  color: var(--accent);
   font-style: italic;
   font-weight: 800;
-  text-shadow: 2px 4px 12px rgba(56, 189, 248, 0.25);
 }
 
 .hero-lead {
