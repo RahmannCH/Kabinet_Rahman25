@@ -438,7 +438,7 @@ test('aspirasi form updates char counter and swaps to permanent success state', 
   // Success card appears permanently
   const successCard = page.locator('#aspirasiSuccessCard');
   await expect(successCard).toBeVisible();
-  await expect(successCard).toContainText('Aspirasi Terkirim');
+  await expect(successCard).toContainText('Simulasi Berhasil');
   await expect(page.locator('#publicAspirasiForm')).toBeHidden();
 
   // Reset button returns the form

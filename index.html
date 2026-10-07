@@ -546,13 +546,17 @@
       </div>
     </section>
 
-    <!-- Contact & Aspirasi Section -->
+    <!-- Contact & Aspirasi Section (Contoh Antarmuka Preview) -->
     <section class="contact section" id="aspirasi" aria-labelledby="contact-title">
       <div class="contact-content sc-fade-up" style="--stagger: 1">
         <div class="contact-text">
-          <div class="section-kicker"><span>09</span> Ruang Aspirasi</div>
+          <div class="section-kicker"><span>09</span> Ruang Aspirasi (Contoh)</div>
           <h2 id="contact-title">Sampaikan<br>Suaramu.</h2>
-          <p>Kami hadir untuk mendengar keluhan, gagasan, dan pertanyaanmu. Privasi dijaga penuh oleh departemen terkait.</p>
+          <p>Kanal resmi himpunan untuk mendengar masukan mahasiswa. Form di bawah merupakan <strong>simulasi antarmuka (preview)</strong> sebelum kanal pengiriman resmi diaktifkan.</p>
+          <div class="contact-notice-card" role="note">
+            <span class="notice-badge">Status Kanal</span>
+            <p>Pengiriman langsung belum dibuka secara publik. Untuk keperluan mendesak saat ini, silakan hubungi kontak resmi sekretariat.</p>
+          </div>
         </div>
         <div class="aspirasi-form-box">
           <form id="publicAspirasiForm" class="styled-form" novalidate>
@@ -582,16 +586,16 @@
               </div>
               <textarea id="pesanInput" rows="4" placeholder="Tuliskan keluhan atau masukanmu secara objektif..." maxlength="500" required></textarea>
             </div>
-            <button type="submit" class="button button-primary">Kirim Aspirasi</button>
+            <button type="submit" class="button button-primary">Uji Coba Kirim Aspirasi</button>
             <div id="formSuccessAlert" class="alert-box" style="display: none;" aria-live="polite">
-              Aspirasi tersimpan di pratinjau ini. Pengiriman nyata ke pengurus belum aktif.
+              Simulasi berhasil. Data uji coba tidak dikirimkan ke server sungguhan.
             </div>
           </form>
           <div id="aspirasiSuccessCard" class="aspirasi-success-card" hidden aria-live="polite">
             <div class="success-icon" aria-hidden="true">✓</div>
-            <h3>Aspirasi Terkirim!</h3>
-            <p>Terima kasih telah menyuarakan aspirasimu. Pesan kamu telah tercatat dalam sistem pratinjau ini untuk departemen yang dituju.</p>
-            <button type="button" class="button button-quiet" id="aspirasiResetBtn">Kirim Aspirasi Lainnya</button>
+            <h3>Simulasi Berhasil!</h3>
+            <p>Ini adalah tampilan simulasi respons antarmuka. Pada implementasi akhir dengan backend aktif, pesan akan diteruskan ke departemen terkait.</p>
+            <button type="button" class="button button-quiet" id="aspirasiResetBtn">Coba Input Lagi</button>
           </div>
         </div>
       </div>
