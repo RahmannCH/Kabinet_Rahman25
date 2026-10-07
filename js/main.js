@@ -134,12 +134,14 @@ if (menuButton && navigation) {
     menuButton.focus();
   });
 
-  document.addEventListener('keydown', event => {
-    if (event.key !== 'Escape' || menuButton.getAttribute('aria-expanded') !== 'true') return;
+  // Register mobile nav into overlay priority stack so escape order is deterministic
+  OverlayManager.register('mobile-nav', () => {
+    if (menuButton.getAttribute('aria-expanded') !== 'true') return false;
     menuButton.setAttribute('aria-expanded', 'false');
     menuButton.setAttribute('aria-label', 'Buka navigasi');
     navigation.classList.remove('is-open');
     menuButton.focus();
+    return true;
   });
 
   // Close mobile nav when clicking outside the navbar header
@@ -166,8 +168,15 @@ if (menuButton && navigation) {
   if (mqDesktop.matches) closeMobileNav();
 
   // Scrollspy: Highlight Active Nav Link
-  const sections = document.querySelectorAll('main section[id]');
   const navLinks = navigation.querySelectorAll('a[href^="#"]');
+  const validLinkIds = new Set(
+    Array.from(navLinks)
+      .map(link => link.getAttribute('href')?.replace('#', ''))
+      .filter(Boolean)
+  );
+  const sections = Array.from(document.querySelectorAll('main section[id]')).filter(sec =>
+    validLinkIds.has(sec.id)
+  );
 
   if ('IntersectionObserver' in window && sections.length) {
     let currentActiveId = null;
@@ -541,6 +550,7 @@ if (form) {
     // Local preview mode: no backend is connected yet.
     if (form._submitTimer) clearTimeout(form._submitTimer);
     form._submitTimer = window.setTimeout(() => {
+      form._submitTimer = null;
       form.reset();
       if (pesanCounter) pesanCounter.textContent = '0 / 500';
       submitBtn.disabled = false;
@@ -558,6 +568,13 @@ if (form) {
         }, 6000);
       }
     }, 600);
+  });
+
+  window.addEventListener('pagehide', () => {
+    if (form._submitTimer) {
+      clearTimeout(form._submitTimer);
+      form._submitTimer = null;
+    }
   });
 
   resetBtn?.addEventListener('click', () => {
@@ -664,8 +681,11 @@ if (openModalBtn && closeModalBtn && cabinetModal) {
         cabinetPushed = false;
         history.back();
       } else {
+        cabinetPushed = false;
         history.replaceState(null, '', window.location.pathname + window.location.search);
       }
+    } else {
+      cabinetPushed = false;
     }
 
     if (lastFocusedElement) {
@@ -705,9 +725,11 @@ if (openModalBtn && closeModalBtn && cabinetModal) {
   // Browser Back/Forward integration — popstate fires on back/forward nav
   window.addEventListener('popstate', () => {
     if (window.location.hash !== '#struktur' && !cabinetModal.hidden) {
+      cabinetPushed = false;
       closeCabinetModal();
     } else if (window.location.hash === '#struktur' && cabinetModal.hidden) {
       // Navigated to #struktur via back/forward — show without pushing a new entry
+      cabinetPushed = false;
       showCabinet();
     }
   });
@@ -884,8 +906,11 @@ if (articleModal && articleTriggers.length) {
         articlePushed = false;
         history.back();
       } else {
+        articlePushed = false;
         history.replaceState(null, '', window.location.pathname + window.location.search);
       }
+    } else {
+      articlePushed = false;
     }
 
     currentArticleKey = null;
@@ -940,19 +965,28 @@ if (articleModal && articleTriggers.length) {
         input.select();
         const success = document.execCommand('copy');
         document.body.removeChild(input);
-        if (success) handleSuccess();
-        else if (labelSpan) labelSpan.textContent = url;
+        if (success) {
+          handleSuccess();
+        } else if (labelSpan) {
+          labelSpan.textContent = 'Gagal menyalin';
+          labelSpan.setAttribute('aria-live', 'assertive');
+        }
       }
     } catch {
-      if (labelSpan) labelSpan.textContent = url;
+      if (labelSpan) {
+        labelSpan.textContent = 'Gagal menyalin';
+        labelSpan.setAttribute('aria-live', 'assertive');
+      }
     }
   });
 
   window.addEventListener('popstate', () => {
     const hashKey = window.location.hash.slice(1);
     if (ARTICLES[hashKey]) {
+      articlePushed = false;
       openArticle(hashKey, true);
     } else if (!articleModal.hidden) {
+      articlePushed = false;
       closeArticle();
     }
   });
@@ -1071,6 +1105,21 @@ if (articleModal && articleTriggers.length) {
   AGENDA_ITEMS.forEach((item, i) => timeline.appendChild(renderItem(item, i)));
 
   // Refresh status on tab focus and midnight transition
+  let midnightTimer = null;
+  const scheduleMidnightRefresh = () => {
+    if (midnightTimer) clearTimeout(midnightTimer);
+    const now = new Date();
+    // Jakarta is UTC+7
+    const jakartaTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' }));
+    const midnight = new Date(jakartaTime);
+    midnight.setHours(24, 0, 1, 0); // 1 sec after midnight in Jakarta
+    const msUntilMidnight = Math.max(1000, midnight.getTime() - jakartaTime.getTime());
+    midnightTimer = setTimeout(() => {
+      refreshStatuses();
+      scheduleMidnightRefresh();
+    }, msUntilMidnight);
+  };
+
   const refreshStatuses = () => {
     timeline.querySelectorAll('.agenda-item').forEach(li => {
       const dateStr = li.dataset.date;
@@ -1082,11 +1131,29 @@ if (articleModal && articleTriggers.length) {
         statusEl.textContent = status.label;
       }
     });
+
+    if (btnScrollNext) {
+      const hasActive = Array.from(items).some(el => {
+        const s = el.querySelector('.agenda-status');
+        return s && (s.classList.contains('is-running') || s.classList.contains('is-upcoming'));
+      });
+      if (hasActive) {
+        btnScrollNext.textContent = '↓ Terdekat';
+        btnScrollNext.disabled = false;
+      } else {
+        btnScrollNext.textContent = 'Semua Selesai';
+        btnScrollNext.disabled = true;
+      }
+    }
   };
 
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') refreshStatuses();
+    if (document.visibilityState === 'visible') {
+      refreshStatuses();
+      scheduleMidnightRefresh();
+    }
   });
+  scheduleMidnightRefresh();
 
   // Register freshly-injected nodes with the reveal engine
   RevealEngine.observe(timeline.querySelectorAll('.sc-fade-up'));
@@ -1132,8 +1199,12 @@ if (articleModal && articleTriggers.length) {
   });
 
   if (btnScrollNext) {
+    // Initial state check
+    refreshStatuses();
+
     btnScrollNext.addEventListener('click', () => {
       const activeOrUpcoming = Array.from(items).find(el => {
+        if (el.hidden) return false;
         const statusEl = el.querySelector('.agenda-status');
         return statusEl && (statusEl.classList.contains('is-running') || statusEl.classList.contains('is-upcoming'));
       });
@@ -1149,9 +1220,6 @@ if (articleModal && articleTriggers.length) {
             card.style.boxShadow = '';
           }, 1200);
         }
-      } else {
-        btnScrollNext.textContent = 'Semua Selesai';
-        btnScrollNext.disabled = true;
       }
     });
   }
@@ -1169,6 +1237,16 @@ if (articleModal && articleTriggers.length) {
   const triggers = Array.from(document.querySelectorAll('.gallery-item[data-caption]'));
   if (!lightbox || !triggers.length) return;
 
+  // Global image error fallback for gallery thumbnails
+  triggers.forEach(trigger => {
+    const img = trigger.querySelector('img');
+    if (img) {
+      img.addEventListener('error', () => {
+        img.src = DEFAULT_MEMBER_PHOTO;
+      });
+    }
+  });
+
   let lastFocused = null;
   let currentIndex = -1;
 
@@ -1179,9 +1257,17 @@ if (articleModal && articleTriggers.length) {
     const img = trigger.querySelector('img');
     if (!img) return;
 
-    lightboxImg.src = img.src;
+    // Use currentSrc if available (responsive/picture), fallback to src
+    lightboxImg.src = img.currentSrc || img.src;
     lightboxImg.alt = img.alt || '';
     lightboxCap.textContent = trigger.dataset.caption || '';
+
+    // Handle broken/error image gracefully
+    lightboxImg.onerror = () => {
+      lightboxImg.onerror = null;
+      lightboxImg.src = DEFAULT_MEMBER_PHOTO;
+      lightboxCap.textContent = (trigger.dataset.caption || '') + ' (Gambar pratinjau cadangan)';
+    };
 
     const multiple = triggers.length > 1;
     if (prevBtn) prevBtn.hidden = !multiple;
@@ -1265,9 +1351,6 @@ if (articleModal && articleTriggers.length) {
 // 14. Global Escape Handler (closes only the topmost overlay)
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
-  // Ignore when mobile nav is open — its own handler manages that
-  const menuBtn = document.querySelector('.menu-toggle');
-  if (menuBtn && menuBtn.getAttribute('aria-expanded') === 'true') return;
   if (OverlayManager.closeTop()) e.preventDefault();
 });
 

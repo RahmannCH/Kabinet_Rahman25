@@ -534,3 +534,33 @@ test('article modal next/prev replaces state instead of stacking history', async
   await page.locator('.article-sheet-close').click();
   await expect(modal).toBeHidden();
 });
+
+test('clipboard fallback gracefully handles missing navigator.clipboard', async ({ page }) => {
+  await page.goto('/');
+  // Mock missing clipboard API
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'clipboard', { value: undefined });
+  });
+
+  await page.locator('[data-article="kabar-pelatihan"]').first().click();
+  const shareBtn = page.locator('#articleShareBtn');
+  const labelSpan = shareBtn.locator('.share-label');
+  
+  await shareBtn.click();
+  // With missing clipboard and headless context, our fallback properly communicates failure or URL
+  await expect(labelSpan).toHaveText(/Gagal menyalin|kabar-pelatihan/);
+});
+
+test('lightbox image handles network error with fallback', async ({ page }) => {
+  await page.goto('/');
+  // Open lightbox
+  await page.locator('.gallery-item').first().click();
+  const lightboxImg = page.locator('#lightboxImage');
+
+  // Simulate error on lightbox image
+  await lightboxImg.evaluate(img => {
+    img.dispatchEvent(new Event('error'));
+  });
+
+  await expect(lightboxImg).toHaveAttribute('src', /ProfileRahman\.jpeg/);
+});
