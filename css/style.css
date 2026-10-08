@@ -9,44 +9,44 @@
   --z-modal: 1000;
   --z-lightbox: 1200;
 
-
   /* ==========================================================================
-     REFINED CLAYMORPHISM DESIGN SYSTEM - COMPLETE SPECIFICATION
-     Architecture: Tactile 3D Soft-Clay Aesthetics + Enterprise Structure
-     Reference: Hype4 Academy Mathematical Claymorphism Physics
+     REFINED HIGH-END INSTITUTIONAL DESIGN SYSTEM (ANTI-SLOP)
+     Architecture: Soft Structuralism / Precision Modernism
+     Reference: DESIGN.md + High-End Visual Design & Interaction Engine
      ========================================================================== */
   
   /* Canvas & Base Viewport */
-  --clay-canvas: #eef4fc;
-  --clay-canvas-alt: #e1edf9;
+  --clay-canvas: #f8fafc;
+  --clay-canvas-alt: #f1f5f9;
   --paper: var(--clay-canvas);
-  --paper-soft: #f4f8fe;
+  --paper-soft: #ffffff;
   
-  /* Clay Surface Tints */
+  /* Surface Tints */
   --clay-white: #ffffff;
-  --clay-white-soft: #fcfdff;
+  --clay-white-soft: #f8fafc;
   --surface: #ffffff;
   --surface-raised: #ffffff;
 
   /* Strict WCAG AAA & AA Accessible Inks */
-  --ink: #0f172a;               /* Deep Slate (Contrast 15.8:1 on #ffffff) */
-  --muted: #475569;             /* Balanced Cool Slate (Contrast 5.8:1) */
-  --line: rgba(186, 215, 245, 0.45);
-  --line-light: rgba(226, 238, 252, 0.7);
+  --ink: #0f172a;               /* Deep Slate 900 (Contrast > 15:1) */
+  --muted: #475569;             /* Slate 600 (Contrast > 5.5:1) */
+  --line: rgba(15, 23, 42, 0.08);
+  --line-light: rgba(15, 23, 42, 0.04);
 
-  /* Clay Pastel Color System */
-  --clay-blue: #38bdf8;         /* Sky 400 - Main Interactive Clay */
-  --clay-blue-dark: #0284c7;    /* Sky 600 - High-Contrast Text on Pastel */
-  --clay-blue-light: #e0f2fe;   /* Sky 100 - Pill Backgrounds & Chips */
-  --clay-blue-border: #bae6fd;  /* Sky 200 - Soft Clay Rims */
+  /* Deep Teal Institutional Color System */
+  --clay-blue: #087c78;         /* Institutional Muted Teal */
+  --clay-blue-dark: #054f4c;    /* Deep Teal */
+  --clay-blue-light: #e6f4f1;   /* Pale Teal */
+  --clay-blue-border: #bce3dc;  /* Soft Teal Rims */
   
-  --blue-pastel: #38bdf8;
-  --blue-pastel-medium: #0284c7;
-  --blue-pastel-light: #f0f9ff;
-  --blue-pastel-pill: #e0f2fe;
-  --blue-pastel-border: #bae6fd;
+  --blue-pastel: #087c78;
+  --blue-pastel-medium: #054f4c;
+  --blue-pastel-light: #f3f9f8;
+  --blue-pastel-pill: #e6f4f1;
+  --blue-pastel-border: #bce3dc;
 
-  --accent-gold: #d97706;       /* Warm Amber 600 - Leadership Insignia */
+  --accent: #087c78;
+  --accent-gold: #b45309;       /* Deep Amber */
   --gold-pill: #fef3c7;
   --gold-border: #fde68a;
 
@@ -54,82 +54,63 @@
   --draft-ink: #78350f;
 
   /* Nav & Modals */
-  --nav-bg: rgba(238, 244, 252, 0.88);
-  --focus: #38bdf8;
+  --nav-bg: rgba(255, 255, 255, 0.92);
+  --focus: #087c78;
 
   /* ==========================================================================
-     MATHEMATICAL CLAYMORPHISM MULTI-LAYER SHADOW PRIMITIVES
-     [Outer Elevation] + [Negative Dark Inset] + [Positive Specular Highlight Inset]
+     PRECISION AMBIENT SHADOWS (Soft Structuralism)
      ========================================================================== */
   
-  /* 1. Standard Clay Card (Convex 3D Volume) */
-  --clay-card-radius: 28px;
+  /* 1. Standard Card */
+  --clay-card-radius: 20px;
   --clay-shadow-card:
-    14px 18px 36px rgba(160, 195, 235, 0.4),
-    -8px -8px 20px rgba(255, 255, 255, 0.9),
-    inset -7px -7px 14px rgba(186, 215, 245, 0.45),
-    inset 7px 7px 14px rgba(255, 255, 255, 0.95);
+    0 1px 3px rgba(11, 19, 41, 0.04),
+    0 20px 40px -15px rgba(11, 19, 41, 0.06);
 
   --clay-shadow-card-hover:
-    18px 24px 44px rgba(160, 195, 235, 0.55),
-    -10px -10px 24px rgba(255, 255, 255, 0.95),
-    inset -8px -8px 16px rgba(186, 215, 245, 0.5),
-    inset 8px 8px 16px rgba(255, 255, 255, 1);
+    0 4px 6px -1px rgba(11, 19, 41, 0.05),
+    0 28px 56px -15px rgba(11, 19, 41, 0.1);
 
-  /* 2. Primary Action Button (Tactile Squishy Plump Clay) */
+  /* 2. Primary Action Button */
   --clay-btn-radius: 999px;
   --clay-shadow-btn-primary:
-    8px 12px 24px rgba(56, 189, 248, 0.38),
-    -4px -4px 10px rgba(255, 255, 255, 0.85),
-    inset -5px -5px 10px rgba(2, 132, 199, 0.4),
-    inset 5px 5px 10px rgba(255, 255, 255, 0.65);
+    0 2px 4px rgba(8, 124, 120, 0.15),
+    0 8px 16px -4px rgba(8, 124, 120, 0.35);
 
   --clay-shadow-btn-primary-hover:
-    12px 16px 30px rgba(56, 189, 248, 0.48),
-    -6px -6px 14px rgba(255, 255, 255, 0.95),
-    inset -6px -6px 12px rgba(2, 132, 199, 0.45),
-    inset 6px 6px 12px rgba(255, 255, 255, 0.75);
+    0 4px 8px rgba(8, 124, 120, 0.2),
+    0 16px 24px -6px rgba(8, 124, 120, 0.45);
 
   --clay-shadow-btn-primary-active:
-    3px 4px 10px rgba(56, 189, 248, 0.3),
-    inset 4px 4px 8px rgba(2, 132, 199, 0.55),
-    inset -3px -3px 6px rgba(255, 255, 255, 0.4);
+    0 1px 2px rgba(8, 124, 120, 0.2),
+    inset 0 2px 4px rgba(5, 79, 76, 0.3);
 
-  /* 3. Quiet Button & Filter Pills (White Clay Capsule) */
+  /* 3. Quiet Button & Filter Pills */
   --clay-shadow-pill:
-    6px 8px 18px rgba(175, 205, 238, 0.35),
-    -4px -4px 10px rgba(255, 255, 255, 0.85),
-    inset -4px -4px 8px rgba(195, 220, 245, 0.4),
-    inset 4px 4px 8px rgba(255, 255, 255, 0.95);
+    0 1px 2px rgba(11, 19, 41, 0.04),
+    0 4px 12px rgba(11, 19, 41, 0.04);
 
   --clay-shadow-pill-hover:
-    8px 12px 22px rgba(175, 205, 238, 0.45),
-    -5px -5px 12px rgba(255, 255, 255, 0.95),
-    inset -5px -5px 10px rgba(195, 220, 245, 0.45),
-    inset 5px 5px 10px rgba(255, 255, 255, 1);
+    0 2px 4px rgba(11, 19, 41, 0.06),
+    0 8px 16px rgba(11, 19, 41, 0.08);
 
   --clay-shadow-pill-active:
-    2px 3px 8px rgba(56, 189, 248, 0.3),
-    inset 4px 4px 8px rgba(186, 230, 253, 0.6),
-    inset -3px -3px 6px rgba(255, 255, 255, 0.8);
+    0 1px 2px rgba(11, 19, 41, 0.04),
+    inset 0 2px 4px rgba(11, 19, 41, 0.06);
 
-  /* 4. Inputs & Recessed Cavities (Concave Inset Clay) */
+  /* 4. Inputs */
   --clay-shadow-input:
-    inset 4px 4px 8px rgba(175, 205, 238, 0.55),
-    inset -4px -4px 8px rgba(255, 255, 255, 0.9),
-    0 1px 2px rgba(255, 255, 255, 0.8);
+    inset 0 2px 4px rgba(11, 19, 41, 0.03),
+    0 1px 0 rgba(255, 255, 255, 0.8);
 
   --clay-shadow-input-focus:
-    inset 5px 5px 10px rgba(56, 189, 248, 0.28),
-    inset -4px -4px 8px rgba(255, 255, 255, 0.95),
-    0 0 0 3px rgba(56, 189, 248, 0.35);
+    0 0 0 3px rgba(8, 124, 120, 0.15),
+    inset 0 2px 4px rgba(11, 19, 41, 0.03);
 
-  /* 5. Floating Frosted Clay Nameplate */
+  /* 5. Floating Nameplate */
   --clay-shadow-nameplate:
-    8px 12px 24px rgba(15, 23, 42, 0.12),
-    -3px -3px 8px rgba(255, 255, 255, 0.7),
-    inset -3px -3px 6px rgba(186, 230, 253, 0.35),
-    inset 3px 3px 6px rgba(255, 255, 255, 0.95);
+    0 4px 12px rgba(11, 19, 41, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
 
   /* Typography Stacks */
   --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -145,8 +126,7 @@
 }
 
 /* ==========================================================================
-   DARK THEME CLAYMORPHISM TOKENS
-   Deep Obsidian Clay with Glowing Neon Highlights
+   DARK THEME TOKENS (OLED Minimalist)
    ========================================================================== */
 html[data-theme="dark"] {
   color-scheme: dark;
@@ -154,27 +134,27 @@ html[data-theme="dark"] {
   --clay-canvas: #090e17;
   --clay-canvas-alt: #0d1524;
   --paper: var(--clay-canvas);
-  --paper-soft: #10192a;
+  --paper-soft: #162033;
   
   --clay-white: #162033;
-  --clay-white-soft: #1a263d;
+  --clay-white-soft: #1c2840;
   --surface: #162033;
-  --surface-raised: #1a263d;
+  --surface-raised: #1c2840;
 
   --ink: #f8fafc;
   --muted: #94a3b8;
-  --line: rgba(30, 48, 77, 0.6);
-  --line-light: rgba(226, 238, 252, 0.1);
+  --line: rgba(255, 255, 255, 0.08);
+  --line-light: rgba(255, 255, 255, 0.04);
 
-  --clay-blue: #38bdf8;
+  --clay-blue: #087c78;
   --clay-blue-dark: #7dd3fc;
-  --clay-blue-light: #0c4a6e;
-  --clay-blue-border: #0369a1;
-  --blue-pastel: #38bdf8;
+  --clay-blue-light: #054f4c;
+  --clay-blue-border: #0c6a66;
+  --blue-pastel: #087c78;
   --blue-pastel-medium: #7dd3fc;
-  --blue-pastel-light: #0c4a6e;
-  --blue-pastel-pill: #10233d;
-  --blue-pastel-border: #0284c7;
+  --blue-pastel-light: #032b29;
+  --blue-pastel-pill: #054f4c;
+  --blue-pastel-border: #0c6a66;
 
   --accent-gold: #fbbf24;
   --gold-pill: #451a03;
@@ -183,71 +163,59 @@ html[data-theme="dark"] {
   --draft: #451a03;
   --draft-ink: #fde68a;
 
-  --nav-bg: rgba(9, 14, 23, 0.88);
-  --focus: #38bdf8;
+  --nav-bg: rgba(9, 14, 23, 0.92);
+  --focus: #087c78;
 
-  /* Dark Clay Multi-Shadows */
+  /* Dark Ambient Elevation */
   --clay-shadow-card:
-    14px 18px 36px rgba(0, 0, 0, 0.55),
-    -6px -6px 16px rgba(255, 255, 255, 0.05),
-    inset -6px -6px 14px rgba(0, 0, 0, 0.6),
-    inset 6px 6px 14px rgba(255, 255, 255, 0.12);
+    0 1px 3px rgba(0, 0, 0, 0.6),
+    0 24px 48px -16px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
 
   --clay-shadow-card-hover:
-    18px 24px 44px rgba(0, 0, 0, 0.7),
-    -8px -8px 20px rgba(56, 189, 248, 0.12),
-    inset -7px -7px 16px rgba(0, 0, 0, 0.65),
-    inset 7px 7px 16px rgba(255, 255, 255, 0.16);
+    0 4px 6px -1px rgba(0, 0, 0, 0.6),
+    0 32px 64px -16px rgba(0, 0, 0, 0.9),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
   --clay-shadow-btn-primary:
-    8px 12px 24px rgba(0, 0, 0, 0.4),
-    -3px -3px 8px rgba(255, 255, 255, 0.1),
-    inset -5px -5px 10px rgba(2, 132, 199, 0.5),
-    inset 5px 5px 10px rgba(255, 255, 255, 0.4);
+    0 2px 4px rgba(0, 0, 0, 0.5),
+    0 8px 16px -4px rgba(8, 124, 120, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 
   --clay-shadow-btn-primary-hover:
-    12px 16px 28px rgba(56, 189, 248, 0.25),
-    -4px -4px 10px rgba(255, 255, 255, 0.15),
-    inset -6px -6px 12px rgba(2, 132, 199, 0.55),
-    inset 6px 6px 12px rgba(255, 255, 255, 0.5);
+    0 4px 8px rgba(0, 0, 0, 0.6),
+    0 16px 24px -6px rgba(8, 124, 120, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 
   --clay-shadow-btn-primary-active:
-    3px 4px 10px rgba(0, 0, 0, 0.5),
-    inset 4px 4px 8px rgba(2, 132, 199, 0.7),
-    inset -3px -3px 6px rgba(255, 255, 255, 0.2);
+    0 1px 2px rgba(0, 0, 0, 0.6),
+    inset 0 2px 4px rgba(0, 0, 0, 0.8);
 
   --clay-shadow-pill:
-    6px 8px 18px rgba(0, 0, 0, 0.45),
-    -3px -3px 8px rgba(255, 255, 255, 0.04),
-    inset -4px -4px 8px rgba(0, 0, 0, 0.5),
-    inset 4px 4px 8px rgba(255, 255, 255, 0.08);
+    0 1px 2px rgba(0, 0, 0, 0.5),
+    0 4px 12px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
 
   --clay-shadow-pill-hover:
-    8px 12px 22px rgba(0, 0, 0, 0.55),
-    -4px -4px 10px rgba(56, 189, 248, 0.1),
-    inset -5px -5px 10px rgba(0, 0, 0, 0.55),
-    inset 5px 5px 10px rgba(255, 255, 255, 0.12);
+    0 2px 4px rgba(0, 0, 0, 0.6),
+    0 8px 16px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
   --clay-shadow-pill-active:
-    2px 3px 8px rgba(0, 0, 0, 0.5),
-    inset 4px 4px 8px rgba(2, 132, 199, 0.45),
-    inset -3px -3px 6px rgba(255, 255, 255, 0.08);
+    0 1px 2px rgba(0, 0, 0, 0.5),
+    inset 0 2px 4px rgba(0, 0, 0, 0.8);
 
   --clay-shadow-input:
-    inset 4px 4px 8px rgba(0, 0, 0, 0.65),
-    inset -3px -3px 6px rgba(255, 255, 255, 0.05),
-    0 1px 2px rgba(0, 0, 0, 0.4);
+    inset 0 2px 4px rgba(0, 0, 0, 0.6),
+    0 1px 0 rgba(255, 255, 255, 0.04);
 
   --clay-shadow-input-focus:
-    inset 5px 5px 10px rgba(0, 0, 0, 0.75),
-    inset -4px -4px 8px rgba(56, 189, 248, 0.15),
-    0 0 0 3px rgba(56, 189, 248, 0.35);
+    0 0 0 3px rgba(8, 124, 120, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.6);
 
   --clay-shadow-nameplate:
-    8px 12px 24px rgba(0, 0, 0, 0.5),
-    -2px -2px 6px rgba(255, 255, 255, 0.05),
-    inset -3px -3px 6px rgba(0, 0, 0, 0.6),
-    inset 3px 3px 6px rgba(255, 255, 255, 0.1);
+    0 4px 12px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 /* ==========================================================================
@@ -496,12 +464,12 @@ html[data-theme="dark"] .site-header.is-scrolled {
 
 .site-nav .nav-action:hover {
   box-shadow: var(--clay-shadow-btn-primary-hover);
-  transform: translateY(-3px) scale(1.02);
+  transform: translateY(-1px);
 }
 
 .site-nav .nav-action:active {
   box-shadow: var(--clay-shadow-btn-primary-active);
-  transform: translateY(1px) scale(0.98);
+  transform: scale(0.98);
 }
 
 .header-actions {
@@ -525,18 +493,18 @@ html[data-theme="dark"] .site-header.is-scrolled {
   font-size: 1rem;
   cursor: pointer;
   box-shadow: var(--clay-shadow-pill);
-  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .theme-toggle:hover {
   box-shadow: var(--clay-shadow-pill-hover);
-  transform: translateY(-3px) rotate(15deg);
+  transform: translateY(-1px);
   color: var(--clay-blue-dark);
 }
 
 .theme-toggle:active {
   box-shadow: var(--clay-shadow-pill-active);
-  transform: translateY(1px) scale(0.95);
+  transform: scale(0.95);
 }
 
 .menu-toggle {
@@ -691,12 +659,35 @@ html[data-theme="dark"] .hero-glow-2 {
 
 .button-primary:hover {
   box-shadow: var(--clay-shadow-btn-primary-hover);
-  transform: translateY(-4px) scale(1.02);
+  transform: translateY(-1px);
 }
 
 .button-primary:active {
   box-shadow: var(--clay-shadow-btn-primary-active);
-  transform: translateY(2px) scale(0.97);
+  transform: scale(0.98);
+}
+
+/* Button-in-Button Trailing Icon Architecture */
+.btn-icon-bubble {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  font-size: 0.85rem;
+  line-height: 1;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-left: 0.2rem;
+}
+
+.button-primary:hover .btn-icon-bubble {
+  transform: translateY(2px);
+}
+
+.nav-action:hover .btn-icon-bubble {
+  transform: translate(2px, -2px);
 }
 
 /* Quiet Secondary Clay Button */
@@ -710,12 +701,12 @@ html[data-theme="dark"] .hero-glow-2 {
 .button-quiet:hover {
   box-shadow: var(--clay-shadow-pill-hover);
   color: var(--clay-blue-dark);
-  transform: translateY(-4px) scale(1.02);
+  transform: translateY(-1px);
 }
 
 .button-quiet:active {
   box-shadow: var(--clay-shadow-pill-active);
-  transform: translateY(2px) scale(0.97);
+  transform: scale(0.98);
 }
 
 .hero-identities {
@@ -897,7 +888,7 @@ html[data-theme="dark"] .content-card {
 
 .content-card:hover {
   box-shadow: var(--clay-shadow-card-hover);
-  transform: translateY(-5px);
+  transform: translateY(-2px);
 }
 
 .content-card h3 {
@@ -1588,7 +1579,7 @@ html[data-theme="dark"] .kabar-card {
 }
 
 .program-card:hover, .kabar-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-2px);
   box-shadow: var(--clay-shadow-card-hover);
 }
 
@@ -2275,25 +2266,28 @@ html[data-theme="dark"] .modal-nav-bar {
   background: var(--clay-blue);
 }
 
-/* Fluid Scroll Reveal Engine (only hides when JS is confirmed active) */
+/* Fluid Scroll Reveal Engine (GSAP-like Cinematic Entry) */
 .js .sc-fade-up {
   opacity: 0;
-  transform: translateY(28px);
+  transform: translateY(32px);
+  filter: blur(4px);
   transition:
-    opacity 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
-    transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-  transition-delay: calc(var(--stagger, 0) * 0.1s);
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--stagger, 0) * 0.12s);
 }
 
 .js .sc-fade-up.sc-in {
   opacity: 1;
   transform: translateY(0);
+  filter: blur(0);
 }
 
 .js .sc-fade-in {
   opacity: 0;
-  transition: opacity 0.8s ease;
-  transition-delay: calc(var(--stagger, 0) * 0.1s);
+  transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--stagger, 0) * 0.12s);
 }
 
 .js .sc-fade-in.sc-in {
@@ -2730,7 +2724,7 @@ html[data-theme="dark"] .agenda-card {
 }
 
 .agenda-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
   box-shadow: var(--clay-shadow-card-hover);
 }
 
@@ -2848,12 +2842,12 @@ html[data-theme="dark"] .agenda-card {
   height: 100%;
   padding: 0;
   border: 1px solid rgba(255, 255, 255, 0.9);
-  border-radius: 26px;
+  border-radius: 20px;
   overflow: hidden;
   cursor: pointer;
   background: var(--clay-white);
   box-shadow: var(--clay-shadow-card);
-  transition: all 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 html[data-theme="dark"] .gallery-item {
@@ -2861,7 +2855,7 @@ html[data-theme="dark"] .gallery-item {
 }
 
 .gallery-item:hover {
-  transform: translateY(-5px) scale(1.01);
+  transform: translateY(-2px);
   box-shadow: var(--clay-shadow-card-hover);
 }
 
@@ -2869,11 +2863,11 @@ html[data-theme="dark"] .gallery-item {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .gallery-item:hover img {
-  transform: scale(1.06);
+  transform: scale(1.04);
 }
 
 .gallery-item-wide {
@@ -3162,6 +3156,21 @@ html[data-theme="dark"] .faq-item {
   line-height: 1.75;
 }
 
+.faq-item[open] p {
+  animation: faqContentReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes faqContentReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ==========================================================================
    ARSIP KABINET
    ========================================================================== */
@@ -3208,7 +3217,7 @@ html[data-theme="dark"] .archive-card {
 }
 
 .archive-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
   box-shadow: var(--clay-shadow-card-hover);
 }
 
@@ -3388,7 +3397,7 @@ html[data-theme="dark"] .proker-dept-card {
 }
 
 .proker-dept-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
   box-shadow: var(--clay-shadow-card-hover);
 }
 
