@@ -334,6 +334,69 @@ test('all sections share one container width and one rhythm', async ({ page }) =
   expect(hero).toBeLessThanOrEqual(1200);
 });
 
+test('every section heading renders at exactly one shared type size', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+
+  const headingSelectors = [
+    '#tentang h2',
+    '#divisi h2',
+    '#program h2',
+    '#proker-dept h2',
+    '#agenda h2',
+    '#kabar h2',
+    '#galeri h2',
+    '#faq h2',
+    '#aspirasi h2',
+    '#arsip h2',
+  ];
+
+  const sizes = new Set();
+  const fonts = new Set();
+  for (const sel of headingSelectors) {
+    const s = await page.locator(sel).evaluate(el => {
+      const cs = getComputedStyle(el);
+      return {
+        size: cs.fontSize,
+        family: cs.fontFamily.split(',')[0].replace(/["']/g, '').trim(),
+        weight: cs.fontWeight,
+      };
+    });
+    sizes.add(s.size);
+    fonts.add(s.family);
+    // DESIGN.md section 3: display type is semibold/bold, never extra-bold.
+    expect(Number(s.weight)).toBeLessThanOrEqual(700);
+  }
+
+  // One ramp for the whole page. It was four.
+  expect(sizes.size).toBe(1);
+  expect(fonts.has('Plus Jakarta Sans')).toBe(true);
+});
+
+test('body line-height sits inside the DESIGN.md 1.55-1.75 band', async ({ page }) => {
+  await page.goto('/');
+
+  const css = await page.evaluate(() =>
+    Array.from(document.styleSheets)
+      .flatMap(s => {
+        try {
+          return Array.from(s.cssRules).map(r => r.cssText);
+        } catch {
+          return [];
+        }
+      })
+      .join('\n')
+  );
+
+  const declared = [...css.matchAll(/line-height:\s*([0-9.]+)\s*[;}]/g)].map(m => parseFloat(m[1]));
+  // Ignore the display/heading leads, which are intentionally tighter.
+  const bodyLeads = declared.filter(v => v > 1.2);
+  for (const v of bodyLeads) {
+    expect(v).toBeGreaterThanOrEqual(1.55);
+    expect(v).toBeLessThanOrEqual(1.75);
+  }
+});
+
 test('no scroll-reveal dependency: content is fully visible with JS disabled', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();

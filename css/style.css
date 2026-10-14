@@ -337,6 +337,69 @@ h1, h2, h3, h4, p {
   overflow-wrap: break-word;
 }
 
+/* ==========================================================================
+   TYPOGRAPHY — HEADING LEVELS, DECLARED ONCE
+
+   The previous stylesheet carried FOUR different h2 ramps
+   (clamp(2.3rem,3.8vw,3.4rem), clamp(2.3rem,4vw,3.4rem) x3,
+   clamp(2.2rem,4vw,3.2rem) x5) copy-pasted across nine rules, and NINE
+   different h3 sizes. One scale, one rule, one source of truth.
+   ========================================================================== */
+h1,
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: var(--text-display);
+  font-weight: 700;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-tight);
+}
+
+h2,
+.sticky-sidebar h2,
+.organization-header h2,
+.program-header h2,
+.kabar-header h2,
+.contact-text h2,
+.agenda-header h2,
+.gallery-header h2,
+.faq-header h2,
+.archive-header h2,
+.proker-dept-header h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-h2);
+  font-weight: 700;
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-tight);
+}
+
+h3,
+.member-name,
+.content-card h3,
+.program-card h3,
+.kabar-card h3,
+.archive-card h3,
+.proker-dept-card h3,
+.faq-item h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-h3);
+  font-weight: 700;
+  line-height: var(--leading-tight);
+  letter-spacing: -0.01em;
+}
+
+h4 {
+  font-family: var(--font-display);
+  font-size: var(--text-h4);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+}
+
+h1 em,
+h2 em {
+  font-style: italic;
+  color: var(--color-text-link);
+}
+
 ::selection {
   color: var(--color-text-strong);
   background: var(--color-surface-accent-soft);
@@ -712,9 +775,7 @@ html[data-theme="dark"] .hero-glow-2 {
 }
 
 .hero h1 {
-  margin: 0 0 1.3rem;
-  font: 800 clamp(3.2rem, 5.5vw, 5.2rem) / 1.05 var(--display);
-  letter-spacing: -0.04em;
+  margin: 0 0 var(--space-5);
   text-wrap: balance;
 }
 
@@ -979,8 +1040,6 @@ html[data-theme="dark"] .glass-caption {
 }
 
 .sticky-sidebar h2 {
-  font: 800 clamp(2.3rem, 3.8vw, 3.4rem) / 1.15 var(--display);
-  letter-spacing: -0.04em;
   margin-bottom: 1.3rem;
 }
 
@@ -1023,9 +1082,7 @@ html[data-theme="dark"] .content-card {
 }
 
 .content-card h3 {
-  font: 800 1.35rem var(--display);
-  color: var(--ink);
-  letter-spacing: -0.02em;
+  color: var(--color-text-strong);
   margin-bottom: 0.85rem;
 }
 
@@ -1044,8 +1101,6 @@ html[data-theme="dark"] .content-card {
 }
 
 .organization-header h2 {
-  font: 800 clamp(2.3rem, 4vw, 3.4rem) / 1.15 var(--display);
-  letter-spacing: -0.04em;
   margin-bottom: 0.9rem;
 }
 
@@ -1476,7 +1531,7 @@ html[data-theme="dark"] .article-sheet {
 
 .article-title {
   margin: 0 0 1.2rem;
-  font: 800 clamp(1.5rem, 3vw, 2rem) / 1.2 var(--display);
+  font: 700 var(--text-h1) / var(--leading-heading) var(--font-display);
   letter-spacing: -0.03em;
   color: var(--ink);
 }
@@ -1497,7 +1552,7 @@ html[data-theme="dark"] .article-sheet {
   margin: 0 0 1.1rem;
   color: var(--muted);
   font-size: 1rem;
-  line-height: 1.8;
+  line-height: var(--leading-relaxed);
 }
 
 .article-body p:last-child {
@@ -1711,8 +1766,6 @@ html[data-theme="dark"] .member-card:hover .member-info {
 }
 
 .program-header h2, .kabar-header h2 {
-  font: 800 clamp(2.3rem, 4vw, 3.4rem) / 1.15 var(--display);
-  letter-spacing: -0.04em;
   margin-bottom: 0.9rem;
 }
 
@@ -1797,10 +1850,9 @@ html[data-theme="dark"] .kabar-card {
   box-shadow: var(--clay-shadow-pill);
 }
 
-.program-card h3, .kabar-card h3 {
-  margin: 0 0 0.85rem;
-  font: 800 1.28rem var(--display);
-  letter-spacing: -0.02em;
+.program-card h3,
+.kabar-card h3 {
+  margin: 0 0 var(--space-3);
 }
 
 .program-card p, .kabar-card p {
@@ -1869,8 +1921,6 @@ html[data-theme="dark"] .field-error {
 }
 
 .contact-text h2 {
-  font: 800 clamp(2.3rem, 4vw, 3.4rem) / 1.15 var(--display);
-  letter-spacing: -0.04em;
   margin-bottom: 1.3rem;
 }
 
@@ -1901,7 +1951,7 @@ html[data-theme="dark"] .field-error {
 
 .contact-notice-card p {
   font-size: 0.9rem;
-  line-height: 1.5;
+  line-height: var(--leading-body);
   margin: 0;
 }
 
@@ -2029,9 +2079,8 @@ html[data-theme="dark"] .form-group textarea:focus {
 }
 
 .aspirasi-success-card h3 {
-  margin: 0 0 0.6rem;
-  font: 800 1.4rem var(--display);
-  color: var(--ink);
+  margin: 0 0 var(--space-2);
+  color: var(--color-text-strong);
 }
 
 .aspirasi-success-card p {
@@ -2252,7 +2301,7 @@ html[data-theme="dark"] .not-found-card {
 }
 
 .modal-header-brand h2 {
-  font: 800 1.3rem / 1.2 var(--display);
+  font: 700 var(--text-h4) / var(--leading-tight) var(--font-display);
   letter-spacing: -0.02em;
   margin: 0 0 0.15rem;
   color: var(--ink);
@@ -2397,9 +2446,7 @@ html[data-theme="dark"] .modal-nav-bar {
 }
 
 .modal-dept-header h3 {
-  font: 800 1.45rem var(--display);
-  letter-spacing: -0.02em;
-  margin-bottom: 0.4rem;
+  margin-bottom: var(--space-2);
 }
 
 .modal-dept-header p {
@@ -2664,10 +2711,6 @@ html[data-theme="dark"] .modal-nav-bar {
     padding: 0.6rem 1.1rem;
   }
 
-  .hero h1 {
-    font-size: clamp(2.8rem, 11vw, 4rem);
-  }
-
   .hero-portrait {
     width: min(100%, 380px);
     justify-self: center;
@@ -2824,8 +2867,6 @@ html[data-theme="dark"] .stats-grid {
 }
 
 .agenda-header h2 {
-  font: 800 clamp(2.2rem, 4vw, 3.2rem) / 1.15 var(--display);
-  letter-spacing: -0.04em;
   margin-bottom: 0.8rem;
 }
 
@@ -3035,8 +3076,6 @@ html[data-theme="dark"] .agenda-card {
 }
 
 .gallery-header h2 {
-  font: 800 clamp(2.2rem, 4vw, 3.2rem) / 1.15 var(--display);
-  letter-spacing: -0.04em;
   margin-bottom: 0.8rem;
 }
 
@@ -3313,8 +3352,6 @@ html[data-theme="dark"] .lightbox-nav {
 }
 
 .faq-header h2 {
-  font: 800 clamp(2.2rem, 4vw, 3.2rem) / 1.15 var(--display);
-  letter-spacing: -0.04em;
   margin-bottom: 0.8rem;
 }
 
@@ -3429,8 +3466,6 @@ html[data-theme="dark"] .faq-item {
 }
 
 .archive-header h2 {
-  font: 800 clamp(2.2rem, 4vw, 3.2rem) / 1.15 var(--display);
-  letter-spacing: -0.04em;
   margin-bottom: 0.8rem;
 }
 
@@ -3542,8 +3577,6 @@ html[data-theme="dark"] .archive-card {
 }
 
 .proker-dept-header h2 {
-  font: 800 clamp(2.2rem, 4vw, 3.2rem) / 1.15 var(--display);
-  letter-spacing: -0.04em;
   margin-bottom: 0.8rem;
 }
 
