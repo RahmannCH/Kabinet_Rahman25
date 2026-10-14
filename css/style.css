@@ -1,7 +1,210 @@
-﻿:root {
+﻿/* ==========================================================================
+   KABINET RAHMAN 25 — DESIGN TOKEN ARCHITECTURE
+   Source of truth: DESIGN.md. Layered so a theme swap touches ONE layer.
+
+     Layer 1 PRIMITIVE  raw palette, zero semantic meaning
+     Layer 2 SEMANTIC    role tokens, the only layer a theme overrides
+     Layer 3 COMPONENT   component surfaces (shadows, states)
+     Layer 4 UTILITY     spacing / type / radius / motion / z-index / container
+     Layer 5 THEME       html[data-theme] overrides Layer 2 + 3 only
+   ========================================================================== */
+
+:root {
   color-scheme: light;
 
-  /* Z-Index scale (systemic layers only) */
+  /* --------------------------------------------------------------------------
+     LAYER 1 — PRIMITIVE
+     Raw values. Never referenced directly by a component rule.
+     -------------------------------------------------------------------------- */
+  --p-white: #ffffff;
+  --p-canvas-subtle: #f5f7f5;
+  --p-ink: #15243a;
+  --p-muted: #637181;
+  --p-border: #dce3e2;
+
+  --p-teal-700: #075c5a;
+  --p-teal-600: #087c78;
+  --p-teal-300: #bce3dc;
+  --p-teal-100: #e7f3f1;
+
+  --p-error: #b42318;
+  --p-warning: #805600;
+  --p-success: #176b45;
+  --p-info: #245a83;
+
+  --p-amber-700: #805600;
+  --p-amber-100: #fef3c7;
+  --p-draft-ink: #78350f;
+
+  --p-night-900: #090e17;
+  --p-night-800: #0d1524;
+  --p-night-700: #162033;
+  --p-night-600: #1c2840;
+  --p-night-400: #94a3b8;
+  --p-slate-100: #f8fafc;
+  --p-slate-200: #f1f5f9;
+
+  /* --------------------------------------------------------------------------
+     LAYER 2 — SEMANTIC
+     -------------------------------------------------------------------------- */
+  --color-surface-canvas: var(--p-white);
+  --color-surface-subtle: var(--p-canvas-subtle);
+  --color-surface-raised: var(--p-white);
+  --color-surface-inverse: var(--p-ink);
+  --color-surface-accent: var(--p-teal-600);
+  --color-surface-accent-strong: var(--p-teal-700);
+  --color-surface-accent-soft: var(--p-teal-100);
+  --color-surface-on-accent: var(--p-white);
+
+  --color-text-strong: var(--p-ink);
+  --color-text-body: var(--p-ink);
+  --color-text-muted: var(--p-muted);
+  --color-text-on-accent: var(--p-white);
+  --color-text-on-inverse: var(--p-white);
+  --color-text-link: var(--p-teal-600);
+  /* On --color-surface-accent-soft, --color-text-link fails 4.5:1 (4.35:1).
+     Always pair the soft tint with the strong teal. */
+  --color-text-on-accent-soft: var(--p-teal-700);
+  --color-text-placeholder: var(--p-muted);
+
+  --color-border-default: var(--p-border);
+  --color-border-strong: var(--p-teal-300);
+  --color-border-accent: var(--p-teal-600);
+  --color-border-subtle: var(--p-slate-200);
+  --color-focus-ring: var(--p-teal-700);
+
+  --color-status-error: var(--p-error);
+  --color-status-warning: var(--p-warning);
+  --color-status-success: var(--p-success);
+  --color-status-info: var(--p-info);
+  --color-surface-error-soft: #fdeceb;
+  --color-surface-error-soft-text: var(--p-error);
+  --color-surface-warning-soft: var(--p-amber-100);
+  --color-surface-warning-soft-text: var(--p-amber-700);
+  --color-surface-info-soft: #e8f0f8;
+  --color-surface-info-soft-text: var(--p-info);
+  --color-surface-success-soft: #e4f1ea;
+  --color-surface-success-soft-text: var(--p-success);
+  --color-surface-draft: var(--p-amber-100);
+  --color-text-draft: var(--p-draft-ink);
+
+  --color-backdrop-modal: rgba(21, 36, 58, 0.55);
+  --color-backdrop-lightbox: rgba(21, 36, 58, 0.72);
+
+  /* --------------------------------------------------------------------------
+     LAYER 4 — UTILITY: container & grid
+     -------------------------------------------------------------------------- */
+  --container-max: 1200px;
+  --container-max-wide: 1440px;
+  --container-pad: clamp(16px, 4vw, 32px);
+  --grid-gap: 24px;
+  --grid-gap-sm: 16px;
+
+  /* --------------------------------------------------------------------------
+     LAYER 4 — UTILITY: spacing scale (4px base)
+     Every margin/padding/gap in the codebase resolves to one of these.
+     -------------------------------------------------------------------------- */
+  --space-1: 0.25rem;   /*   4px */
+  --space-2: 0.5rem;    /*   8px */
+  --space-3: 0.75rem;   /*  12px */
+  --space-4: 1rem;      /*  16px */
+  --space-5: 1.5rem;    /*  24px */
+  --space-6: 2rem;      /*  32px */
+  --space-7: 2.5rem;    /*  40px */
+  --space-8: 3rem;      /*  48px */
+  --space-9: 4rem;      /*  64px */
+  --space-10: 5rem;     /*  80px */
+  --space-11: 6.5rem;   /* 104px */
+  --space-12: 8rem;     /* 128px */
+
+  /* Section rhythm — one knob, alternating density. */
+  --section-y: clamp(4rem, 8vw, 7rem);
+  --section-y-lg: clamp(6rem, 12vw, 10rem);
+
+  /* --------------------------------------------------------------------------
+     LAYER 4 — UTILITY: type scale
+     DESIGN.md §3. One h2 ramp for the whole page.
+     -------------------------------------------------------------------------- */
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Legacy aliases retained until downstream rules are migrated. */
+  --sans: var(--font-body);
+  --display: var(--font-display);
+
+  --text-display: clamp(2.75rem, 6vw, 5.5rem);
+  --text-h1: clamp(2.25rem, 4.5vw, 3.5rem);
+  --text-h2: clamp(2rem, 4vw, 3rem);
+  --text-h3: clamp(1.375rem, 2.5vw, 1.75rem);
+  --text-h4: 1.25rem;
+  --text-body-lg: 1.125rem;
+  --text-body: 1rem;
+  --text-sm: 0.875rem;
+  --text-xs: 0.75rem;
+
+  --leading-display: 1.05;
+  --leading-heading: 1.15;
+  --leading-tight: 1.4;
+  --leading-body: 1.65;   /* DESIGN.md §3 band is 1.55–1.75 */
+  --leading-relaxed: 1.75;
+  --tracking-tight: -0.02em;
+  --tracking-label: 0.08em;
+
+  /* --------------------------------------------------------------------------
+     LAYER 4 — UTILITY: radius scale
+     DESIGN.md §5 requires a SMALL radius. The retired --clay-card-radius:20px
+     is the single largest source of "AI template" reads and is gone.
+     -------------------------------------------------------------------------- */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-pill: 999px;
+  /* Legacy alias. Downstream uses resolve to the 8px scale. */
+  --clay-card-radius: var(--radius-lg);
+
+  /* --------------------------------------------------------------------------
+     LAYER 4 — UTILITY: motion scale
+     DESIGN.md §6 caps every transition at 150–250ms, transform/opacity only.
+     -------------------------------------------------------------------------- */
+  --dur-fast: 150ms;
+  --dur-base: 200ms;
+  --dur-slow: 250ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0.2, 1);
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* --------------------------------------------------------------------------
+     LAYER 4 — UTILITY: elevation
+     Hairline-first. Shadows are for interactive elevation only.
+     -------------------------------------------------------------------------- */
+  --shadow-card: 0 1px 2px rgba(21, 36, 58, 0.04);
+  --shadow-card-hover: 0 4px 12px rgba(21, 36, 58, 0.08);
+  --shadow-btn-primary: 0 1px 2px rgba(7, 92, 90, 0.2);
+  --shadow-btn-primary-hover: 0 3px 8px rgba(7, 92, 90, 0.24);
+  --shadow-btn-primary-active: 0 1px 1px rgba(7, 92, 90, 0.2);
+  --shadow-pill: 0 1px 2px rgba(21, 36, 58, 0.04);
+  --shadow-pill-hover: 0 2px 6px rgba(21, 36, 58, 0.08);
+  --shadow-pill-active: inset 0 1px 2px rgba(21, 36, 58, 0.08);
+  --shadow-input: inset 0 1px 2px rgba(21, 36, 58, 0.04);
+  --shadow-input-focus: 0 0 0 3px rgba(8, 124, 120, 0.22);
+  --shadow-nameplate: 0 2px 8px rgba(21, 36, 58, 0.08);
+  --shadow-modal: 0 24px 48px -12px rgba(21, 36, 58, 0.28);
+  --shadow-header-scrolled: 0 1px 0 var(--color-border-default);
+
+  /* Legacy aliases → Layer 3. */
+  --clay-shadow-card: var(--shadow-card);
+  --clay-shadow-card-hover: var(--shadow-card-hover);
+  --clay-shadow-btn-primary: var(--shadow-btn-primary);
+  --clay-shadow-btn-primary-hover: var(--shadow-btn-primary-hover);
+  --clay-shadow-btn-primary-active: var(--shadow-btn-primary-active);
+  --clay-shadow-pill: var(--shadow-pill);
+  --clay-shadow-pill-hover: var(--shadow-pill-hover);
+  --clay-shadow-pill-active: var(--shadow-pill-active);
+  --clay-shadow-input: var(--shadow-input);
+  --clay-shadow-input-focus: var(--shadow-input-focus);
+  --clay-shadow-nameplate: var(--shadow-nameplate);
+
+  /* --------------------------------------------------------------------------
+     LAYER 4 — UTILITY: z-index
+     -------------------------------------------------------------------------- */
   --z-base: 1;
   --z-decor: 2;
   --z-nav: 100;
@@ -9,116 +212,31 @@
   --z-modal: 1000;
   --z-lightbox: 1200;
 
-  /* ==========================================================================
-     REFINED HIGH-END INSTITUTIONAL DESIGN SYSTEM (ANTI-SLOP)
-     Architecture: Soft Structuralism / Precision Modernism
-     Reference: DESIGN.md + High-End Visual Design & Interaction Engine
-     ========================================================================== */
-  
-  /* Canvas & Base Viewport */
-  --clay-canvas: #f8fafc;
-  --clay-canvas-alt: #f1f5f9;
-  --paper: var(--clay-canvas);
-  --paper-soft: #ffffff;
-  
-  /* Surface Tints */
-  --clay-white: #ffffff;
-  --clay-white-soft: #f8fafc;
-  --surface: #ffffff;
-  --surface-raised: #ffffff;
+  /* --------------------------------------------------------------------------
+     LAYER 2 — LEGACY ALIASES
+     Retained so the ~3,500 lines of downstream rules keep resolving.
+     Migrated rule-by-rule in later phases; the names are then deleted.
+     -------------------------------------------------------------------------- */
+  --clay-canvas: var(--color-surface-canvas);
+  --clay-canvas-alt: var(--color-surface-subtle);
+  --clay-white: var(--color-surface-raised);
+  --clay-white-soft: var(--color-surface-subtle);
+  --surface: var(--color-surface-raised);
+  --ink: var(--color-text-strong);
+  --muted: var(--color-text-muted);
+  --line: var(--color-border-default);
+  --clay-blue: var(--color-surface-accent);
+  --clay-blue-dark: var(--color-text-on-accent-soft);
+  --clay-blue-light: var(--color-surface-accent-soft);
+  --clay-blue-border: var(--color-border-strong);
+  --accent: var(--color-surface-accent);
+  --accent-gold: var(--color-status-warning);
+  --gold-pill: var(--color-surface-warning-soft);
 
-  /* Strict WCAG AAA & AA Accessible Inks */
-  --ink: #0f172a;               /* Deep Slate 900 (Contrast > 15:1) */
-  --muted: #475569;             /* Slate 600 (Contrast > 5.5:1) */
-  --line: rgba(15, 23, 42, 0.08);
-  --line-light: rgba(15, 23, 42, 0.04);
-
-  /* Deep Teal Institutional Color System */
-  --clay-blue: #087c78;         /* Institutional Muted Teal */
-  --clay-blue-dark: #054f4c;    /* Deep Teal */
-  --clay-blue-light: #e6f4f1;   /* Pale Teal */
-  --clay-blue-border: #bce3dc;  /* Soft Teal Rims */
-  
-  --blue-pastel: #087c78;
-  --blue-pastel-medium: #054f4c;
-  --blue-pastel-light: #f3f9f8;
-  --blue-pastel-pill: #e6f4f1;
-  --blue-pastel-border: #bce3dc;
-
-  --accent: #087c78;
-  --accent-gold: #b45309;       /* Deep Amber */
-  --gold-pill: #fef3c7;
-  --gold-border: #fde68a;
-
-  --draft: #fef3c7;
-  --draft-ink: #78350f;
-
-  /* Nav & Modals */
-  --nav-bg: rgba(255, 255, 255, 0.92);
-  --focus: #087c78;
-
-  /* ==========================================================================
-     PRECISION AMBIENT SHADOWS (Soft Structuralism)
-     ========================================================================== */
-  
-  /* 1. Standard Card */
-  --clay-card-radius: 20px;
-  --clay-shadow-card:
-    0 1px 3px rgba(11, 19, 41, 0.04),
-    0 20px 40px -15px rgba(11, 19, 41, 0.06);
-
-  --clay-shadow-card-hover:
-    0 4px 6px -1px rgba(11, 19, 41, 0.05),
-    0 28px 56px -15px rgba(11, 19, 41, 0.1);
-
-  /* 2. Primary Action Button */
-  --clay-btn-radius: 999px;
-  --clay-shadow-btn-primary:
-    0 2px 4px rgba(8, 124, 120, 0.15),
-    0 8px 16px -4px rgba(8, 124, 120, 0.35);
-
-  --clay-shadow-btn-primary-hover:
-    0 4px 8px rgba(8, 124, 120, 0.2),
-    0 16px 24px -6px rgba(8, 124, 120, 0.45);
-
-  --clay-shadow-btn-primary-active:
-    0 1px 2px rgba(8, 124, 120, 0.2),
-    inset 0 2px 4px rgba(5, 79, 76, 0.3);
-
-  /* 3. Quiet Button & Filter Pills */
-  --clay-shadow-pill:
-    0 1px 2px rgba(11, 19, 41, 0.04),
-    0 4px 12px rgba(11, 19, 41, 0.04);
-
-  --clay-shadow-pill-hover:
-    0 2px 4px rgba(11, 19, 41, 0.06),
-    0 8px 16px rgba(11, 19, 41, 0.08);
-
-  --clay-shadow-pill-active:
-    0 1px 2px rgba(11, 19, 41, 0.04),
-    inset 0 2px 4px rgba(11, 19, 41, 0.06);
-
-  /* 4. Inputs */
-  --clay-shadow-input:
-    inset 0 2px 4px rgba(11, 19, 41, 0.03),
-    0 1px 0 rgba(255, 255, 255, 0.8);
-
-  --clay-shadow-input-focus:
-    0 0 0 3px rgba(8, 124, 120, 0.15),
-    inset 0 2px 4px rgba(11, 19, 41, 0.03);
-
-  /* 5. Floating Nameplate */
-  --clay-shadow-nameplate:
-    0 4px 12px rgba(11, 19, 41, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-
-  /* Typography Stacks */
-  --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-
-  font-family: var(--sans);
-  color: var(--ink);
-  background: var(--clay-canvas);
+  font-family: var(--font-body);
+  line-height: var(--leading-body);
+  color: var(--color-text-body);
+  background: var(--color-surface-canvas);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   scroll-behavior: smooth;
@@ -126,96 +244,67 @@
 }
 
 /* ==========================================================================
-   DARK THEME TOKENS (OLED Minimalist)
+   LAYER 5 — THEME: DARK
+   Overrides Layer 2 (semantic colour) and Layer 3 (elevation) ONLY.
+   Never redeclares a primitive or a utility token.
    ========================================================================== */
 html[data-theme="dark"] {
   color-scheme: dark;
-  
-  --clay-canvas: #090e17;
-  --clay-canvas-alt: #0d1524;
-  --paper: var(--clay-canvas);
-  --paper-soft: #162033;
-  
-  --clay-white: #162033;
-  --clay-white-soft: #1c2840;
-  --surface: #162033;
-  --surface-raised: #1c2840;
 
-  --ink: #f8fafc;
-  --muted: #94a3b8;
-  --line: rgba(255, 255, 255, 0.08);
-  --line-light: rgba(255, 255, 255, 0.04);
+  /* Surfaces */
+  --color-surface-canvas: var(--p-night-900);
+  --color-surface-subtle: var(--p-night-800);
+  --color-surface-raised: var(--p-night-700);
+  --color-surface-inverse: var(--p-night-600);
+  --color-surface-accent-soft: #06312f;
 
-  --clay-blue: #087c78;
-  --clay-blue-dark: #7dd3fc;
-  --clay-blue-light: #054f4c;
-  --clay-blue-border: #0c6a66;
-  --blue-pastel: #087c78;
-  --blue-pastel-medium: #7dd3fc;
-  --blue-pastel-light: #032b29;
-  --blue-pastel-pill: #054f4c;
-  --blue-pastel-border: #0c6a66;
+  /* Text */
+  --color-text-strong: var(--p-slate-100);
+  --color-text-body: #e6ebf2;
+  --color-text-muted: var(--p-night-400);
+  --color-text-link: #4fd1c5;
+  --color-text-on-accent-soft: #6fe0d5;
+  --color-text-placeholder: var(--p-night-400);
+  --color-text-draft: var(--p-amber-100);
 
-  --accent-gold: #fbbf24;
-  --gold-pill: #451a03;
-  --gold-border: #78350f;
+  /* Borders */
+  --color-border-default: #26334a;
+  --color-border-strong: #0c6a66;
+  --color-border-subtle: #1b2437;
+  --color-focus-ring: #4fd1c5;
 
-  --draft: #451a03;
-  --draft-ink: #fde68a;
+  /* Status */
+  --color-status-error: #f9a29b;
+  --color-status-warning: #f5c66b;
+  --color-status-success: #7fceA6;
+  --color-status-info: #96c5e8;
+  --color-surface-error-soft: #2d1512;
+  --color-surface-error-soft-text: #f9a29b;
+  --color-surface-warning-soft: #2a1e06;
+  --color-surface-warning-soft-text: #f5c66b;
+  --color-surface-info-soft: #10243a;
+  --color-surface-info-soft-text: #96c5e8;
+  --color-surface-success-soft: #0d2a1e;
+  --color-surface-success-soft-text: #7fceA6;
+  --color-surface-draft: #2a1e06;
 
-  --nav-bg: rgba(9, 14, 23, 0.92);
-  --focus: #087c78;
+  --color-backdrop-modal: rgba(3, 7, 18, 0.72);
+  --color-backdrop-lightbox: rgba(3, 7, 18, 0.86);
 
-  /* Dark Ambient Elevation */
-  --clay-shadow-card:
-    0 1px 3px rgba(0, 0, 0, 0.6),
-    0 24px 48px -16px rgba(0, 0, 0, 0.8),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
-
-  --clay-shadow-card-hover:
-    0 4px 6px -1px rgba(0, 0, 0, 0.6),
-    0 32px 64px -16px rgba(0, 0, 0, 0.9),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-
-  --clay-shadow-btn-primary:
-    0 2px 4px rgba(0, 0, 0, 0.5),
-    0 8px 16px -4px rgba(8, 124, 120, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-
-  --clay-shadow-btn-primary-hover:
-    0 4px 8px rgba(0, 0, 0, 0.6),
-    0 16px 24px -6px rgba(8, 124, 120, 0.65),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-
-  --clay-shadow-btn-primary-active:
-    0 1px 2px rgba(0, 0, 0, 0.6),
-    inset 0 2px 4px rgba(0, 0, 0, 0.8);
-
-  --clay-shadow-pill:
-    0 1px 2px rgba(0, 0, 0, 0.5),
-    0 4px 12px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
-
-  --clay-shadow-pill-hover:
-    0 2px 4px rgba(0, 0, 0, 0.6),
-    0 8px 16px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-
-  --clay-shadow-pill-active:
-    0 1px 2px rgba(0, 0, 0, 0.5),
-    inset 0 2px 4px rgba(0, 0, 0, 0.8);
-
-  --clay-shadow-input:
-    inset 0 2px 4px rgba(0, 0, 0, 0.6),
-    0 1px 0 rgba(255, 255, 255, 0.04);
-
-  --clay-shadow-input-focus:
-    0 0 0 3px rgba(8, 124, 120, 0.3),
-    inset 0 2px 4px rgba(0, 0, 0, 0.6);
-
-  --clay-shadow-nameplate:
-    0 4px 12px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  /* Layer 3 — elevation. Single-layer ambient, no neumorphic doubles. */
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.6);
+  --shadow-btn-primary: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-btn-primary-hover: 0 3px 8px rgba(0, 0, 0, 0.6);
+  --shadow-btn-primary-active: 0 1px 1px rgba(0, 0, 0, 0.5);
+  --shadow-pill: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-pill-hover: 0 2px 6px rgba(0, 0, 0, 0.6);
+  --shadow-pill-active: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+  --shadow-input: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-input-focus: 0 0 0 3px rgba(79, 209, 197, 0.28);
+  --shadow-nameplate: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-modal: 0 24px 48px -12px rgba(0, 0, 0, 0.8);
+  --shadow-header-scrolled: 0 1px 0 var(--color-border-default);
 }
 
 /* ==========================================================================
@@ -228,19 +317,8 @@ html[data-theme="dark"] {
 body {
   margin: 0;
   min-width: 320px;
-  overflow-x: clip;
-  background-color: var(--clay-canvas);
-  background-image: 
-    radial-gradient(at 10% 15%, rgba(186, 230, 253, 0.45) 0px, transparent 55%),
-    radial-gradient(at 90% 85%, rgba(224, 242, 254, 0.55) 0px, transparent 55%);
-  background-attachment: fixed;
-  color: var(--ink);
-}
-
-html[data-theme="dark"] body {
-  background-image: 
-    radial-gradient(at 10% 15%, rgba(12, 74, 110, 0.25) 0px, transparent 55%),
-    radial-gradient(at 90% 85%, rgba(16, 35, 61, 0.35) 0px, transparent 55%);
+  background-color: var(--color-surface-canvas);
+  color: var(--color-text-body);
 }
 
 a {
@@ -260,8 +338,9 @@ h1, h2, h3, h4, p {
 }
 
 ::selection {
-  color: #0f172a;
-  background: var(--blue-pastel-pill);
+  color: var(--color-text-strong);
+  background: var(--color-surface-accent-soft);
+}
 }
 
 html[data-theme="dark"] ::selection {
@@ -3319,18 +3398,19 @@ html[data-theme="dark"] .archive-card {
 
 .proker-search-input {
   width: 100%;
-  padding: 0.8rem 1.2rem 0.8rem 2.8rem;
-  border: 1px solid rgba(255, 255, 255, 0.85);
-  border-radius: 999px;
-  background: var(--clay-white);
-  color: var(--ink);
-  font: 500 0.88rem var(--body);
-  box-shadow: var(--clay-shadow-pill);
-  transition: all 0.22s ease;
+  padding: var(--space-3) var(--space-5) var(--space-3) var(--space-8);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-raised);
+  color: var(--color-text-body);
+  font: 500 var(--text-sm) var(--font-body);
+  box-shadow: var(--shadow-pill);
+  transition: border-color var(--dur-base) var(--ease-standard),
+    box-shadow var(--dur-base) var(--ease-standard);
 }
 
-.proker-search-input:focus {
-  outline: 3px solid var(--clay-blue);
+.proker-search-input:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
   outline-offset: 2px;
   background: #ffffff;
 }
