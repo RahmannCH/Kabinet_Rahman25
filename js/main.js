@@ -585,39 +585,17 @@ if (form) {
   });
 }
 
-// 7. Fluid Scroll Reveal Engine (exposed so dynamically-injected nodes also reveal)
-const RevealEngine = (() => {
-  const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-  // Force-reveal everything — used for reduced-motion and as a safety net so no
-  // content can ever stay permanently hidden (WCAG 1.4.10 / 2.3.3).
-  const revealAll = () =>
-    document.querySelectorAll('.sc-fade-up, .sc-fade-in').forEach(el => el.classList.add('sc-in'));
-
-  if (!('IntersectionObserver' in window) || reduceMotion) {
-    revealAll();
-    return {
-      observe: els => els.forEach(el => el.classList.add('sc-in')),
-      revealAll,
-    };
-  }
-  const observer = new IntersectionObserver(
-    (entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('sc-in');
-          obs.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
-  );
-  const observe = els => els.forEach(el => observer.observe(el));
-  observe(document.querySelectorAll('.sc-fade-up, .sc-fade-in'));
-  // Safety net: if the observer never fires for any node (e.g. injected late),
-  // guarantee readability after a short grace period.
-  window.setTimeout(revealAll, 3000);
-  return { observe, revealAll };
-})();
+// 7. Scroll-reveal engine — RETIRED.
+//
+// The stylesheet previously hid `.sc-fade-up` / `.sc-fade-in` behind
+// `opacity: 0` + `filter: blur(4px)` and only restored them from here, on a
+// 0.9s–1s transition. DESIGN.md section 6 bans scroll-reveal as a content
+// dependency, and the coupling was actively fragile: without JS, or if this
+// observer failed to fire, the entire page below the fold stayed invisible.
+//
+// The class names remain in the markup as inert hooks so no HTML needs to
+// change. The `.is-paused` IntersectionObserver further up is separate and
+// still live — it gates the hero's expensive blur filter.
 
 // ==========================================================================
 // 8. FULL-SCREEN CABINET EXPLORER MODAL CONTROLLER
@@ -1155,9 +1133,6 @@ if (articleModal && articleTriggers.length) {
   });
   scheduleMidnightRefresh();
 
-  // Register freshly-injected nodes with the reveal engine
-  RevealEngine.observe(timeline.querySelectorAll('.sc-fade-up'));
-
   // --- Generate filter pills automatically from data ---
   if (filterContainer) {
     const months = [...new Set(AGENDA_ITEMS.map(a => a.month))];
@@ -1393,7 +1368,6 @@ document.addEventListener('keydown', e => {
     </article>`;
 
   grid.innerHTML = DEPT_PROGRAMS.map(buildCard).join('');
-  RevealEngine.observe(grid.querySelectorAll('.sc-fade-up'));
 
   const applyFilter = () => {
     let visible = 0;

@@ -275,15 +275,82 @@ test('lightbox close button is visible in dark mode', async ({ page }) => {
   expect(bg).toContain('42');
 });
 
-test('reduced-motion reveals all scroll content immediately', async ({ page }) => {
+test('no scroll-reveal dependency: content is fully visible with JS disabled', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
   await page.goto('/');
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  const opacities = await page.locator('.sc-fade-up').evaluateAll(els =>
+
+  // DESIGN.md section 6 bans scroll-reveal. Nothing may depend on JS to become
+  // visible, so every reveal hook must be opaque at rest with no JS at all.
+  const opacities = await page.locator('.sc-fade-up, .sc-fade-in').evaluateAll(els =>
     els.map(el => getComputedStyle(el).opacity)
   );
+  expect(opacities.length).toBeGreaterThan(0);
   for (const op of opacities) {
     expect(parseFloat(op)).toBe(1);
   }
+
+  // Nothing may be blurred at rest.
+  const filters = await page.locator('.sc-fade-up, .sc-fade-in').evaluateAll(els =>
+    els.map(el => getComputedStyle(el).filter)
+  );
+  for (const f of filters) {
+    expect(f === 'none' || f === 'blur(0px)').toBe(true);
+  }
+
+  await context.close();
+});
+
+test('reduced-motion disables smooth scrolling and all animation', async ({ page }) => {
+  await page.goto('/');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+
+  const scrollBehavior = await page.evaluate(
+    () => getComputedStyle(document.documentElement).scrollBehavior
+  );
+  expect(scrollBehavior).toBe('auto');
+
+  // No element anywhere may still be running an infinite animation.
+  const infinite = await page.evaluate(() =>
+    Array.from(document.querySelectorAll('*')).filter(el => {
+      const s = getComputedStyle(el);
+      return (
+        s.animationName !== 'none' &&
+        s.animationIterationCount === 'infinite'
+      );
+    }).length
+  );
+  expect(infinite).toBe(0);
+});
+
+test('stylesheet contains no neon cyan literals and no perpetual loops', async ({ page }) => {
+  await page.goto('/');
+  const css = await page.evaluate(async () =>
+    Array.from(document.styleSheets)
+      .map(s => {
+        try {
+          return Array.from(s.cssRules).map(r => r.cssText).join('\n');
+        } catch {
+          return '';
+        }
+      })
+      .join('\n')
+  );
+
+  // DESIGN.md section 7 bans neon cyan / purple-blue glow outright.
+  for (const banned of [
+    'rgb(56, 189, 248)',
+    'rgb(14, 165, 233)',
+    'rgb(2, 132, 199)',
+    '#38bdf8',
+    '#0ea5e9',
+  ]) {
+    expect(css).not.toContain(banned);
+  }
+
+  // `transition: all` is banned by DESIGN.md section 6 (animates layout props).
+  expect(css).not.toMatch(/transition:\s*all/);
+  expect(css).not.toMatch(/animation:[^;]*infinite/);
 });
 
 test('agenda status uses Jakarta timezone', async ({ page }) => {

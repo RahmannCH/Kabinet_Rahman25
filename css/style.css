@@ -391,7 +391,7 @@ html[data-theme="dark"] ::selection {
   border-radius: 999px;
   box-shadow: var(--clay-shadow-card);
   transform: translateY(-200%);
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform var(--dur-slow) var(--ease-enter);
   text-decoration: none;
 }
 
@@ -409,7 +409,7 @@ html[data-theme="dark"] ::selection {
   font-size: 0.78rem;
   font-weight: 700;
   text-align: center;
-  box-shadow: inset 0 -2px 4px rgba(186, 230, 253, 0.5);
+  box-shadow: inset 0 -2px 4px rgba(231, 243, 241, 0.5);
   letter-spacing: 0.02em;
 }
 
@@ -438,7 +438,14 @@ html[data-theme="dark"] .preview-banner {
   border-radius: 999px;
   background: var(--clay-white);
   box-shadow: var(--clay-shadow-card);
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-enter);
   border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
@@ -448,9 +455,9 @@ html[data-theme="dark"] .site-header {
 
 .site-header.is-scrolled {
   box-shadow: 
-    16px 22px 40px rgba(150, 185, 225, 0.5),
+    16px 22px 40px rgba(188, 227, 220, 0.5),
     -8px -8px 18px rgba(255, 255, 255, 0.95),
-    inset -6px -6px 12px rgba(186, 215, 245, 0.4),
+    inset -6px -6px 12px rgba(188, 227, 220, 0.4),
     inset 6px 6px 12px rgba(255, 255, 255, 1);
   transform: translateY(-2px);
 }
@@ -514,7 +521,14 @@ html[data-theme="dark"] .site-header.is-scrolled {
   text-decoration: none;
   padding: 0.45rem clamp(0.6rem, 1vw, 1rem);
   border-radius: 999px;
-  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-enter);
 }
 
 .site-nav a:hover {
@@ -572,7 +586,14 @@ html[data-theme="dark"] .site-header.is-scrolled {
   font-size: 1rem;
   cursor: pointer;
   box-shadow: var(--clay-shadow-pill);
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-enter);
 }
 
 .theme-toggle:hover {
@@ -607,7 +628,10 @@ html[data-theme="dark"] .site-header.is-scrolled {
   overflow: hidden;
 }
 
-/* Ambient background glow — soft and restrained */
+/* Static ambient tint — a decoration, not an animation.
+ * The previous implementation carried `.hero.is-paused .hero-glow` and
+ * `@media (max-width:768px) .hero-glow` rules targeting an animation that
+ * never existed. Both were dead scaffolding and are gone. */
 .hero-glow {
   position: absolute;
   border-radius: 50%;
@@ -617,23 +641,18 @@ html[data-theme="dark"] .site-header.is-scrolled {
   filter: blur(40px);
 }
 
-.hero.is-paused .hero-glow,
-.hero.is-paused .pulse-dot {
-  animation-play-state: paused !important;
-}
-
 .hero-glow-1 {
-  width: 320px;
-  height: 320px;
-  background: radial-gradient(circle, var(--clay-blue-light) 0%, transparent 70%);
+  width: min(320px, 60vw);
+  aspect-ratio: 1;
+  background: radial-gradient(circle, var(--color-surface-accent-soft) 0%, transparent 70%);
   top: 10%;
   right: 5%;
 }
 
 .hero-glow-2 {
-  width: 220px;
-  height: 220px;
-  background: radial-gradient(circle, var(--clay-blue-light) 0%, transparent 70%);
+  width: min(220px, 45vw);
+  aspect-ratio: 1;
+  background: radial-gradient(circle, var(--color-surface-accent-soft) 0%, transparent 70%);
   bottom: 8%;
   left: 2%;
 }
@@ -643,44 +662,45 @@ html[data-theme="dark"] .hero-glow-2 {
   opacity: 0.2;
 }
 
+/* Offscreen cost control. `filter: blur(40px)` over two large elements is
+ * genuinely expensive to repaint; main.js toggles `.is-paused` via an
+ * IntersectionObserver so the work stops when the hero leaves the viewport.
+ * This replaces the old `animation-play-state: paused`, which targeted an
+ * animation that never existed. */
+.hero.is-paused .hero-glow {
+  filter: blur(8px);
+  opacity: 0.12;
+}
+
 .hero-copy {
   position: relative;
   z-index: var(--z-decor);
 }
 
-/* Clay Eyebrow Pill */
+/* Eyebrow label */
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 0.65rem;
-  color: var(--clay-blue-dark);
-  font-size: 0.74rem;
-  font-weight: 800;
+  gap: var(--space-2);
+  color: var(--color-text-on-accent-soft);
+  font-size: var(--text-xs);
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  padding: 0.45rem 1.1rem;
-  background: var(--clay-white);
-  border-radius: 999px;
-  box-shadow: var(--clay-shadow-pill);
-  margin-bottom: 1.4rem;
+  letter-spacing: var(--tracking-label);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-surface-accent-soft);
+  border-radius: var(--radius-pill);
+  margin-bottom: var(--space-5);
 }
 
+/* Static status dot. The perpetual `pulse 2.2s infinite` loop is banned by
+ * DESIGN.md section 6 ("no perpetual loops"). */
 .pulse-dot {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
   border-radius: 50%;
-  background: var(--clay-blue);
-  box-shadow: 
-    0 0 0 0 rgba(56, 189, 248, 0.7),
-    inset -1px -1px 2px rgba(2, 132, 199, 0.5),
-    inset 1px 1px 2px rgba(255, 255, 255, 0.8);
-  animation: pulse 2.2s infinite;
-}
-
-@keyframes pulse {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7); }
-  70% { transform: scale(1.05); box-shadow: 0 0 0 8px rgba(56, 189, 248, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+  background: var(--color-surface-accent-strong);
 }
 
 .hero h1 {
@@ -725,7 +745,14 @@ html[data-theme="dark"] .hero-glow-2 {
   border-radius: 999px;
   border: none;
   cursor: pointer;
-  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-enter);
 }
 
 /* Primary Plump Clay Button */
@@ -757,7 +784,7 @@ html[data-theme="dark"] .hero-glow-2 {
   background: rgba(255, 255, 255, 0.22);
   font-size: 0.85rem;
   line-height: 1;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform var(--dur-slow) var(--ease-enter);
   margin-left: 0.2rem;
 }
 
@@ -957,7 +984,14 @@ html[data-theme="dark"] .glass-caption {
   border-radius: var(--clay-card-radius, 28px);
   background: var(--clay-white);
   box-shadow: var(--clay-shadow-card);
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-enter);
   border: 1px solid rgba(255, 255, 255, 0.85);
 }
 
@@ -1035,7 +1069,14 @@ html[data-theme="dark"] .content-card {
   border-radius: 999px;
   cursor: pointer;
   box-shadow: var(--clay-shadow-pill);
-  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-enter);
 }
 
 .filter-btn:hover {
@@ -1171,13 +1212,13 @@ html[data-theme="dark"] .content-card {
   border-radius: 999px;
   box-shadow: 
     0 0 0 1px rgba(255, 255, 255, 0.6),
-    1px 2px 4px rgba(56, 189, 248, 0.25);
+    1px 2px 4px rgba(8, 124, 120, 0.25);
 }
 
 html[data-theme="dark"] .tree-line-v {
   box-shadow:
     0 0 0 1px rgba(30, 41, 59, 0.6),
-    1px 2px 4px rgba(14, 165, 233, 0.15);
+    1px 2px 4px rgba(7, 92, 90, 0.15);
 }
 
 .tree-branch {
@@ -1231,7 +1272,7 @@ html[data-theme="dark"] .tree-line-v {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  animation: treeExpand 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: treeExpand var(--dur-slow) var(--ease-enter);
 }
 
 .tree-dept-panel[hidden] {
@@ -1284,7 +1325,7 @@ html[data-theme="dark"] .tree-tier-expanded {
   background: rgba(15, 23, 42, 0.55);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  animation: fadeIn 0.3s ease;
+  animation: fadeIn var(--dur-slow) var(--ease-standard);
 }
 
 .article-sheet {
@@ -1298,7 +1339,7 @@ html[data-theme="dark"] .tree-tier-expanded {
   background: var(--clay-white);
   box-shadow: var(--clay-shadow-card-hover);
   border: 1px solid rgba(255, 255, 255, 0.9);
-  animation: slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: slideUp var(--dur-slow) var(--ease-enter) forwards;
   overscroll-behavior: contain;
 }
 
@@ -1331,7 +1372,14 @@ html[data-theme="dark"] .article-sheet {
   font-weight: 600;
   cursor: pointer;
   box-shadow: var(--clay-shadow-pill);
-  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-enter);
 }
 
 .article-sheet-close {
@@ -1375,7 +1423,14 @@ html[data-theme="dark"] .article-sheet {
   font: 700 0.82rem var(--display);
   cursor: pointer;
   box-shadow: var(--clay-shadow-pill);
-  transition: all 0.2s ease;
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-base) var(--ease-standard);
 }
 
 .article-nav-btn:hover {
@@ -1489,7 +1544,14 @@ html[data-theme="dark"] .article-sheet {
   overflow: hidden;
   background: var(--clay-white);
   box-shadow: var(--clay-shadow-card);
-  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-enter);
   aspect-ratio: 3 / 4;
   border: 1px solid rgba(255, 255, 255, 0.9);
 }
@@ -1529,7 +1591,7 @@ html[data-theme="dark"] .member-card {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform var(--dur-slow) var(--ease-enter);
 }
 
 .member-card:hover .member-image-wrap img {
@@ -1552,7 +1614,14 @@ html[data-theme="dark"] .member-card {
   flex-direction: column;
   justify-content: flex-end;
   border: 1px solid rgba(255, 255, 255, 0.95);
-  transition: all 0.25s ease;
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-standard);
 }
 
 html[data-theme="dark"] .member-info {
@@ -1649,7 +1718,14 @@ html[data-theme="dark"] .member-card:hover .member-info {
   background: var(--clay-white);
   box-shadow: var(--clay-shadow-card);
   border: 1px solid rgba(255, 255, 255, 0.9);
-  transition: all 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-enter);
 }
 
 html[data-theme="dark"] .program-card,
@@ -1725,7 +1801,7 @@ html[data-theme="dark"] .kabar-card {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  transition: transform 0.2s ease;
+  transition: transform var(--dur-base) var(--ease-standard);
   /* reset for <button> usage */
   border: none;
   background: none;
@@ -1869,7 +1945,14 @@ html[data-theme="dark"] .aspirasi-form-box {
   font: inherit;
   font-size: 0.95rem;
   box-shadow: var(--clay-shadow-input);
-  transition: all 0.22s ease;
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-standard);
 }
 
 .form-group input::placeholder,
@@ -1905,7 +1988,7 @@ html[data-theme="dark"] .form-group textarea:focus {
 .aspirasi-success-card {
   text-align: center;
   padding: 2rem 1.5rem;
-  animation: fadeIn 0.3s ease;
+  animation: fadeIn var(--dur-slow) var(--ease-standard);
 }
 
 .aspirasi-success-card[hidden] {
@@ -1986,7 +2069,7 @@ html[data-theme="dark"] .form-group textarea:focus {
   font-size: 0.92rem;
   font-weight: 600;
   text-decoration: none;
-  transition: color 0.18s ease;
+  transition: color var(--dur-base) var(--ease-standard);
 }
 
 .footer-group a:hover {
@@ -1998,7 +2081,7 @@ html[data-theme="dark"] .form-group textarea:focus {
   justify-content: space-between;
   align-items: center;
   padding-top: 2rem;
-  border-top: 2px dashed rgba(186, 215, 245, 0.7);
+  border-top: 2px dashed rgba(188, 227, 220, 0.7);
 }
 
 html[data-theme="dark"] .footer-bottom {
@@ -2061,7 +2144,14 @@ html[data-theme="dark"] .not-found-card {
   background: var(--clay-white);
   border-radius: 999px;
   box-shadow: var(--clay-shadow-pill);
-  transition: all 0.22s ease;
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-standard);
 }
 
 .back-top:hover {
@@ -2092,7 +2182,7 @@ html[data-theme="dark"] .not-found-card {
   background: rgba(15, 23, 42, 0.55);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  animation: fadeIn 0.3s ease;
+  animation: fadeIn var(--dur-slow) var(--ease-standard);
 }
 
 @keyframes fadeIn {
@@ -2110,7 +2200,7 @@ html[data-theme="dark"] .not-found-card {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  animation: slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: slideUp var(--dur-slow) var(--ease-enter) forwards;
 }
 
 @keyframes slideUp {
@@ -2171,7 +2261,14 @@ html[data-theme="dark"] .not-found-card {
   font-size: 1.2rem;
   cursor: pointer;
   box-shadow: var(--clay-shadow-pill);
-  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-enter);
 }
 
 .modal-close-btn:hover {
@@ -2190,7 +2287,7 @@ html[data-theme="dark"] .not-found-card {
 .modal-nav-bar {
   padding: 0.85rem max(4%, calc((100% - 1200px) / 2));
   background: var(--clay-canvas-alt);
-  box-shadow: inset 0 -2px 6px rgba(186, 215, 245, 0.35);
+  box-shadow: inset 0 -2px 6px rgba(188, 227, 220, 0.35);
   z-index: var(--z-decor);
 }
 
@@ -2220,7 +2317,14 @@ html[data-theme="dark"] .modal-nav-bar {
   font-weight: 800;
   cursor: pointer;
   box-shadow: var(--clay-shadow-pill);
-  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-enter);
 }
 
 .modal-pill-btn:hover {
@@ -2345,60 +2449,55 @@ html[data-theme="dark"] .modal-nav-bar {
   background: var(--clay-blue);
 }
 
-/* Fluid Scroll Reveal Engine (GSAP-like Cinematic Entry) */
-.js .sc-fade-up {
-  opacity: 0;
-  transform: translateY(32px);
-  filter: blur(4px);
-  transition:
-    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-    filter 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-  transition-delay: calc(var(--stagger, 0) * 0.12s);
-}
+/* Scroll reveal is intentionally absent.
+ * DESIGN.md section 6 bans scroll-reveal as a content dependency: the previous
+ * implementation hid 46 elements behind `opacity: 0` + `filter: blur(4px)` and
+ * only restored them from JS. Without JS — or if the IntersectionObserver
+ * safety net failed — the entire page below the fold rendered invisible.
+ * The `.sc-fade-up` / `.sc-fade-in` / `--stagger` classes are retained as
+ * inert markup hooks so existing HTML needs no surgery. */
 
-.js .sc-fade-up.sc-in {
-  opacity: 1;
-  transform: translateY(0);
-  filter: blur(0);
-}
-
-.js .sc-fade-in {
-  opacity: 0;
-  transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
-  transition-delay: calc(var(--stagger, 0) * 0.12s);
-}
-
-.js .sc-fade-in.sc-in {
-  opacity: 1;
-}
-
-/* Respect reduced-motion: never hide content, disable all motion */
+/* Respect reduced-motion: immediate state changes, non-smooth scrolling.
+ * This block must stay a complete inventory of every motion source in the
+ * stylesheet; a dead selector here is a silent WCAG 2.3.3 failure. */
 @media (prefers-reduced-motion: reduce) {
-  .js .sc-fade-up,
-  .js .sc-fade-in {
-    opacity: 1;
-    transform: none;
-    transition: none;
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 
   .hero-glow,
-  .pulse-dot {
+  .pulse-dot,
+  .tree-dept-panel,
+  .faq-item summary::after {
     animation: none;
   }
 
   .cabinet-modal-content,
   .article-sheet,
-  .lightbox-figure,
-  .tree-dept-panel,
-  .faq-item summary::after {
+  .lightbox-figure {
     animation: none;
-    transition: none;
   }
 
-  .cabinet-modal-backdrop,
+  .modal-backdrop,
   .article-backdrop,
   .lightbox-backdrop {
+    animation: none;
+  }
+
+  .aspirasi-success-card {
+    animation: none;
+  }
+
+  .faq-item[open] p {
     animation: none;
   }
 }
@@ -2427,7 +2526,7 @@ html[data-theme="dark"] .modal-nav-bar {
     height: 2.5px;
     border-radius: 4px;
     background: var(--ink);
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform var(--dur-slow) var(--ease-enter);
   }
 
   .menu-toggle[aria-expanded="true"] span:first-child {
@@ -2526,10 +2625,6 @@ html[data-theme="dark"] .modal-nav-bar {
   .tree-connector-rail .tree-line-v {
     height: 2.2rem;
   }
-  .hero-glow {
-    animation: none;
-    opacity: 0.5;
-  }
 }
 
 /* 4. Viewports <= 720px: Padding & Scale */
@@ -2585,15 +2680,15 @@ html[data-theme="dark"] .modal-nav-bar {
   /* Reduced shadow intensity for high-DPI screens */
   :root {
     --clay-shadow-card:
-      10px 12px 24px rgba(160, 195, 235, 0.35),
+      10px 12px 24px rgba(188, 227, 220, 0.35),
       -4px -4px 12px rgba(255, 255, 255, 0.8),
-      inset -4px -4px 8px rgba(186, 215, 245, 0.35),
+      inset -4px -4px 8px rgba(188, 227, 220, 0.35),
       inset 4px 4px 8px rgba(255, 255, 255, 0.9);
 
     --clay-shadow-btn-primary:
-      6px 8px 16px rgba(56, 189, 248, 0.35),
+      6px 8px 16px rgba(8, 124, 120, 0.35),
       -2px -2px 6px rgba(255, 255, 255, 0.8),
-      inset -3px -3px 6px rgba(2, 132, 199, 0.4),
+      inset -3px -3px 6px rgba(7, 92, 90, 0.4),
       inset 3px 3px 6px rgba(255, 255, 255, 0.6);
   }
 
@@ -2728,7 +2823,14 @@ html[data-theme="dark"] .stats-grid {
   font-weight: 800;
   cursor: pointer;
   box-shadow: var(--clay-shadow-pill);
-  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-enter);
 }
 
 .agenda-action-btn {
@@ -2785,7 +2887,7 @@ html[data-theme="dark"] .stats-grid {
   background: var(--clay-blue);
   box-shadow:
     0 0 0 4px var(--clay-canvas),
-    inset -2px -2px 4px rgba(2, 132, 199, 0.5),
+    inset -2px -2px 4px rgba(7, 92, 90, 0.5),
     inset 2px 2px 4px rgba(255, 255, 255, 0.7);
 }
 
@@ -2795,7 +2897,14 @@ html[data-theme="dark"] .stats-grid {
   background: var(--clay-white);
   box-shadow: var(--clay-shadow-card);
   border: 1px solid rgba(255, 255, 255, 0.85);
-  transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-enter);
 }
 
 html[data-theme="dark"] .agenda-card {
@@ -2926,7 +3035,14 @@ html[data-theme="dark"] .agenda-card {
   cursor: pointer;
   background: var(--clay-white);
   box-shadow: var(--clay-shadow-card);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-enter);
 }
 
 html[data-theme="dark"] .gallery-item {
@@ -2942,7 +3058,7 @@ html[data-theme="dark"] .gallery-item {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform var(--dur-slow) var(--ease-enter);
 }
 
 .gallery-item:hover img {
@@ -2978,7 +3094,7 @@ html[data-theme="dark"] .gallery-item {
   background: rgba(9, 14, 23, 0.72);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  animation: fadeIn 0.3s ease;
+  animation: fadeIn var(--dur-slow) var(--ease-standard);
 }
 
 .lightbox-figure {
@@ -2990,7 +3106,7 @@ html[data-theme="dark"] .gallery-item {
   overflow: hidden;
   background: var(--clay-white);
   box-shadow: var(--clay-shadow-card-hover);
-  animation: slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: slideUp var(--dur-slow) var(--ease-enter) forwards;
 }
 
 .lightbox-figure img {
@@ -3025,7 +3141,14 @@ html[data-theme="dark"] .gallery-item {
   font-size: 1.1rem;
   cursor: pointer;
   box-shadow: var(--clay-shadow-pill);
-  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-enter);
 }
 
 html[data-theme="dark"] .lightbox-close {
@@ -3056,7 +3179,14 @@ html[data-theme="dark"] .lightbox-close {
   line-height: 1;
   cursor: pointer;
   box-shadow: var(--clay-shadow-pill);
-  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-enter);
   z-index: 2;
 }
 
@@ -3176,7 +3306,14 @@ html[data-theme="dark"] .lightbox-nav {
   background: var(--clay-white);
   box-shadow: var(--clay-shadow-card);
   overflow: hidden;
-  transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-enter);
 }
 
 html[data-theme="dark"] .faq-item {
@@ -3218,7 +3355,7 @@ html[data-theme="dark"] .faq-item {
   color: var(--clay-blue-dark);
   font-size: 1.2rem;
   font-weight: 800;
-  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform var(--dur-slow) var(--ease-enter);
 }
 
 .faq-item[open] summary::after {
@@ -3236,7 +3373,7 @@ html[data-theme="dark"] .faq-item {
 }
 
 .faq-item[open] p {
-  animation: faqContentReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: faqContentReveal var(--dur-slow) var(--ease-enter) forwards;
 }
 
 @keyframes faqContentReveal {
@@ -3288,7 +3425,14 @@ html[data-theme="dark"] .faq-item {
   background: var(--clay-white);
   border: 1px solid rgba(255, 255, 255, 0.85);
   box-shadow: var(--clay-shadow-card);
-  transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-enter);
 }
 
 html[data-theme="dark"] .archive-card {
@@ -3440,7 +3584,14 @@ html[data-theme="dark"] .proker-search-input:focus {
   font-weight: 800;
   cursor: pointer;
   box-shadow: var(--clay-shadow-pill);
-  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-enter);
 }
 
 .proker-filter-btn:hover {
@@ -3469,7 +3620,14 @@ html[data-theme="dark"] .proker-search-input:focus {
   background: var(--clay-white);
   border: 1px solid rgba(255, 255, 255, 0.85);
   box-shadow: var(--clay-shadow-card);
-  transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    transform,
+    opacity
+    var(--dur-slow) var(--ease-enter);
 }
 
 html[data-theme="dark"] .proker-dept-card {
