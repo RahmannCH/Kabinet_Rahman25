@@ -275,6 +275,65 @@ test('lightbox close button is visible in dark mode', async ({ page }) => {
   expect(bg).toContain('42');
 });
 
+test('no horizontal overflow from 320px to 2560px', async ({ page }) => {
+  const offenders = [];
+  for (const width of [320, 360, 414, 768, 1024, 1280, 1440, 1920, 2560]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/');
+    // Let reveal-free layout settle.
+    await page.waitForLoadState('networkidle');
+
+    const overflow = await page.evaluate(() => {
+      const doc = document.documentElement;
+      const slack = doc.scrollWidth - doc.clientWidth;
+      if (slack <= 1) return null;
+      // Identify which elements actually stick out past the viewport.
+      const guilty = [];
+      for (const el of document.querySelectorAll('body *')) {
+        const r = el.getBoundingClientRect();
+        if (r.width === 0 || r.height === 0) continue;
+        if (r.right > doc.clientWidth + 1) {
+          guilty.push(
+            `${el.tagName.toLowerCase()}.${(el.className || '').toString().split(' ')[0]}@${Math.round(r.right)}`
+          );
+        }
+        if (guilty.length > 5) break;
+      }
+      return { slack, guilty };
+    });
+
+    if (overflow) offenders.push({ width, ...overflow });
+  }
+  expect(offenders).toEqual([]);
+});
+
+test('all sections share one container width and one rhythm', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+
+  // Compare CONTENT boxes, not border boxes: `.section` is full-bleed and
+  // achieves its container through horizontal padding, whereas `.hero`
+  // is itself the container. The hero used to be 1240px against a 1200px
+  // container — a 20px misalignment on each side.
+  const contentBox = sel =>
+    page.locator(sel).evaluate(el => {
+      const s = getComputedStyle(el);
+      return (
+        el.getBoundingClientRect().width -
+        parseFloat(s.paddingLeft) -
+        parseFloat(s.paddingRight)
+      );
+    });
+
+  const hero = await contentBox('.hero');
+  const tentang = await contentBox('#tentang');
+  const footer = await contentBox('.footer');
+
+  expect(Math.abs(hero - tentang)).toBeLessThanOrEqual(1);
+  expect(Math.abs(hero - footer)).toBeLessThanOrEqual(1);
+  expect(hero).toBeLessThanOrEqual(1200);
+});
+
 test('no scroll-reveal dependency: content is fully visible with JS disabled', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();

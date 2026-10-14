@@ -1,5 +1,5 @@
-﻿/* ==========================================================================
-   KABINET RAHMAN 25 — DESIGN TOKEN ARCHITECTURE
+/* ==========================================================================
+   KABINET RAHMAN 25 � DESIGN TOKEN ARCHITECTURE
    Source of truth: DESIGN.md. Layered so a theme swap touches ONE layer.
 
      Layer 1 PRIMITIVE  raw palette, zero semantic meaning
@@ -13,7 +13,7 @@
   color-scheme: light;
 
   /* --------------------------------------------------------------------------
-     LAYER 1 — PRIMITIVE
+     LAYER 1 � PRIMITIVE
      Raw values. Never referenced directly by a component rule.
      -------------------------------------------------------------------------- */
   --p-white: #ffffff;
@@ -45,7 +45,7 @@
   --p-slate-200: #f1f5f9;
 
   /* --------------------------------------------------------------------------
-     LAYER 2 — SEMANTIC
+     LAYER 2 � SEMANTIC
      -------------------------------------------------------------------------- */
   --color-surface-canvas: var(--p-white);
   --color-surface-subtle: var(--p-canvas-subtle);
@@ -92,7 +92,7 @@
   --color-backdrop-lightbox: rgba(21, 36, 58, 0.72);
 
   /* --------------------------------------------------------------------------
-     LAYER 4 — UTILITY: container & grid
+     LAYER 4 � UTILITY: container & grid
      -------------------------------------------------------------------------- */
   --container-max: 1200px;
   --container-max-wide: 1440px;
@@ -101,7 +101,7 @@
   --grid-gap-sm: 16px;
 
   /* --------------------------------------------------------------------------
-     LAYER 4 — UTILITY: spacing scale (4px base)
+     LAYER 4 � UTILITY: spacing scale (4px base)
      Every margin/padding/gap in the codebase resolves to one of these.
      -------------------------------------------------------------------------- */
   --space-1: 0.25rem;   /*   4px */
@@ -117,13 +117,13 @@
   --space-11: 6.5rem;   /* 104px */
   --space-12: 8rem;     /* 128px */
 
-  /* Section rhythm — one knob, alternating density. */
+  /* Section rhythm � one knob, alternating density. */
   --section-y: clamp(4rem, 8vw, 7rem);
   --section-y-lg: clamp(6rem, 12vw, 10rem);
 
   /* --------------------------------------------------------------------------
-     LAYER 4 — UTILITY: type scale
-     DESIGN.md §3. One h2 ramp for the whole page.
+     LAYER 4 � UTILITY: type scale
+     DESIGN.md �3. One h2 ramp for the whole page.
      -------------------------------------------------------------------------- */
   --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -144,14 +144,14 @@
   --leading-display: 1.05;
   --leading-heading: 1.15;
   --leading-tight: 1.4;
-  --leading-body: 1.65;   /* DESIGN.md §3 band is 1.55–1.75 */
+  --leading-body: 1.65;   /* DESIGN.md �3 band is 1.55�1.75 */
   --leading-relaxed: 1.75;
   --tracking-tight: -0.02em;
   --tracking-label: 0.08em;
 
   /* --------------------------------------------------------------------------
-     LAYER 4 — UTILITY: radius scale
-     DESIGN.md §5 requires a SMALL radius. The retired --clay-card-radius:20px
+     LAYER 4 � UTILITY: radius scale
+     DESIGN.md �5 requires a SMALL radius. The retired --clay-card-radius:20px
      is the single largest source of "AI template" reads and is gone.
      -------------------------------------------------------------------------- */
   --radius-sm: 4px;
@@ -162,8 +162,8 @@
   --clay-card-radius: var(--radius-lg);
 
   /* --------------------------------------------------------------------------
-     LAYER 4 — UTILITY: motion scale
-     DESIGN.md §6 caps every transition at 150–250ms, transform/opacity only.
+     LAYER 4 � UTILITY: motion scale
+     DESIGN.md �6 caps every transition at 150�250ms, transform/opacity only.
      -------------------------------------------------------------------------- */
   --dur-fast: 150ms;
   --dur-base: 200ms;
@@ -172,7 +172,7 @@
   --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* --------------------------------------------------------------------------
-     LAYER 4 — UTILITY: elevation
+     LAYER 4 � UTILITY: elevation
      Hairline-first. Shadows are for interactive elevation only.
      -------------------------------------------------------------------------- */
   --shadow-card: 0 1px 2px rgba(21, 36, 58, 0.04);
@@ -189,7 +189,7 @@
   --shadow-modal: 0 24px 48px -12px rgba(21, 36, 58, 0.28);
   --shadow-header-scrolled: 0 1px 0 var(--color-border-default);
 
-  /* Legacy aliases → Layer 3. */
+  /* Legacy aliases ? Layer 3. */
   --clay-shadow-card: var(--shadow-card);
   --clay-shadow-card-hover: var(--shadow-card-hover);
   --clay-shadow-btn-primary: var(--shadow-btn-primary);
@@ -203,7 +203,7 @@
   --clay-shadow-nameplate: var(--shadow-nameplate);
 
   /* --------------------------------------------------------------------------
-     LAYER 4 — UTILITY: z-index
+     LAYER 4 � UTILITY: z-index
      -------------------------------------------------------------------------- */
   --z-base: 1;
   --z-decor: 2;
@@ -213,7 +213,7 @@
   --z-lightbox: 1200;
 
   /* --------------------------------------------------------------------------
-     LAYER 2 — LEGACY ALIASES
+     LAYER 2 � LEGACY ALIASES
      Retained so the ~3,500 lines of downstream rules keep resolving.
      Migrated rule-by-rule in later phases; the names are then deleted.
      -------------------------------------------------------------------------- */
@@ -244,7 +244,7 @@
 }
 
 /* ==========================================================================
-   LAYER 5 — THEME: DARK
+   LAYER 5 � THEME: DARK
    Overrides Layer 2 (semantic colour) and Layer 3 (elevation) ONLY.
    Never redeclares a primitive or a utility token.
    ========================================================================== */
@@ -291,7 +291,7 @@ html[data-theme="dark"] {
   --color-backdrop-modal: rgba(3, 7, 18, 0.72);
   --color-backdrop-lightbox: rgba(3, 7, 18, 0.86);
 
-  /* Layer 3 — elevation. Single-layer ambient, no neumorphic doubles. */
+  /* Layer 3 � elevation. Single-layer ambient, no neumorphic doubles. */
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.5);
   --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.6);
   --shadow-btn-primary: 0 1px 2px rgba(0, 0, 0, 0.5);
@@ -426,7 +426,7 @@ html[data-theme="dark"] .preview-banner {
   position: sticky;
   top: 1rem;
   z-index: var(--z-nav);
-  padding: 0 max(4%, calc((100% - 1200px) / 2));
+  padding: 0 max(var(--container-pad), calc((100% - var(--container-max)) / 2));
 }
 
 .site-header {
@@ -509,7 +509,13 @@ html[data-theme="dark"] .site-header.is-scrolled {
   align-items: center;
   gap: clamp(0.3rem, 1.2vw, 0.8rem);
   flex-wrap: nowrap;
-  overflow: hidden;
+  /* Was `overflow: hidden`, which silently clipped nav labels with no
+   * ellipsis and no fallback — the opposite of DESIGN.md section 5's
+   * "condense secondary labels before hiding essential navigation".
+   * Clipping is now impossible; the nav simply cannot collapse before the
+   * 1280px drawer breakpoint takes over. */
+  overflow: visible;
+  min-width: 0;
 }
 
 .site-nav a {
@@ -616,19 +622,21 @@ html[data-theme="dark"] .site-header.is-scrolled {
    HERO SECTION & CLAY FLOATING AMBIENCE
    ========================================================================== */
 .hero {
-  position: relative;
+position: relative;
   display: grid;
   min-height: min(720px, calc(100svh - 80px));
   grid-template-columns: 1.15fr 0.85fr;
   align-items: center;
   gap: 5%;
-  max-width: 1240px;
-  margin: auto;
-  padding: 3.5rem 4% 5.5rem;
+  /* Full-bleed, exactly like `.section`. The hero previously carried its own
+   * `max-width` AND its own padding, so the gutter was counted twice and the
+   * hero's content column came out 64px narrower than every section below it
+   * (1136px vs 1200px). */
+  padding: var(--space-9) max(var(--container-pad), calc((100% - var(--container-max)) / 2)) var(--space-10);
   overflow: hidden;
 }
 
-/* Static ambient tint — a decoration, not an animation.
+/* Static ambient tint � a decoration, not an animation.
  * The previous implementation carried `.hero.is-paused .hero-glow` and
  * `@media (max-width:768px) .hero-glow` rules targeting an animation that
  * never existed. Both were dead scaffolding and are gone. */
@@ -854,10 +862,12 @@ html[data-theme="dark"] .hero-glow-2 {
 
 .hero-portrait > img {
   width: 100%;
-  height: clamp(340px, 42vw, 480px);
-  border-radius: 26px;
+  /* vw floor removed: the old clamp(340px, ...) forced the image column to
+   * at least 340px tall even at a 320px viewport, which is what pushed the
+   * layout into overflow. Fully fluid now. */
+  height: clamp(240px, 42vw, 480px);
+  border-radius: var(--radius-lg);
   object-fit: cover;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 /* Floating Clay Caption Badge */
@@ -917,10 +927,18 @@ html[data-theme="dark"] .glass-caption {
 }
 
 /* ==========================================================================
-   SECTIONS & STICKY PROFIL (CLAY CONTAINER ARCHITECTURE)
+   SECTIONS & STICKY PROFILE
+   One rhythm knob (--section-y) drives every section's vertical breathing
+   room. The previous build used 104 / 88 / 80 / 56 / 48 / 45 / 32 / 16 px
+   across eight separate rules, so sections never quite lined up.
    ========================================================================== */
 .section {
-  padding: 6.5rem max(4%, calc((100% - 1200px) / 2));
+  padding: var(--section-y) max(var(--container-pad), calc((100% - var(--container-max)) / 2));
+}
+
+/* Deliberate "breath" breaks before the visual pivots of the page. */
+.section--spacious {
+  padding-block: var(--section-y-lg);
 }
 
 .section-kicker {
@@ -2027,7 +2045,7 @@ html[data-theme="dark"] .form-group textarea:focus {
    ========================================================================== */
 .footer {
   background: var(--clay-canvas-alt);
-  padding: 5.5rem max(4%, calc((100% - 1200px) / 2)) 2.8rem;
+  padding: 5.5rem max(var(--container-pad), calc((100% - var(--container-max)) / 2)) 2.8rem;
   border-top: 1px solid var(--line);
 }
 
@@ -2212,7 +2230,7 @@ html[data-theme="dark"] .not-found-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.2rem max(4%, calc((100% - 1200px) / 2));
+  padding: 1.2rem max(var(--container-pad), calc((100% - var(--container-max)) / 2));
   background: var(--clay-white);
   box-shadow: var(--clay-shadow-card);
   border-bottom: 1px solid var(--line);
@@ -2285,7 +2303,7 @@ html[data-theme="dark"] .not-found-card {
 
 /* Modal Nav Filter Pills */
 .modal-nav-bar {
-  padding: 0.85rem max(4%, calc((100% - 1200px) / 2));
+  padding: 0.85rem max(var(--container-pad), calc((100% - var(--container-max)) / 2));
   background: var(--clay-canvas-alt);
   box-shadow: inset 0 -2px 6px rgba(188, 227, 220, 0.35);
   z-index: var(--z-decor);
@@ -2344,7 +2362,7 @@ html[data-theme="dark"] .modal-nav-bar {
 .cabinet-modal-body {
   flex: 1;
   overflow-y: auto;
-  padding: 3rem max(4%, calc((100% - 1200px) / 2)) 5rem;
+  padding: 3rem max(var(--container-pad), calc((100% - var(--container-max)) / 2)) 5rem;
   overscroll-behavior: contain;
 }
 
@@ -2452,8 +2470,8 @@ html[data-theme="dark"] .modal-nav-bar {
 /* Scroll reveal is intentionally absent.
  * DESIGN.md section 6 bans scroll-reveal as a content dependency: the previous
  * implementation hid 46 elements behind `opacity: 0` + `filter: blur(4px)` and
- * only restored them from JS. Without JS — or if the IntersectionObserver
- * safety net failed — the entire page below the fold rendered invisible.
+ * only restored them from JS. Without JS � or if the IntersectionObserver
+ * safety net failed � the entire page below the fold rendered invisible.
  * The `.sc-fade-up` / `.sc-fade-in` / `--stagger` classes are retained as
  * inert markup hooks so existing HTML needs no surgery. */
 
@@ -2504,7 +2522,19 @@ html[data-theme="dark"] .modal-nav-bar {
 
 /* ==========================================================================
    RESPONSIVE DESIGN & MOBILE ERGONOMICS
+
+   BREAKPOINT SCALE — six tiers, narrowest last in source order:
+     1280px  drawer nav (desktop nav cannot hold 10 labels)
+      960px  multi-column -> 2-column
+      768px  DESIGN.md section 5 collapse-to-one-column boundary
+      720px  phablet: 2-column grids -> 1-column
+      560px  compact: densest cards, timeline rails tighten
+      480px  small phone: 320px floor is never crossed
+
+   Order matters. A narrower tier declared after a wider one wins the
+   cascade for shared selectors, so these blocks must stay in this sequence.
    ========================================================================== */
+
 /* 1. Viewports <= 1280px: Collapse Desktop Nav into Floating Capsule Drawer */
 @media (max-width: 1280px) {
   .menu-toggle {
@@ -2644,7 +2674,7 @@ html[data-theme="dark"] .modal-nav-bar {
   }
 
   .hero-portrait > img {
-    height: clamp(280px, 70vw, 360px);
+    height: clamp(220px, 70vw, 360px);
   }
 
   .hero-side-note {
@@ -3696,22 +3726,12 @@ html[data-theme="dark"] .proker-dept-card {
   }
 }
 
-/* Intermediate breakpoint: prevent cramped 2-col grids on phablets */
+/* Phablet tier. This block is declared AFTER the 560px blocks, so at 560px
+ * it would otherwise win the cascade and silently degrade the gallery to
+ * 130px rows / 0.6rem gaps. Its gallery declarations were byte-identical to
+ * the 560px block apart from those worse values, so they are deleted here;
+ * the 560px block is now the single source of truth for gallery density. */
 @media (max-width: 720px) {
-  .gallery-grid {
-    grid-template-columns: 1fr 1fr;
-    grid-auto-rows: 130px;
-    gap: 0.6rem;
-  }
-
-  .gallery-item-wide {
-    grid-column: span 2;
-  }
-
-  .gallery-item-tall {
-    grid-row: span 1;
-  }
-
   .proker-dept-grid {
     grid-template-columns: 1fr;
   }
@@ -3769,5 +3789,48 @@ html[data-theme="dark"] .proker-dept-card {
 
   html[data-theme="dark"] .member-card:hover .member-info {
     background: rgba(15, 23, 42, 0.94);
+  }
+}
+
+/* ==========================================================================
+   ULTRA-WIDE (>= 1600px)
+
+   Grid-driven sections get a wider container so cards keep a sensible
+   measure instead of stranding a 1200px column in a field of dead space.
+   Reading sections stay at 1200px � widening a prose measure past ~70ch
+   is a readability regression, not a feature.
+   ========================================================================== */
+@media (min-width: 1600px) {
+  .gallery-grid,
+  .proker-dept-grid,
+  .stats-grid,
+  .archive-grid,
+  .program-grid,
+  .kabar-grid {
+    max-width: var(--container-max-wide);
+    margin-inline: auto;
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(5, 1fr);
+    grid-auto-rows: 240px;
+  }
+}
+
+/* ==========================================================================
+   320px FLOOR
+
+   DESIGN.md section 5: no horizontal overflow at 320 CSS px. The rules
+   below remove the only two sources of overflow at that width.
+   ========================================================================== */
+@media (max-width: 360px) {
+  :root {
+    --container-pad: 1rem;
+    --grid-gap: var(--space-4);
+  }
+
+  .button {
+    min-height: 44px;
+    padding-inline: var(--space-4);
   }
 }
